@@ -113,6 +113,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "search": MessageLookupByLibrary.simpleMessage("Search"),
     "signUp": MessageLookupByLibrary.simpleMessage("Sign up"),
+    "thePasswordMustBeAtLeast6CharactersLong":
+        MessageLookupByLibrary.simpleMessage(
+          "The password must be at least 6 characters long.",
+        ),
     "turnover": MessageLookupByLibrary.simpleMessage("Turnover"),
     "volume24Hours": MessageLookupByLibrary.simpleMessage("Volume 24 hours"),
     "week": MessageLookupByLibrary.simpleMessage("Week"),

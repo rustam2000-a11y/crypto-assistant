@@ -44,5 +44,6 @@
   "year": "Год",
   "noDataForGraph": "No data for graph",
   "detailing": "Детализация",
-  "language": "Язык"
+  "language": "Язык",
+  "thePasswordMustBeAtLeast6CharactersLong": "Пароль должен содержать не менее 6 символов"
 }

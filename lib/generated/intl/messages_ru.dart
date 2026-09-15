@@ -113,6 +113,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "search": MessageLookupByLibrary.simpleMessage("Поиск"),
     "signUp": MessageLookupByLibrary.simpleMessage("Зарегистрироваться"),
+    "thePasswordMustBeAtLeast6CharactersLong":
+        MessageLookupByLibrary.simpleMessage(
+          "Пароль должен содержать не менее 6 символов",
+        ),
     "turnover": MessageLookupByLibrary.simpleMessage("Оборачиваемость"),
     "volume24Hours": MessageLookupByLibrary.simpleMessage("Объём за 24 часа"),
     "week": MessageLookupByLibrary.simpleMessage("Неделя"),

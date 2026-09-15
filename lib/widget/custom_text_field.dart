@@ -2,6 +2,8 @@ import 'package:crypto_assistant/presentation/app_colors.dart';
 import 'package:crypto_assistant/widget/custom_text.dart';
 import 'package:flutter/material.dart';
 
+import '../generated/l10n.dart';
+
 class CustomTextField extends StatelessWidget {
   const CustomTextField({
     super.key,
@@ -158,7 +160,7 @@ class _CustomPasswordTextFieldState extends State<CustomPasswordTextField> {
               borderSide: BorderSide(color: AppColors.activeBorder, width: 1),
             ),
             errorText: widget.error
-                ? 'Пароль должен содержать не менее 6 символов'
+                ? S.of(context).thePasswordMustBeAtLeast6CharactersLong
                 : null,
             errorBorder: OutlineInputBorder(
               borderSide: BorderSide(

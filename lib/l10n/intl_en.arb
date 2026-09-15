@@ -47,5 +47,6 @@
   "year": "Year",
   "noDataForGraph": "No data for graph",
   "detailing": "Detailing",
-  "language": "Language"
+  "language": "Language",
+  "thePasswordMustBeAtLeast6CharactersLong": "The password must be at least 6 characters long."
 }

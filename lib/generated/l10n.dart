@@ -429,6 +429,16 @@ class S {
   String get language {
     return Intl.message('Language', name: 'language', desc: '', args: []);
   }
+
+  /// `The password must be at least 6 characters long.`
+  String get thePasswordMustBeAtLeast6CharactersLong {
+    return Intl.message(
+      'The password must be at least 6 characters long.',
+      name: 'thePasswordMustBeAtLeast6CharactersLong',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
