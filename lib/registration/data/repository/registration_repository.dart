@@ -1,4 +1,3 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
 
 import '../../../core/models/user_model.dart';
@@ -14,7 +13,7 @@ class RegistrationRepository extends RegistrationRepositoryI {
   Stream<bool> authStateChanges() => _api.authStateChanges();
 
   @override
-  User? get currentUser => _api.currentUser;
+  UserModel? get currentUser => _api.currentUser;
 
   @override
   Future<UserModel?> signInWithEmail({
@@ -58,7 +57,7 @@ class RegistrationRepository extends RegistrationRepositoryI {
 abstract class RegistrationRepositoryI {
   Stream<bool> authStateChanges();
 
-  User? get currentUser;
+  UserModel? get currentUser;
 
   Future<UserModel?> signInWithEmail({
     required String email,

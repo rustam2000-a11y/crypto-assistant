@@ -27,7 +27,17 @@ class RegistrationApi extends RegistrationApiI {
       _auth.authStateChanges().map((user) => user != null);
 
   @override
-  User? get currentUser => _auth.currentUser;
+  UserModel? get currentUser {
+    final user = _auth.currentUser;
+    if (user == null) return null;
+
+    return UserModel(
+      id: user.uid,
+      name: user.displayName ?? '',
+      email: user.email ?? '',
+      coinIds: const [],
+    );
+  }
 
   @override
   Future<UserModel?> signInWithEmail({
@@ -194,7 +204,7 @@ class RegistrationApi extends RegistrationApiI {
 abstract class RegistrationApiI {
   Stream<bool> authStateChanges();
 
-  User? get currentUser;
+  UserModel? get currentUser;
 
   Future<UserModel?> signInWithEmail({
     required String email,
