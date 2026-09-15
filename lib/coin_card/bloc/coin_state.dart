@@ -6,6 +6,7 @@ import '../../home/data/models/price_point.dart';
 
 class CoinState extends Equatable {
   const CoinState({
+    this.coinId,
     this.coin,
     this.isLoading = false,
     this.chartPoints = const [],
@@ -14,6 +15,7 @@ class CoinState extends Equatable {
     this.chartPeriod = ChartPeriod.day,
   });
 
+  final String? coinId;
   final CoinModel? coin;
   final bool isLoading;
   final List<PricePoint> chartPoints;
@@ -22,6 +24,7 @@ class CoinState extends Equatable {
   final ChartPeriod chartPeriod;
 
   CoinState copyWith({
+    String? coinId,
     CoinModel? coin,
     bool? isLoading,
     List<PricePoint>? chartPoints,
@@ -30,6 +33,7 @@ class CoinState extends Equatable {
     ChartPeriod? chartPeriod,
   }) {
     return CoinState(
+      coinId: coinId ?? this.coinId,
       coin: coin ?? this.coin,
       isLoading: isLoading ?? this.isLoading,
       chartPoints: chartPoints ?? this.chartPoints,
@@ -41,6 +45,7 @@ class CoinState extends Equatable {
 
   @override
   List<Object?> get props => [
+    coinId,
     coin,
     isLoading,
     chartPoints,

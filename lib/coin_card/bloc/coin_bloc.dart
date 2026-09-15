@@ -21,7 +21,7 @@ class CoinBloc extends EffectBloc<CoinEvent, CoinState, CoinEffect> {
        _registrationRepository = registrationRepository,
        super(const CoinState()) {
     on<LoadCoinDetailsEvent>((event, emit) {
-      _coinId = event.coinId;
+      emit(state.copyWith(coinId: event.coinId));
       _watchCoin(event.coinId);
       _watchChart(event.coinId, state.chartPeriod);
       _loadBriefcaseStatus(event.coinId);
@@ -54,7 +54,6 @@ class CoinBloc extends EffectBloc<CoinEvent, CoinState, CoinEffect> {
 
   final CoinRepositoryI _coinRepository;
   final RegistrationRepositoryI _registrationRepository;
-  String? _coinId;
   StreamSubscription<CoinModel>? _coinSubscription;
   StreamSubscription<List<PricePoint>>? _chartSubscription;
 
@@ -79,7 +78,7 @@ class CoinBloc extends EffectBloc<CoinEvent, CoinState, CoinEffect> {
   void _changeChartPeriod(ChartPeriod period) {
     if (period == state.chartPeriod) return;
     add(ChartPeriodChangedEvent(period));
-    final coinId = _coinId;
+    final coinId = state.coinId;
     if (coinId != null) _watchChart(coinId, period);
   }
 
@@ -109,7 +108,6 @@ class CoinBloc extends EffectBloc<CoinEvent, CoinState, CoinEffect> {
 
     await _coinRepository.addCoinToBriefcase(coinId);
     add(const BriefcaseStatusLoadedEvent(isFavorite: true));
-
   }
 
   @override
