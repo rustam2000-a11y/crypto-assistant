@@ -20,6 +20,8 @@ import 'package:crypto_assistant/home/data/repository/coint_rpository.dart'
     as _i404;
 import 'package:crypto_assistant/home/domain/usecase/search_coins_usecase.dart'
     as _i976;
+import 'package:crypto_assistant/home/language/bloc/app_locale_bloc.dart'
+    as _i758;
 import 'package:crypto_assistant/home/language/bloc/language_bloc.dart'
     as _i861;
 import 'package:crypto_assistant/home/language/data/api/language_api.dart'
@@ -98,6 +100,11 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.factory<_i861.LanguageBloc>(
       () => _i861.LanguageBloc(
+        languageRepository: gh<_i576.LanguageRepositoryI>(),
+      ),
+    );
+    gh.lazySingleton<_i758.AppLocaleBloc>(
+      () => _i758.AppLocaleBloc(
         languageRepository: gh<_i576.LanguageRepositoryI>(),
       ),
     );
