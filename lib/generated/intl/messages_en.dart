@@ -57,6 +57,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "dontHaveAnAccount": MessageLookupByLibrary.simpleMessage(
       "Don\'t have an account?",
     ),
+    "emailAlreadyInUse": MessageLookupByLibrary.simpleMessage(
+      "This email is already in use",
+    ),
+    "failedToLogIn": MessageLookupByLibrary.simpleMessage(
+      "Failed to log in, please try again later",
+    ),
+    "failedToSignUp": MessageLookupByLibrary.simpleMessage(
+      "Failed to sign up, please try again later",
+    ),
     "highVolatility": MessageLookupByLibrary.simpleMessage("High volatility"),
     "historicalMaximum": MessageLookupByLibrary.simpleMessage(
       "Historical maximum",
@@ -67,6 +76,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "historicalMinimum": MessageLookupByLibrary.simpleMessage(
       "Historical minimum",
     ),
+    "invalidEmail": MessageLookupByLibrary.simpleMessage("Invalid email"),
     "itTakesLessThanAMinute": MessageLookupByLibrary.simpleMessage(
       "It takes less than a minute",
     ),
@@ -119,6 +129,9 @@ class MessageLookup extends MessageLookupByLibrary {
         ),
     "turnover": MessageLookupByLibrary.simpleMessage("Turnover"),
     "volume24Hours": MessageLookupByLibrary.simpleMessage("Volume 24 hours"),
+    "weakPassword": MessageLookupByLibrary.simpleMessage(
+      "Password is too weak",
+    ),
     "week": MessageLookupByLibrary.simpleMessage("Week"),
     "welcomeBack": MessageLookupByLibrary.simpleMessage("Welcome back"),
     "year": MessageLookupByLibrary.simpleMessage("Year"),

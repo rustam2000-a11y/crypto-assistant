@@ -45,5 +45,10 @@
   "noDataForGraph": "No data for graph",
   "detailing": "Детализация",
   "language": "Язык",
-  "thePasswordMustBeAtLeast6CharactersLong": "Пароль должен содержать не менее 6 символов"
+  "thePasswordMustBeAtLeast6CharactersLong": "Пароль должен содержать не менее 6 символов",
+  "invalidEmail": "Некорректный email",
+  "failedToLogIn": "Не удалось войти, попробуйте позже",
+  "weakPassword": "Пароль слишком простой",
+  "emailAlreadyInUse": "Этот email уже используется",
+  "failedToSignUp": "Не удалось зарегистрироваться, попробуйте позже"
 }

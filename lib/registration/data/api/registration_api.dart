@@ -4,7 +4,12 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:injectable/injectable.dart';
 import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
+import '../../../core/errors/auth_exceptions.dart';
 import '../../../core/models/user_model.dart';
+
+const _emailAlreadyInUse = 'email-already-in-use';
+const _invalidEmail = 'invalid-email';
+const _weakPassword = 'weak-password';
 
 @Injectable(as: RegistrationApiI)
 class RegistrationApi extends RegistrationApiI {
@@ -21,6 +26,14 @@ class RegistrationApi extends RegistrationApiI {
       '449327116621-m85002n56m497sqev7qn8rmk16kfs5dc.apps.googleusercontent.com';
 
   bool _googleSignInInitialized = false;
+
+
+  Never _throwEmailAuthError(FirebaseAuthException e) {
+    if (e.code == _invalidEmail) throw InvalidEmailException();
+    if (e.code == _weakPassword) throw WeakPasswordException();
+    if (e.code == _emailAlreadyInUse) throw EmailAlreadyInUseException();
+    throw e;
+  }
 
   @override
   Stream<bool> authStateChanges() =>
@@ -44,10 +57,15 @@ class RegistrationApi extends RegistrationApiI {
     required String email,
     required String password,
   }) async {
-    final userCred = await _auth.signInWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    UserCredential userCred;
+    try {
+      userCred = await _auth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException catch (e) {
+      _throwEmailAuthError(e);
+    }
     final user = userCred.user;
     if (user == null) return null;
 
@@ -65,10 +83,15 @@ class RegistrationApi extends RegistrationApiI {
     required String password,
     required String name,
   }) async {
-    final userCred = await _auth.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
-    );
+    UserCredential userCred;
+    try {
+      userCred = await _auth.createUserWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException catch (e) {
+      _throwEmailAuthError(e);
+    }
     final user = userCred.user;
     if (user == null) return null;
 

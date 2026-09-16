@@ -1,7 +1,8 @@
 import 'package:bloc_after_effect/bloc_after_effect.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../core/errors/auth_exceptions.dart';
+import '../../generated/l10n.dart';
 import '../data/repository/registration_repository.dart';
 import 'login_effect.dart';
 import 'login_event.dart';
@@ -84,9 +85,9 @@ class LoginBloc extends EffectBloc<LoginEvent, LoginState, LoginEffect> {
   }
 
   String _describeError(Object error) {
-    if (error is FirebaseAuthException) {
-      return error.message ?? error.code;
-    }
-    return error.toString();
+    return switch (error) {
+      InvalidEmailException() => S.current.invalidEmail,
+      _ => S.current.failedToLogIn,
+    };
   }
 }

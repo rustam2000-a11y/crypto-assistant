@@ -1,7 +1,8 @@
 import 'package:bloc_after_effect/bloc_after_effect.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../core/errors/auth_exceptions.dart';
+import '../../generated/l10n.dart';
 import '../data/repository/registration_repository.dart';
 import 'registration_effect.dart';
 import 'registration_event.dart';
@@ -90,9 +91,11 @@ class RegistrationBloc
   }
 
   String _describeError(Object error) {
-    if (error is FirebaseAuthException) {
-      return error.message ?? error.code;
-    }
-    return error.toString();
+    return switch (error) {
+      WeakPasswordException() => S.current.weakPassword,
+      EmailAlreadyInUseException() => S.current.emailAlreadyInUse,
+      InvalidEmailException() => S.current.invalidEmail,
+      _ => S.current.failedToSignUp,
+    };
   }
 }

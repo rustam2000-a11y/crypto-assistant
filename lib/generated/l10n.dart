@@ -439,6 +439,56 @@ class S {
       args: [],
     );
   }
+
+  /// `Invalid email`
+  String get invalidEmail {
+    return Intl.message(
+      'Invalid email',
+      name: 'invalidEmail',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to log in, please try again later`
+  String get failedToLogIn {
+    return Intl.message(
+      'Failed to log in, please try again later',
+      name: 'failedToLogIn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Password is too weak`
+  String get weakPassword {
+    return Intl.message(
+      'Password is too weak',
+      name: 'weakPassword',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This email is already in use`
+  String get emailAlreadyInUse {
+    return Intl.message(
+      'This email is already in use',
+      name: 'emailAlreadyInUse',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Failed to sign up, please try again later`
+  String get failedToSignUp {
+    return Intl.message(
+      'Failed to sign up, please try again later',
+      name: 'failedToSignUp',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

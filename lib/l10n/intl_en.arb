@@ -48,5 +48,10 @@
   "noDataForGraph": "No data for graph",
   "detailing": "Detailing",
   "language": "Language",
-  "thePasswordMustBeAtLeast6CharactersLong": "The password must be at least 6 characters long."
+  "thePasswordMustBeAtLeast6CharactersLong": "The password must be at least 6 characters long.",
+  "invalidEmail": "Invalid email",
+  "failedToLogIn": "Failed to log in, please try again later",
+  "weakPassword": "Password is too weak",
+  "emailAlreadyInUse": "This email is already in use",
+  "failedToSignUp": "Failed to sign up, please try again later"
 }

@@ -55,6 +55,15 @@ class MessageLookup extends MessageLookupByLibrary {
         ),
     "detailing": MessageLookupByLibrary.simpleMessage("Детализация"),
     "dontHaveAnAccount": MessageLookupByLibrary.simpleMessage("Нет аккаунта?"),
+    "emailAlreadyInUse": MessageLookupByLibrary.simpleMessage(
+      "Этот email уже используется",
+    ),
+    "failedToLogIn": MessageLookupByLibrary.simpleMessage(
+      "Не удалось войти, попробуйте позже",
+    ),
+    "failedToSignUp": MessageLookupByLibrary.simpleMessage(
+      "Не удалось зарегистрироваться, попробуйте позже",
+    ),
     "highVolatility": MessageLookupByLibrary.simpleMessage(
       "Высокая волатильность",
     ),
@@ -67,6 +76,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "historicalMinimum": MessageLookupByLibrary.simpleMessage(
       "Исторический минимум",
     ),
+    "invalidEmail": MessageLookupByLibrary.simpleMessage("Некорректный email"),
     "itTakesLessThanAMinute": MessageLookupByLibrary.simpleMessage(
       "Это займёт меньше минуты",
     ),
@@ -119,6 +129,9 @@ class MessageLookup extends MessageLookupByLibrary {
         ),
     "turnover": MessageLookupByLibrary.simpleMessage("Оборачиваемость"),
     "volume24Hours": MessageLookupByLibrary.simpleMessage("Объём за 24 часа"),
+    "weakPassword": MessageLookupByLibrary.simpleMessage(
+      "Пароль слишком простой",
+    ),
     "week": MessageLookupByLibrary.simpleMessage("Неделя"),
     "welcomeBack": MessageLookupByLibrary.simpleMessage("С возвращением"),
     "year": MessageLookupByLibrary.simpleMessage("Год"),
