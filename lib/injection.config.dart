@@ -19,7 +19,7 @@ import 'package:crypto_assistant/auth/registration/bloc/registration_bloc.dart'
     as _i685;
 import 'package:crypto_assistant/briefcase/bloc/briefcase_bloc.dart' as _i612;
 import 'package:crypto_assistant/coin_card/bloc/coin_bloc.dart' as _i287;
-import 'package:crypto_assistant/core/app_bloc/app_locale_bloc.dart' as _i423;
+import 'package:crypto_assistant/core/bloc/app_locale_bloc.dart' as _i684;
 import 'package:crypto_assistant/home/bloc/home_bloc.dart' as _i838;
 import 'package:crypto_assistant/home/data/api/coint_api.dart' as _i997;
 import 'package:crypto_assistant/home/data/client/api_client.dart' as _i292;
@@ -87,8 +87,8 @@ extension GetItInjectableX on _i174.GetIt {
         languageRepository: gh<_i576.LanguageRepositoryI>(),
       ),
     );
-    gh.lazySingleton<_i423.AppLocaleBloc>(
-      () => _i423.AppLocaleBloc(
+    gh.lazySingleton<_i684.AppLocaleBloc>(
+      () => _i684.AppLocaleBloc(
         languageRepository: gh<_i576.LanguageRepositoryI>(),
       ),
     );
