@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:bloc_after_effect/bloc_after_effect.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../registration/data/repository/registration_repository.dart';
+import '../../auth/data/repository/auth_repository.dart';
 import '../data/models/coin_model.dart';
 import '../data/repository/coint_rpository.dart';
 import '../domain/usecase/search_coins_usecase.dart';
@@ -15,10 +15,10 @@ import 'home_state.dart';
 class HomeBloc extends EffectBloc<HomeEvent, HomeState, HomeEffect> {
   HomeBloc({
     required CoinRepositoryI coinRepository,
-    required RegistrationRepositoryI registrationRepository,
+    required AuthRepositoryI authRepository,
     required SearchCoinsUseCase searchCoinsUseCase,
   }) : _coinRepository = coinRepository,
-       _registrationRepository = registrationRepository,
+       _authRepository = authRepository,
        _searchCoinsUseCase = searchCoinsUseCase,
        super(const HomeState()) {
     on<LoadingEvent>((event, emit) {
@@ -49,7 +49,7 @@ class HomeBloc extends EffectBloc<HomeEvent, HomeState, HomeEffect> {
   }
 
   final CoinRepositoryI _coinRepository;
-  final RegistrationRepositoryI _registrationRepository;
+  final AuthRepositoryI _authRepository;
   final SearchCoinsUseCase _searchCoinsUseCase;
   StreamSubscription<List<CoinModel>>? _coinsSubscription;
   StreamSubscription<bool>? _authSubscription;
@@ -59,7 +59,7 @@ class HomeBloc extends EffectBloc<HomeEvent, HomeState, HomeEffect> {
     _coinsSubscription = _coinRepository.watchCoins().listen((coins) {
       add(LoadItemsEvent(items: coins));
     });
-    _authSubscription = _registrationRepository.authStateChanges().listen((
+    _authSubscription = _authRepository.authStateChanges().listen((
       isLoggedIn,
     ) {
       add(LoggedInStatusChangedEvent(isLoggedIn: isLoggedIn));
@@ -72,7 +72,7 @@ class HomeBloc extends EffectBloc<HomeEvent, HomeState, HomeEffect> {
   }
 
   void _logOut() async {
-    await _registrationRepository.logout();
+    await _authRepository.logout();
   }
 
   @override

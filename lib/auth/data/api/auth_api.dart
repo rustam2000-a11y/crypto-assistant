@@ -11,8 +11,8 @@ const _emailAlreadyInUse = 'email-already-in-use';
 const _invalidEmail = 'invalid-email';
 const _weakPassword = 'weak-password';
 
-@Injectable(as: RegistrationApiI)
-class RegistrationApi extends RegistrationApiI {
+@Injectable(as: AuthApiI)
+class AuthApi extends AuthApiI {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final GoogleSignIn _googleSignIn = GoogleSignIn.instance;
@@ -224,7 +224,7 @@ class RegistrationApi extends RegistrationApiI {
   }
 }
 
-abstract class RegistrationApiI {
+abstract class AuthApiI {
   Stream<bool> authStateChanges();
 
   UserModel? get currentUser;

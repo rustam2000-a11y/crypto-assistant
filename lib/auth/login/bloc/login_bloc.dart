@@ -1,16 +1,16 @@
 import 'package:bloc_after_effect/bloc_after_effect.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../core/errors/auth_exceptions.dart';
-import '../../generated/l10n.dart';
-import '../data/repository/registration_repository.dart';
+import '../../../core/errors/auth_exceptions.dart';
+import '../../../generated/l10n.dart';
+import '../../data/repository/auth_repository.dart';
 import 'login_effect.dart';
 import 'login_event.dart';
 import 'login_state.dart';
 
 @injectable
 class LoginBloc extends EffectBloc<LoginEvent, LoginState, LoginEffect> {
-  LoginBloc({required RegistrationRepositoryI repository})
+  LoginBloc({required AuthRepositoryI repository})
     : _repository = repository,
       super(const LoginState()) {
     on<LoginEmailChanged>((event, emit) {
@@ -38,7 +38,7 @@ class LoginBloc extends EffectBloc<LoginEvent, LoginState, LoginEffect> {
 
   static const _minPasswordLength = 6;
 
-  final RegistrationRepositoryI _repository;
+  final AuthRepositoryI _repository;
 
   Future<void> _signInWithEmail() async {
     if (state.password.length < _minPasswordLength) {

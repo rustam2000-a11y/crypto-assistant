@@ -1,9 +1,9 @@
 import 'package:bloc_after_effect/bloc_after_effect.dart';
 import 'package:injectable/injectable.dart';
 
-import '../../core/errors/auth_exceptions.dart';
-import '../../generated/l10n.dart';
-import '../data/repository/registration_repository.dart';
+import '../../../core/errors/auth_exceptions.dart';
+import '../../../generated/l10n.dart';
+import '../../data/repository/auth_repository.dart';
 import 'registration_effect.dart';
 import 'registration_event.dart';
 import 'registration_state.dart';
@@ -12,7 +12,7 @@ import 'registration_state.dart';
 class RegistrationBloc
     extends
         EffectBloc<RegistrationEvent, RegistrationState, RegistrationEffect> {
-  RegistrationBloc({required RegistrationRepositoryI repository})
+  RegistrationBloc({required AuthRepositoryI repository})
     : _repository = repository,
       super(const RegistrationState()) {
     on<RegisterNameChanged>((event, emit) {
@@ -43,7 +43,7 @@ class RegistrationBloc
 
   static const _minPasswordLength = 6;
 
-  final RegistrationRepositoryI _repository;
+  final AuthRepositoryI _repository;
 
   Future<void> _registerWithEmail() async {
     if (state.password.length < _minPasswordLength) {
@@ -93,7 +93,7 @@ class RegistrationBloc
   String _describeError(Object error) {
     return switch (error) {
       WeakPasswordException() => S.current.weakPassword,
-      EmailAlreadyInUseException() => S.current.emailAlreadyInUse,
+      EmailAlreadyInUseException() => S.current.emailAlreadyInUse,//
       InvalidEmailException() => S.current.invalidEmail,
       _ => S.current.failedToSignUp,
     };

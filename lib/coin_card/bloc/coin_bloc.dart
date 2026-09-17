@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:bloc_after_effect/bloc_after_effect.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../auth/data/repository/auth_repository.dart';
 import '../../home/data/models/chart_period.dart';
 import '../../home/data/models/coin_model.dart';
 import '../../home/data/models/price_point.dart';
 import '../../home/data/repository/coint_rpository.dart';
-import '../../registration/data/repository/registration_repository.dart';
 import 'coin_effect.dart';
 import 'coin_event.dart';
 import 'coin_state.dart';
@@ -16,9 +16,9 @@ import 'coin_state.dart';
 class CoinBloc extends EffectBloc<CoinEvent, CoinState, CoinEffect> {
   CoinBloc({
     required CoinRepositoryI coinRepository,
-    required RegistrationRepositoryI registrationRepository,
+    required AuthRepositoryI authRepository,
   }) : _coinRepository = coinRepository,
-       _registrationRepository = registrationRepository,
+       _authRepository = authRepository,
        super(const CoinState()) {
     on<LoadCoinDetailsEvent>((event, emit) {
       emit(state.copyWith(coinId: event.coinId));
@@ -53,7 +53,7 @@ class CoinBloc extends EffectBloc<CoinEvent, CoinState, CoinEffect> {
   }
 
   final CoinRepositoryI _coinRepository;
-  final RegistrationRepositoryI _registrationRepository;
+  final AuthRepositoryI _authRepository;
   StreamSubscription<CoinModel>? _coinSubscription;
   StreamSubscription<List<PricePoint>>? _chartSubscription;
 
@@ -83,17 +83,17 @@ class CoinBloc extends EffectBloc<CoinEvent, CoinState, CoinEffect> {
   }
 
   Future<void> _loadBriefcaseStatus(String coinId) async {
-    if (_registrationRepository.currentUser == null) {
+    if (_authRepository.currentUser == null) {
       add(const BriefcaseStatusLoadedEvent(isFavorite: false));
       return;
     }
-    final userProfile = await _registrationRepository.getCurrentUserProfile();
+    final userProfile = await _authRepository.getCurrentUserProfile();
     final isFavorite = userProfile?.coinIds.contains(coinId) ?? false;
     add(BriefcaseStatusLoadedEvent(isFavorite: isFavorite));
   }
 
   Future<void> _toggleBriefcase() async {
-    if (_registrationRepository.currentUser == null) {
+    if (_authRepository.currentUser == null) {
       emitEffect(const CoinNavigateToLogin());
       return;
     }

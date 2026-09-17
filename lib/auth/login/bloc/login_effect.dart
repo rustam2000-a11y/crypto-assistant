@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../core/models/user_model.dart';
+import '../../../core/models/user_model.dart';
 
 abstract class LoginEffect extends Equatable {
   const LoginEffect();

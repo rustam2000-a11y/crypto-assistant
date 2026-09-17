@@ -1,13 +1,13 @@
 import 'package:injectable/injectable.dart';
 
 import '../../../core/models/user_model.dart';
-import '../api/registration_api.dart';
+import '../api/auth_api.dart';
 
-@LazySingleton(as: RegistrationRepositoryI)
-class RegistrationRepository extends RegistrationRepositoryI {
-  RegistrationRepository({required RegistrationApiI api}) : _api = api;
+@LazySingleton(as: AuthRepositoryI)
+class AuthRepository extends AuthRepositoryI {
+  AuthRepository({required AuthApiI api}) : _api = api;
 
-  final RegistrationApiI _api;
+  final AuthApiI _api;
 
   @override
   Stream<bool> authStateChanges() => _api.authStateChanges();
@@ -54,7 +54,7 @@ class RegistrationRepository extends RegistrationRepositoryI {
       _api.watchCurrentUserProfile();
 }
 
-abstract class RegistrationRepositoryI {
+abstract class AuthRepositoryI {
   Stream<bool> authStateChanges();
 
   UserModel? get currentUser;

@@ -1,38 +1,36 @@
 import 'package:bloc_after_effect/bloc_after_effect.dart';
-import 'package:crypto_assistant/home/home_widget/custom_app_bar.dart';
-import 'package:crypto_assistant/presentation/app_images.dart';
-import 'package:crypto_assistant/registration/registration_screen.dart';
-import 'package:crypto_assistant/registration/registration_widget/login_title.dart';
-import 'package:crypto_assistant/widget/custom_button.dart';
-import 'package:crypto_assistant/widget/custom_text.dart';
+import 'package:crypto_assistant/widget/login_title.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../core/ui/device_layout.dart';
+import '../../core/ui/ui_provider.dart';
+import '../../generated/l10n.dart';
+import '../../home/home_widget/custom_app_bar.dart';
+import '../../injection.dart';
+import '../../presentation/app_colors.dart';
+import '../../presentation/app_images.dart';
+import '../../widget/custom_button.dart';
+import '../../widget/custom_divider.dart';
+import '../../widget/custom_text.dart';
+import '../../widget/custom_text_field.dart';
+import 'bloc/registration_bloc.dart';
+import 'bloc/registration_effect.dart';
+import 'bloc/registration_event.dart';
+import 'bloc/registration_state.dart';
 
-import '../core/ui/device_layout.dart';
-import '../core/ui/ui_provider.dart';
-import '../generated/l10n.dart';
-import '../injection.dart';
-import '../presentation/app_colors.dart';
-import '../widget/custom_divider.dart';
-import '../widget/custom_text_field.dart';
-import 'bloc/login_bloc.dart';
-import 'bloc/login_effect.dart';
-import 'bloc/login_event.dart';
-import 'bloc/login_state.dart';
-
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+class RegistrationScreen extends StatefulWidget {
+  const RegistrationScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<RegistrationScreen> createState() => _RegistrationScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
-  late final LoginBloc _bloc;
+class _RegistrationScreenState extends State<RegistrationScreen> {
+  late final RegistrationBloc _bloc;
 
   @override
   void initState() {
-    _bloc = getIt<LoginBloc>();
+    _bloc = getIt<RegistrationBloc>();
     super.initState();
   }
 
@@ -44,13 +42,17 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocEffectBuilder<LoginBloc, LoginState, LoginEffect>(
+    return BlocEffectBuilder<
+      RegistrationBloc,
+      RegistrationState,
+      RegistrationEffect
+    >(
       bloc: _bloc,
       effectListener: (context, effect) {
         switch (effect) {
-          case LoginSucceeded():
-            Navigator.pop(context);
-          case LoginFailed(:final message):
+          case RegistrationSucceeded():
+            Navigator.pop(context, true);
+          case RegistrationFailed(:final message):
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(SnackBar(content: Text(message)));
@@ -60,19 +62,25 @@ class _LoginScreenState extends State<LoginScreen> {
         final isTablet = context.watch<UiProvider>().deviceLayout.isTabletMode;
 
         final content = Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 LoginTitle(
-                  firstText: S.of(context).welcomeBack,
-                  secondaryText: S.of(context).logInToKeepFollowingTheMarket,
+                  firstText: S.of(context).createAnAccount,
+                  secondaryText: S.of(context).itTakesLessThanAMinute,
                 ),
                 SizedBox(height: 30),
                 CustomTextField(
+                  label: S.of(context).name,
+                  onChanged: (value) => _bloc.add(RegisterNameChanged(value)),
+                  hintText: 'Name',
+                  leftIcon: Icons.email_outlined,
+                ),
+                SizedBox(height: 15),
+                CustomTextField(
                   label: 'Email',
-                  onChanged: (value) => _bloc.add(LoginEmailChanged(value)),
+                  onChanged: (value) => _bloc.add(RegisterEmailChanged(value)),
                   hintText: 'Email',
                   leftIcon: Icons.email_outlined,
                 ),
@@ -81,17 +89,16 @@ class _LoginScreenState extends State<LoginScreen> {
                   label: S.of(context).password,
                   error: state.error,
                   onChanged: (value) =>
-                      _bloc.add(LoginPasswordChanged(value)),
+                      _bloc.add(RegisterPasswordChanged(value)),
                 ),
                 SizedBox(height: 30),
                 if (state.isLoading)
                   const Center(child: CircularProgressIndicator())
                 else
                   CustomButton(
-                    onTap: () => _bloc.add(const SignInWithEmailPressed()),
-                    name: S.of(context).logIn,
+                    onTap: () => _bloc.add(const RegisterWithEmailPressed()),
+                    name: S.of(context).signUp,
                   ),
-
                 SizedBox(height: 30),
                 CustomDivider(),
                 SizedBox(height: 30),
@@ -102,7 +109,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: CustomButton(
                         onTap: () {
                           if (!_bloc.state.isLoading) {
-                            _bloc.add(const SignInWithGooglePressed());
+                            _bloc.add(const RegisterWithGooglePressed());
                           }
                         },
                         name: 'Google',
@@ -113,7 +120,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       child: CustomButton(
                         onTap: () {
                           if (!_bloc.state.isLoading) {
-                            _bloc.add(const SignInWithApplePressed());
+                            _bloc.add(const RegisterWithApplePressed());
                           }
                         },
                         name: 'Apple',
@@ -130,23 +137,15 @@ class _LoginScreenState extends State<LoginScreen> {
               spacing: 5,
               children: [
                 CustomNewText(
-                  text: S.of(context).dontHaveAnAccount,
+                  text: S.of(context).alreadyHaveAnAccount,
                   fontSize: 18,
                 ),
                 InkWell(
-                  onTap: () async {
-                    final registered = await Navigator.push<bool>(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => RegistrationScreen(),
-                      ),
-                    );
-                    if (registered == true && context.mounted) {
-                      Navigator.pop(context);
-                    }
+                  onTap: () {
+                    Navigator.pop(context);
                   },
                   child: CustomNewText(
-                    text: S.of(context).signUp,
+                    text: S.of(context).logIn,
                     fontSize: 18,
                     color: AppColors.activeBorder,
                   ),

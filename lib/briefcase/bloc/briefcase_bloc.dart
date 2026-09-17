@@ -4,10 +4,10 @@ import 'package:bloc_after_effect/bloc_after_effect.dart';
 import 'package:injectable/injectable.dart';
 import 'package:rxdart/rxdart.dart';
 
+import '../../auth/data/repository/auth_repository.dart';
 import '../../core/models/user_model.dart';
 import '../../home/data/models/coin_model.dart';
 import '../../home/data/repository/coint_rpository.dart';
-import '../../registration/data/repository/registration_repository.dart';
 import 'briefcase_effect.dart';
 import 'briefcase_event.dart';
 import 'briefcase_state.dart';
@@ -17,9 +17,9 @@ class BriefcaseBloc
     extends EffectBloc<BriefcaseEvent, BriefcaseState, BriefcaseEffect> {
   BriefcaseBloc({
     required CoinRepositoryI coinRepository,
-    required RegistrationRepositoryI registrationRepository,
+    required AuthRepositoryI authRepository,
   }) : _coinRepository = coinRepository,
-       _registrationRepository = registrationRepository,
+       _authRepository = authRepository,
        super(const BriefcaseState()) {
     on<BriefcaseLoadingEvent>((event, emit) {
       emit(state.copyWith(isLoading: event.isLoading));
@@ -32,12 +32,12 @@ class BriefcaseBloc
   }
 
   final CoinRepositoryI _coinRepository;
-  final RegistrationRepositoryI _registrationRepository;
+  final AuthRepositoryI _authRepository;
   StreamSubscription<List<CoinModel>>? _coinsSubscription;
   StreamSubscription<bool>? _authSubscription;
 
   void init() {
-    _authSubscription = _registrationRepository.authStateChanges().listen((
+    _authSubscription = _authRepository.authStateChanges().listen((
       isLoggedIn,
     ) {
       if (!isLoggedIn) {
@@ -56,7 +56,7 @@ class BriefcaseBloc
     _coinsSubscription =
         Rx.combineLatest2<List<CoinModel>, UserModel?, List<CoinModel>>(
           _coinRepository.watchCoins(),
-          _registrationRepository.watchCurrentUserProfile(),
+          _authRepository.watchCurrentUserProfile(),
           (coins, userProfile) {
             final coinIds = userProfile?.coinIds ?? const [];
             return coins.where((coin) => coinIds.contains(coin.id)).toList();

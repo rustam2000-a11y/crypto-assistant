@@ -11,6 +11,12 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:crypto_assistant/assistant/bloc/filter_detailing_bloc.dart'
     as _i2;
+import 'package:crypto_assistant/auth/data/api/auth_api.dart' as _i375;
+import 'package:crypto_assistant/auth/data/repository/auth_repository.dart'
+    as _i767;
+import 'package:crypto_assistant/auth/login/bloc/login_bloc.dart' as _i168;
+import 'package:crypto_assistant/auth/registration/bloc/registration_bloc.dart'
+    as _i685;
 import 'package:crypto_assistant/briefcase/bloc/briefcase_bloc.dart' as _i612;
 import 'package:crypto_assistant/coin_card/bloc/coin_bloc.dart' as _i287;
 import 'package:crypto_assistant/core/bloc/app_locale_bloc.dart' as _i684;
@@ -28,13 +34,6 @@ import 'package:crypto_assistant/home/language/data/api/language_api.dart'
 import 'package:crypto_assistant/home/language/data/repository/language_repository.dart'
     as _i576;
 import 'package:crypto_assistant/injection.dart' as _i437;
-import 'package:crypto_assistant/registration/bloc/login_bloc.dart' as _i471;
-import 'package:crypto_assistant/registration/bloc/registration_bloc.dart'
-    as _i688;
-import 'package:crypto_assistant/registration/data/api/registration_api.dart'
-    as _i957;
-import 'package:crypto_assistant/registration/data/repository/registration_repository.dart'
-    as _i678;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 import 'package:shared_preferences/shared_preferences.dart' as _i460;
@@ -57,45 +56,31 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i404.CoinRepositoryI>(
       () => _i404.CoinRepository(api: gh<_i997.CoinApI>()),
     );
-    gh.factory<_i957.RegistrationApiI>(() => _i957.RegistrationApi());
-    gh.lazySingleton<_i678.RegistrationRepositoryI>(
-      () => _i678.RegistrationRepository(api: gh<_i957.RegistrationApiI>()),
-    );
-    gh.factory<_i838.HomeBloc>(
-      () => _i838.HomeBloc(
-        coinRepository: gh<_i404.CoinRepositoryI>(),
-        registrationRepository: gh<_i678.RegistrationRepositoryI>(),
-        searchCoinsUseCase: gh<_i976.SearchCoinsUseCase>(),
-      ),
-    );
-    gh.factory<_i471.LoginBloc>(
-      () => _i471.LoginBloc(repository: gh<_i678.RegistrationRepositoryI>()),
-    );
-    gh.factory<_i688.RegistrationBloc>(
-      () => _i688.RegistrationBloc(
-        repository: gh<_i678.RegistrationRepositoryI>(),
-      ),
-    );
     gh.factory<_i234.LanguageApiI>(
       () => _i234.LanguageApi(gh<_i460.SharedPreferences>()),
     );
     gh.factory<_i2.FilterDetailingBloc>(
       () => _i2.FilterDetailingBloc(repository: gh<_i404.CoinRepositoryI>()),
     );
-    gh.factory<_i612.BriefcaseBloc>(
-      () => _i612.BriefcaseBloc(
-        coinRepository: gh<_i404.CoinRepositoryI>(),
-        registrationRepository: gh<_i678.RegistrationRepositoryI>(),
-      ),
-    );
-    gh.factory<_i287.CoinBloc>(
-      () => _i287.CoinBloc(
-        coinRepository: gh<_i404.CoinRepositoryI>(),
-        registrationRepository: gh<_i678.RegistrationRepositoryI>(),
-      ),
-    );
+    gh.factory<_i375.AuthApiI>(() => _i375.AuthApi());
     gh.lazySingleton<_i576.LanguageRepositoryI>(
       () => _i576.LanguageRepository(api: gh<_i234.LanguageApiI>()),
+    );
+    gh.lazySingleton<_i767.AuthRepositoryI>(
+      () => _i767.AuthRepository(api: gh<_i375.AuthApiI>()),
+    );
+    gh.factory<_i838.HomeBloc>(
+      () => _i838.HomeBloc(
+        coinRepository: gh<_i404.CoinRepositoryI>(),
+        authRepository: gh<_i767.AuthRepositoryI>(),
+        searchCoinsUseCase: gh<_i976.SearchCoinsUseCase>(),
+      ),
+    );
+    gh.factory<_i168.LoginBloc>(
+      () => _i168.LoginBloc(repository: gh<_i767.AuthRepositoryI>()),
+    );
+    gh.factory<_i685.RegistrationBloc>(
+      () => _i685.RegistrationBloc(repository: gh<_i767.AuthRepositoryI>()),
     );
     gh.factory<_i861.LanguageBloc>(
       () => _i861.LanguageBloc(
@@ -105,6 +90,18 @@ extension GetItInjectableX on _i174.GetIt {
     gh.lazySingleton<_i684.AppLocaleBloc>(
       () => _i684.AppLocaleBloc(
         languageRepository: gh<_i576.LanguageRepositoryI>(),
+      ),
+    );
+    gh.factory<_i612.BriefcaseBloc>(
+      () => _i612.BriefcaseBloc(
+        coinRepository: gh<_i404.CoinRepositoryI>(),
+        authRepository: gh<_i767.AuthRepositoryI>(),
+      ),
+    );
+    gh.factory<_i287.CoinBloc>(
+      () => _i287.CoinBloc(
+        coinRepository: gh<_i404.CoinRepositoryI>(),
+        authRepository: gh<_i767.AuthRepositoryI>(),
       ),
     );
     return this;
