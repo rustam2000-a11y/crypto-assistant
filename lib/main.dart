@@ -6,9 +6,9 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
 import 'firebase_options.dart';
 import 'generated/l10n.dart';
+import 'core/bloc/app_locale_bloc.dart';
+import 'core/bloc/app_locale_state.dart';
 import 'core/ui/ui_provider.dart';
-import 'home/language/bloc/app_locale_bloc.dart';
-import 'home/language/bloc/app_locale_state.dart';
 import 'injection.dart';
 import 'navigation/main_navigation_screen.dart';
 

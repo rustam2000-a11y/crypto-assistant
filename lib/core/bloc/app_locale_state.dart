@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 
-import '../data/models/language.dart';
+import '../../home/language/data/models/language.dart';
 
 class AppLocaleState extends Equatable {
   const AppLocaleState({required this.language});

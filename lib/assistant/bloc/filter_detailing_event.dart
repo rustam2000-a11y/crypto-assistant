@@ -1,5 +1,5 @@
 import '../../home/data/models/coin_model.dart';
-import '../assistant_widgets/filter_type.dart';
+import '../domain/filter_type.dart';
 
 abstract class FilterDetailingEvent {
   const FilterDetailingEvent();

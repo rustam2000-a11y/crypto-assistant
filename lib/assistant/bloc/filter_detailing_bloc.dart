@@ -5,8 +5,8 @@ import 'package:injectable/injectable.dart';
 
 import '../../home/data/models/coin_model.dart';
 import '../../home/data/repository/coint_rpository.dart';
-import '../../widget/format_utils.dart';
-import '../assistant_widgets/filter_type.dart';
+import '../domain/coin_filter.dart';
+import '../domain/filter_type.dart';
 import 'filter_detailing_effect.dart';
 import 'filter_detailing_event.dart';
 import 'filter_detailing_state.dart';
@@ -38,7 +38,7 @@ class FilterDetailingBloc
 
   void _watchCoins(FilterType type) {
     add(const FilterDetailingLoadingEvent(isLoading: true));
-    final filter = _filterFor(type);
+    final filter = CoinFilter.forType(type);
     _coinsSubscription?.cancel();
     _coinsSubscription = _repository.watchCoins().listen(
       (coins) {
@@ -49,27 +49,6 @@ class FilterDetailingBloc
         add(const FilterDetailingLoadingEvent(isLoading: false));
       },
     );
-  }
-
-  CoinFilter _filterFor(FilterType type) {
-    switch (type) {
-      case FilterType.abnormalMovement:
-        return AbnormalMovementFilter();
-      case FilterType.priceMovement:
-        return PriceMovementFilter();
-      case FilterType.highVolatility:
-        return HighVolatilityFilter();
-      case FilterType.historicalExtremum:
-        return HistoricalExtremumFilter();
-      case FilterType.turnover:
-        return TurnoverFilter();
-      case FilterType.capitalInflow:
-        return CapitalInflowFilter();
-      case FilterType.dailyExtremum:
-        return DailyExtremumFilter();
-      case FilterType.confirmedAnomaly:
-        return ConfirmedAnomalyFilter();
-    }
   }
 
   @override

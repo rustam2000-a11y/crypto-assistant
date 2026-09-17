@@ -10,10 +10,10 @@ import '../home/home_widget/custom_app_bar.dart';
 import '../injection.dart';
 import '../presentation/app_colors.dart';
 import '../widget/coin_card.dart';
-import 'assistant_widgets/filter_type.dart';
 import 'bloc/filter_detailing_bloc.dart';
 import 'bloc/filter_detailing_event.dart';
 import 'bloc/filter_detailing_state.dart';
+import 'domain/filter_type.dart';
 
 class FilterDetailingScreen extends StatefulWidget {
   const FilterDetailingScreen({

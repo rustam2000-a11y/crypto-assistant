@@ -3,8 +3,8 @@ import 'dart:async';
 import 'package:bloc_after_effect/bloc_after_effect.dart';
 import 'package:injectable/injectable.dart';
 
-import '../data/models/language.dart';
-import '../data/repository/language_repository.dart';
+import '../../home/language/data/models/language.dart';
+import '../../home/language/data/repository/language_repository.dart';
 import 'app_locale_effect.dart';
 import 'app_locale_event.dart';
 import 'app_locale_state.dart';

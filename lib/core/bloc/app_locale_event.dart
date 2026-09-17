@@ -1,4 +1,4 @@
-import '../data/models/language.dart';
+import '../../home/language/data/models/language.dart';
 
 abstract class AppLocaleEvent {
   const AppLocaleEvent();

@@ -5,7 +5,7 @@ import '../home/home_widget/custom_app_bar.dart';
 import '../presentation/app_colors.dart';
 import '../presentation/app_images.dart';
 import 'assistant_widgets/assistant_card_information.dart';
-import 'assistant_widgets/filter_type.dart';
+import 'domain/filter_type.dart';
 import 'filter_detailing_screen.dart';
 
 class AssistantScreen extends StatelessWidget {

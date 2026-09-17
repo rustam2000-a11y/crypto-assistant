@@ -13,6 +13,7 @@ import 'package:crypto_assistant/assistant/bloc/filter_detailing_bloc.dart'
     as _i2;
 import 'package:crypto_assistant/briefcase/bloc/briefcase_bloc.dart' as _i612;
 import 'package:crypto_assistant/coin_card/bloc/coin_bloc.dart' as _i287;
+import 'package:crypto_assistant/core/bloc/app_locale_bloc.dart' as _i684;
 import 'package:crypto_assistant/home/bloc/home_bloc.dart' as _i838;
 import 'package:crypto_assistant/home/data/api/coint_api.dart' as _i997;
 import 'package:crypto_assistant/home/data/client/api_client.dart' as _i292;
@@ -20,8 +21,6 @@ import 'package:crypto_assistant/home/data/repository/coint_rpository.dart'
     as _i404;
 import 'package:crypto_assistant/home/domain/usecase/search_coins_usecase.dart'
     as _i976;
-import 'package:crypto_assistant/home/language/bloc/app_locale_bloc.dart'
-    as _i758;
 import 'package:crypto_assistant/home/language/bloc/language_bloc.dart'
     as _i861;
 import 'package:crypto_assistant/home/language/data/api/language_api.dart'
@@ -103,8 +102,8 @@ extension GetItInjectableX on _i174.GetIt {
         languageRepository: gh<_i576.LanguageRepositoryI>(),
       ),
     );
-    gh.lazySingleton<_i758.AppLocaleBloc>(
-      () => _i758.AppLocaleBloc(
+    gh.lazySingleton<_i684.AppLocaleBloc>(
+      () => _i684.AppLocaleBloc(
         languageRepository: gh<_i576.LanguageRepositoryI>(),
       ),
     );
