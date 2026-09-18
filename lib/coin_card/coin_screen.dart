@@ -97,12 +97,12 @@ class _CoinScreenState extends State<CoinScreen> {
                                       CoinAvatar(imageUrl: coin.image),
                                       const SizedBox(width: 12),
                                       Expanded(
-                                        child: TitleTextColumn(//
+                                        child: TitleTextColumn(
                                           title: coin.name,
                                           text:
                                               '${coin.symbol.toUpperCase()} - #${coin.marketCapRank}',
-                                          fonSizeFirst: isTablet?22:18,
-                                          fonSizeLast: isTablet?22:14,
+                                          fonSizeFirst: isTablet ? 22 : 18,
+                                          fonSizeLast: isTablet ? 22 : 14,
                                         ),
                                       ),
                                     ],
@@ -121,9 +121,8 @@ class _CoinScreenState extends State<CoinScreen> {
                               points: state.chartPoints,
                               isLoading: state.isChartLoading,
                               selectedPeriod: state.chartPeriod,
-                              onPeriodChanged: (period) => _bloc.add(
-                                ChangeChartPeriodEvent(period),
-                              ),
+                              onPeriodChanged: (period) =>
+                                  _bloc.add(ChangeChartPeriodEvent(period)),
                             ),
                           ],
                         ),

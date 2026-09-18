@@ -56,14 +56,22 @@ class HomeBloc extends EffectBloc<HomeEvent, HomeState, HomeEffect> {
 
   void _init() {
     add(LoadingEvent(isLoading: true));
-    _coinsSubscription = _coinRepository.watchCoins().listen((coins) {
-      add(LoadItemsEvent(items: coins));
-    });
-    _authSubscription = _authRepository.authStateChanges().listen((
-      isLoggedIn,
-    ) {
-      add(LoggedInStatusChangedEvent(isLoggedIn: isLoggedIn));
-    });
+    _coinsSubscription = _coinRepository.watchCoins().listen(
+      (coins) {
+        add(LoadItemsEvent(items: coins));
+      },
+      onError: (Object e) {
+        if (e is Exception) emitEffect(HomeShowError(e.toString()));
+      },
+    );
+    _authSubscription = _authRepository.authStateChanges().listen(
+      (isLoggedIn) {
+        add(LoggedInStatusChangedEvent(isLoggedIn: isLoggedIn));
+      },
+      onError: (Object e) {
+        if (e is Exception) emitEffect(HomeShowError(e.toString()));
+      },
+    );
   }
 
   void _searchCoins(String query) {
@@ -71,8 +79,12 @@ class HomeBloc extends EffectBloc<HomeEvent, HomeState, HomeEffect> {
     add(ChangedFilteredItemsEvent(filteredItems: filtered));
   }
 
-  void _logOut() async {
-    await _authRepository.logout();
+  Future<void> _logOut() async {
+    try {
+      await _authRepository.logout();
+    } on Exception catch (e) {
+      emitEffect(HomeShowError(e.toString()));
+    }
   }
 
   @override

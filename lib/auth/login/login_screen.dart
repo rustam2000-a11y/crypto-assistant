@@ -8,6 +8,7 @@ import 'package:crypto_assistant/widget/login_title.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../core/errors/auth_error_type.dart';
 import '../../core/ui/device_layout.dart';
 import '../../core/ui/ui_provider.dart';
 import '../../generated/l10n.dart';
@@ -50,7 +51,11 @@ class _LoginScreenState extends State<LoginScreen> {
         switch (effect) {
           case LoginSucceeded():
             Navigator.pop(context);
-          case LoginFailed(:final message):
+          case LoginFailed(:final errorType):
+            final message = switch (errorType) {
+              AuthErrorType.invalidEmail => S.of(context).invalidEmail,
+              _ => S.of(context).failedToLogIn,
+            };
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(SnackBar(content: Text(message)));
@@ -80,8 +85,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 CustomPasswordTextField(
                   label: S.of(context).password,
                   error: state.error,
-                  onChanged: (value) =>
-                      _bloc.add(LoginPasswordChanged(value)),
+                  onChanged: (value) => _bloc.add(LoginPasswordChanged(value)),
                 ),
                 SizedBox(height: 30),
                 if (state.isLoading)

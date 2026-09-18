@@ -1,5 +1,7 @@
+import 'package:bloc_after_effect/bloc_after_effect.dart';
 import 'package:crypto_assistant/core/ui/device_layout.dart';
 import 'package:crypto_assistant/home/bloc/home_bloc.dart';
+import 'package:crypto_assistant/home/bloc/home_effect.dart';
 import 'package:crypto_assistant/home/bloc/home_event.dart';
 import 'package:crypto_assistant/home/bloc/home_state.dart';
 import 'package:crypto_assistant/presentation/app_colors.dart';
@@ -41,8 +43,16 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final isTablet = context.watch<UiProvider>().deviceLayout.isTabletMode;
-    return BlocBuilder<HomeBloc, HomeState>(
+    return BlocEffectBuilder<HomeBloc, HomeState, HomeEffect>(
       bloc: _bloc,
+      effectListener: (context, effect) {
+        switch (effect) {
+          case HomeShowError(:final message):
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(message)));
+        }
+      },
       builder: (context, state) {
         return Scaffold(
           backgroundColor: AppColors.haiti,
@@ -63,8 +73,8 @@ class _HomeScreenState extends State<HomeScreen> {
                 },
                 child: Image.asset(
                   AppImages.languages,
-                  width: isTablet?27:24,
-                  height: isTablet?27:24,
+                  width: isTablet ? 27 : 24,
+                  height: isTablet ? 27 : 24,
                   color: AppColors.whiteColor,
                 ),
               ),

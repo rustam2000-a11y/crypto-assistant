@@ -41,7 +41,14 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
       appBar: CustomAppBar(text: S.of(context).myBriefcase, leadingIcon: false),
       body: BlocEffectBuilder<BriefcaseBloc, BriefcaseState, BriefcaseEffect>(
         bloc: _bloc,
-        effectListener: (context, effect) {},
+        effectListener: (context, effect) {
+          switch (effect) {
+            case BriefcaseShowError(:final message):
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(message)));
+          }
+        },
         builder: (context, state) {
           if (state.isLoading) {
             return const Center(child: CircularProgressIndicator());

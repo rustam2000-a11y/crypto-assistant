@@ -1,8 +1,8 @@
 import 'package:bloc_after_effect/bloc_after_effect.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../core/errors/auth_error_type.dart';
 import '../../../core/errors/auth_exceptions.dart';
-import '../../../generated/l10n.dart';
 import '../../data/repository/auth_repository.dart';
 import 'login_effect.dart';
 import 'login_event.dart';
@@ -54,9 +54,9 @@ class LoginBloc extends EffectBloc<LoginEvent, LoginState, LoginEffect> {
       );
       add(const LoginLoadingEvent(isLoading: false));
       if (user != null) emitEffect(LoginSucceeded(user));
-    } catch (e) {
+    } on Exception catch (e) {
       add(const LoginLoadingEvent(isLoading: false));
-      emitEffect(LoginFailed(_describeError(e)));
+      emitEffect(LoginFailed(_mapError(e)));
     }
   }
 
@@ -66,9 +66,9 @@ class LoginBloc extends EffectBloc<LoginEvent, LoginState, LoginEffect> {
       final user = await _repository.signInWithGoogle();
       add(const LoginLoadingEvent(isLoading: false));
       if (user != null) emitEffect(LoginSucceeded(user));
-    } catch (e) {
+    } on Exception catch (e) {
       add(const LoginLoadingEvent(isLoading: false));
-      emitEffect(LoginFailed(_describeError(e)));
+      emitEffect(LoginFailed(_mapError(e)));
     }
   }
 
@@ -78,16 +78,16 @@ class LoginBloc extends EffectBloc<LoginEvent, LoginState, LoginEffect> {
       final user = await _repository.signInWithApple();
       add(const LoginLoadingEvent(isLoading: false));
       if (user != null) emitEffect(LoginSucceeded(user));
-    } catch (e) {
+    } on Exception catch (e) {
       add(const LoginLoadingEvent(isLoading: false));
-      emitEffect(LoginFailed(_describeError(e)));
+      emitEffect(LoginFailed(_mapError(e)));
     }
   }
 
-  String _describeError(Object error) {
+  AuthErrorType _mapError(Object error) {
     return switch (error) {
-      InvalidEmailException() => S.current.invalidEmail,
-      _ => S.current.failedToLogIn,
+      InvalidEmailException() => AuthErrorType.invalidEmail,
+      _ => AuthErrorType.unknown,
     };
   }
 }

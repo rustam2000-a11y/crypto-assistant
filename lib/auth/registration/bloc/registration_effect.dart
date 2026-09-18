@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../core/errors/auth_error_type.dart';
 import '../../../core/models/user_model.dart';
 
 abstract class RegistrationEffect extends Equatable {
@@ -19,10 +20,10 @@ class RegistrationSucceeded extends RegistrationEffect {
 }
 
 class RegistrationFailed extends RegistrationEffect {
-  const RegistrationFailed(this.message);
+  const RegistrationFailed(this.errorType);
 
-  final String message;
+  final AuthErrorType errorType;
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [errorType];
 }

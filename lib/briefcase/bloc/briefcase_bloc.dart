@@ -37,18 +37,21 @@ class BriefcaseBloc
   StreamSubscription<bool>? _authSubscription;
 
   void init() {
-    _authSubscription = _authRepository.authStateChanges().listen((
-      isLoggedIn,
-    ) {
-      if (!isLoggedIn) {
-        _coinsSubscription?.cancel();
-        _coinsSubscription = null;
-        add(const BriefcaseCoinsLoadedEvent(coins: []));
-        return;
-      }
-      add(const BriefcaseLoadingEvent(isLoading: true));
-      _watchUserCoins();
-    });
+    _authSubscription = _authRepository.authStateChanges().listen(
+      (isLoggedIn) {
+        if (!isLoggedIn) {
+          _coinsSubscription?.cancel();
+          _coinsSubscription = null;
+          add(const BriefcaseCoinsLoadedEvent(coins: []));
+          return;
+        }
+        add(const BriefcaseLoadingEvent(isLoading: true));
+        _watchUserCoins();
+      },
+      onError: (Object e) {
+        if (e is Exception) emitEffect(BriefcaseShowError(e.toString()));
+      },
+    );
   }
 
   void _watchUserCoins() {
@@ -61,9 +64,14 @@ class BriefcaseBloc
             final coinIds = userProfile?.coinIds ?? const [];
             return coins.where((coin) => coinIds.contains(coin.id)).toList();
           },
-        ).listen((userCoins) {
-          add(BriefcaseCoinsLoadedEvent(coins: userCoins));
-        });
+        ).listen(
+          (userCoins) {
+            add(BriefcaseCoinsLoadedEvent(coins: userCoins));
+          },
+          onError: (Object e) {
+            if (e is Exception) emitEffect(BriefcaseShowError(e.toString()));
+          },
+        );
   }
 
   @override

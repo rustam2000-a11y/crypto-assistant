@@ -2,6 +2,7 @@ import 'package:bloc_after_effect/bloc_after_effect.dart';
 import 'package:crypto_assistant/widget/login_title.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import '../../core/errors/auth_error_type.dart';
 import '../../core/ui/device_layout.dart';
 import '../../core/ui/ui_provider.dart';
 import '../../generated/l10n.dart';
@@ -52,7 +53,14 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         switch (effect) {
           case RegistrationSucceeded():
             Navigator.pop(context, true);
-          case RegistrationFailed(:final message):
+          case RegistrationFailed(:final errorType):
+            final message = switch (errorType) {
+              AuthErrorType.weakPassword => S.of(context).weakPassword,
+              AuthErrorType.emailAlreadyInUse =>
+                S.of(context).emailAlreadyInUse,
+              AuthErrorType.invalidEmail => S.of(context).invalidEmail,
+              AuthErrorType.unknown => S.of(context).failedToSignUp,
+            };
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(SnackBar(content: Text(message)));

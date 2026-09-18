@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 
+import '../../../core/errors/auth_error_type.dart';
 import '../../../core/models/user_model.dart';
 
 abstract class LoginEffect extends Equatable {
@@ -19,11 +20,10 @@ class LoginSucceeded extends LoginEffect {
 }
 
 class LoginFailed extends LoginEffect {
-  const LoginFailed(this.message);
+  const LoginFailed(this.errorType);
 
-  final String message;
+  final AuthErrorType errorType;
 
   @override
-  List<Object?> get props => [message];
+  List<Object?> get props => [errorType];
 }
-

@@ -60,9 +60,16 @@ class CoinBloc extends EffectBloc<CoinEvent, CoinState, CoinEffect> {
   void _watchCoin(String coinId) {
     add(const CoinLoadingEvent(isLoading: true));
     _coinSubscription?.cancel();
-    _coinSubscription = _coinRepository.watchCoin(coinId).listen((coin) {
-      add(CoinLoadedEvent(coin: coin));
-    });
+    _coinSubscription = _coinRepository
+        .watchCoin(coinId)
+        .listen(
+          (coin) {
+            add(CoinLoadedEvent(coin: coin));
+          },
+          onError: (Object e) {
+            if (e is Exception) emitEffect(CoinShowError(e.toString()));
+          },
+        );
   }
 
   void _watchChart(String coinId, ChartPeriod period) {
@@ -70,9 +77,14 @@ class CoinBloc extends EffectBloc<CoinEvent, CoinState, CoinEffect> {
     _chartSubscription?.cancel();
     _chartSubscription = _coinRepository
         .watchMarketChart(coinId, days: period.days)
-        .listen((points) {
-          add(ChartLoadedEvent(points: points));
-        });
+        .listen(
+          (points) {
+            add(ChartLoadedEvent(points: points));
+          },
+          onError: (Object e) {
+            if (e is Exception) emitEffect(CoinShowError(e.toString()));
+          },
+        );
   }
 
   void _changeChartPeriod(ChartPeriod period) {
@@ -83,31 +95,39 @@ class CoinBloc extends EffectBloc<CoinEvent, CoinState, CoinEffect> {
   }
 
   Future<void> _loadBriefcaseStatus(String coinId) async {
-    if (_authRepository.currentUser == null) {
-      add(const BriefcaseStatusLoadedEvent(isFavorite: false));
-      return;
+    try {
+      if (_authRepository.currentUser == null) {
+        add(const BriefcaseStatusLoadedEvent(isFavorite: false));
+        return;
+      }
+      final userProfile = await _authRepository.getCurrentUserProfile();
+      final isFavorite = userProfile?.coinIds.contains(coinId) ?? false;
+      add(BriefcaseStatusLoadedEvent(isFavorite: isFavorite));
+    } on Exception catch (e) {
+      emitEffect(CoinShowError(e.toString()));
     }
-    final userProfile = await _authRepository.getCurrentUserProfile();
-    final isFavorite = userProfile?.coinIds.contains(coinId) ?? false;
-    add(BriefcaseStatusLoadedEvent(isFavorite: isFavorite));
   }
 
   Future<void> _toggleBriefcase() async {
-    if (_authRepository.currentUser == null) {
-      emitEffect(const CoinNavigateToLogin());
-      return;
-    }
-    final coinId = state.coin?.id;
-    if (coinId == null) return;
+    try {
+      if (_authRepository.currentUser == null) {
+        emitEffect(const CoinNavigateToLogin());
+        return;
+      }
+      final coinId = state.coin?.id;
+      if (coinId == null) return;
 
-    if (state.isFavorite) {
-      await _coinRepository.removeCoinFromBriefcase(coinId);
-      add(const BriefcaseStatusLoadedEvent(isFavorite: false));
-      return;
-    }
+      if (state.isFavorite) {
+        await _coinRepository.removeCoinFromBriefcase(coinId);
+        add(const BriefcaseStatusLoadedEvent(isFavorite: false));
+        return;
+      }
 
-    await _coinRepository.addCoinToBriefcase(coinId);
-    add(const BriefcaseStatusLoadedEvent(isFavorite: true));
+      await _coinRepository.addCoinToBriefcase(coinId);
+      add(const BriefcaseStatusLoadedEvent(isFavorite: true));
+    } on Exception catch (e) {
+      emitEffect(CoinShowError(e.toString()));
+    }
   }
 
   @override

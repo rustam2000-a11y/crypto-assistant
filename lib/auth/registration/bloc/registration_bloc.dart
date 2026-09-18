@@ -1,8 +1,8 @@
 import 'package:bloc_after_effect/bloc_after_effect.dart';
 import 'package:injectable/injectable.dart';
 
+import '../../../core/errors/auth_error_type.dart';
 import '../../../core/errors/auth_exceptions.dart';
-import '../../../generated/l10n.dart';
 import '../../data/repository/auth_repository.dart';
 import 'registration_effect.dart';
 import 'registration_event.dart';
@@ -60,9 +60,9 @@ class RegistrationBloc
       );
       add(const RegistrationLoadingEvent(isLoading: false));
       if (user != null) emitEffect(RegistrationSucceeded(user));
-    } catch (e) {
+    } on Exception catch (e) {
       add(const RegistrationLoadingEvent(isLoading: false));
-      emitEffect(RegistrationFailed(_describeError(e)));
+      emitEffect(RegistrationFailed(_mapError(e)));
     }
   }
 
@@ -72,9 +72,9 @@ class RegistrationBloc
       final user = await _repository.signInWithGoogle();
       add(const RegistrationLoadingEvent(isLoading: false));
       if (user != null) emitEffect(RegistrationSucceeded(user));
-    } catch (e) {
+    } on Exception catch (e) {
       add(const RegistrationLoadingEvent(isLoading: false));
-      emitEffect(RegistrationFailed(_describeError(e)));
+      emitEffect(RegistrationFailed(_mapError(e)));
     }
   }
 
@@ -84,18 +84,18 @@ class RegistrationBloc
       final user = await _repository.signInWithApple();
       add(const RegistrationLoadingEvent(isLoading: false));
       if (user != null) emitEffect(RegistrationSucceeded(user));
-    } catch (e) {
+    } on Exception catch (e) {
       add(const RegistrationLoadingEvent(isLoading: false));
-      emitEffect(RegistrationFailed(_describeError(e)));
+      emitEffect(RegistrationFailed(_mapError(e)));
     }
   }
 
-  String _describeError(Object error) {
+  AuthErrorType _mapError(Object error) {
     return switch (error) {
-      WeakPasswordException() => S.current.weakPassword,
-      EmailAlreadyInUseException() => S.current.emailAlreadyInUse,//
-      InvalidEmailException() => S.current.invalidEmail,
-      _ => S.current.failedToSignUp,
+      WeakPasswordException() => AuthErrorType.weakPassword,
+      EmailAlreadyInUseException() => AuthErrorType.emailAlreadyInUse,
+      InvalidEmailException() => AuthErrorType.invalidEmail,
+      _ => AuthErrorType.unknown,
     };
   }
 }
