@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -12,23 +14,29 @@ import 'core/ui/ui_provider.dart';
 import 'injection.dart';
 import 'navigation/main_navigation_screen.dart';
 
-void main() async {
-  WidgetsFlutterBinding.ensureInitialized();
-  await SystemChrome.setPreferredOrientations([
-    DeviceOrientation.portraitUp,
-    DeviceOrientation.portraitDown,
-  ]);
-  await configureDependencies();
-  try {
-    await Firebase.initializeApp(
-      options: DefaultFirebaseOptions.currentPlatform,
+void main() {
+  runZonedGuarded(() async {
+    WidgetsFlutterBinding.ensureInitialized();
+    FlutterError.onError = (details) {
+      FlutterError.presentError(details);
+      debugPrint('FlutterError: ${details.exception}\n${details.stack}');
+    };
+    await SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
+    await configureDependencies();
+    try {
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
+    } catch (e) {
+      debugPrint('Firebase init error: $e');
+    }
+    runApp(
+      ChangeNotifierProvider(create: (_) => UiProvider(), child: const MyApp()),
     );
-  } catch (e) {
-    debugPrint('Firebase init error: $e');
-  }
-  runApp(
-    ChangeNotifierProvider(create: (_) => UiProvider(), child: const MyApp()),
-  );
+  }, (error, stack) => debugPrint('Uncaught error: $error\n$stack'));
 }
 
 class MyApp extends StatefulWidget {
