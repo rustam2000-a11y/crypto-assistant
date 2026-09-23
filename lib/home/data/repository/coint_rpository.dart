@@ -14,23 +14,53 @@ class CoinRepository extends CoinRepositoryI {
   Stream<List<CoinModel>> watchCoins() {
     return Stream.periodic(const Duration(seconds: 60))
         .startWith(null)
-        .switchMap((_) => Stream.fromFuture(_api.fetch()));
+        .switchMap((_) => Stream.fromFuture(_api.fetch()))
+        .switchMap((coins) {
+          if (coins.isEmpty) return Stream.value(coins);
+          return CombineLatestStream.list(
+            coins.map(
+              (coin) => _api
+                  .watchPrice(coin.symbol)
+                  .map((price) => coin.copyWith(currentPrice: price))
+                  .startWith(coin),
+            ),
+          );
+        });
   }
 
   @override
   Stream<CoinModel> watchCoin(String id) {
     return Stream.periodic(const Duration(seconds: 60))
         .startWith(null)
-        .switchMap((_) => Stream.fromFuture(_api.fetchById(id)));
+        .switchMap((_) => Stream.fromFuture(_api.fetchById(id)))
+        .switchMap(
+          (coin) => _api
+              .watchPrice(coin.symbol)
+              .map((price) => coin.copyWith(currentPrice: price))
+              .startWith(coin),
+        );
   }
 
   @override
   Stream<List<PricePoint>> watchMarketChart(String id, {int days = 7}) {
-    return Stream.periodic(const Duration(seconds: 60))
-        .startWith(null)
-        .switchMap(
-          (_) => Stream.fromFuture(_api.fetchMarketChart(id, days: days)),
-        );
+    return Stream.fromFuture(_api.fetchById(id)).switchMap((coin) {
+      final livePrice = _api.watchPrice(coin.symbol);
+      return Stream.periodic(const Duration(seconds: 60))
+          .startWith(null)
+          .switchMap(
+            (_) => Stream.fromFuture(_api.fetchMarketChart(id, days: days)),
+          )
+          .switchMap(
+            (points) => livePrice
+                .map(
+                  (price) => [
+                    ...points,
+                    PricePoint(timestamp: DateTime.now(), price: price),
+                  ],
+                )
+                .startWith(points),
+          );
+    });
   }
 
   @override

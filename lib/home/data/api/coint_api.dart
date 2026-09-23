@@ -4,16 +4,18 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
 
 import '../client/api_client.dart';
+import '../client/binance_socket_client.dart';
 import '../models/coin_model.dart';
 import '../models/price_point.dart';
 
 @Injectable(as: CoinApI)
 class CoinApi extends CoinApI {
   final ApiClient _client;
+  final BinanceSocketClient _binanceSocket;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  CoinApi(this._client);
+  CoinApi(this._client, this._binanceSocket);
 
   @override
   Future<List<CoinModel>> fetch() async {
@@ -58,6 +60,9 @@ class CoinApi extends CoinApI {
   }
 
   @override
+  Stream<double> watchPrice(String symbol) => _binanceSocket.watchPrice(symbol);
+
+  @override
   Future<void> addCoinToBriefcase(String coinId) async {
     final uid = _auth.currentUser?.uid;
     if (uid == null) return;
@@ -82,6 +87,7 @@ abstract class CoinApI {
   Future<List<CoinModel>> fetch();
   Future<CoinModel> fetchById(String id);
   Future<List<PricePoint>> fetchMarketChart(String id, {int days = 7});
+  Stream<double> watchPrice(String symbol);
   Future<void> addCoinToBriefcase(String coinId);
   Future<void> removeCoinFromBriefcase(String coinId);
 }

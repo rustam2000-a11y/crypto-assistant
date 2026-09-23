@@ -47,6 +47,7 @@ dependencies:
   rxdart: ^0.27.0
   bloc_after_effect: ^0.3.0
   http: ^1.2.2
+  web_socket_channel: ^3.0.3
   fl_chart: ^1.0.0
   google_sign_in: ^7.2.0
   sign_in_with_apple: ^7.0.1

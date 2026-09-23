@@ -23,6 +23,8 @@ import 'package:crypto_assistant/core/bloc/app_locale_bloc.dart' as _i684;
 import 'package:crypto_assistant/home/bloc/home_bloc.dart' as _i838;
 import 'package:crypto_assistant/home/data/api/coint_api.dart' as _i997;
 import 'package:crypto_assistant/home/data/client/api_client.dart' as _i292;
+import 'package:crypto_assistant/home/data/client/binance_socket_client.dart'
+    as _i978;
 import 'package:crypto_assistant/home/data/repository/coint_rpository.dart'
     as _i404;
 import 'package:crypto_assistant/home/domain/usecase/search_coins_usecase.dart'
@@ -52,19 +54,20 @@ extension GetItInjectableX on _i174.GetIt {
       preResolve: true,
     );
     gh.singleton<_i292.ApiClient>(() => _i292.ApiClient());
-    gh.factory<_i997.CoinApI>(() => _i997.CoinApi(gh<_i292.ApiClient>()));
-    gh.lazySingleton<_i404.CoinRepositoryI>(
-      () => _i404.CoinRepository(api: gh<_i997.CoinApI>()),
-    );
+    gh.singleton<_i978.BinanceSocketClient>(() => _i978.BinanceSocketClient());
     gh.factory<_i234.LanguageApiI>(
       () => _i234.LanguageApi(gh<_i460.SharedPreferences>()),
-    );
-    gh.factory<_i2.FilterDetailingBloc>(
-      () => _i2.FilterDetailingBloc(repository: gh<_i404.CoinRepositoryI>()),
     );
     gh.factory<_i375.AuthApiI>(() => _i375.AuthApi());
     gh.lazySingleton<_i576.LanguageRepositoryI>(
       () => _i576.LanguageRepository(api: gh<_i234.LanguageApiI>()),
+    );
+    gh.factory<_i997.CoinApI>(
+      () =>
+          _i997.CoinApi(gh<_i292.ApiClient>(), gh<_i978.BinanceSocketClient>()),
+    );
+    gh.lazySingleton<_i404.CoinRepositoryI>(
+      () => _i404.CoinRepository(api: gh<_i997.CoinApI>()),
     );
     gh.lazySingleton<_i767.AuthRepositoryI>(
       () => _i767.AuthRepository(api: gh<_i375.AuthApiI>()),
@@ -75,6 +78,9 @@ extension GetItInjectableX on _i174.GetIt {
         authRepository: gh<_i767.AuthRepositoryI>(),
         searchCoinsUseCase: gh<_i976.SearchCoinsUseCase>(),
       ),
+    );
+    gh.factory<_i2.FilterDetailingBloc>(
+      () => _i2.FilterDetailingBloc(repository: gh<_i404.CoinRepositoryI>()),
     );
     gh.factory<_i168.LoginBloc>(
       () => _i168.LoginBloc(repository: gh<_i767.AuthRepositoryI>()),
