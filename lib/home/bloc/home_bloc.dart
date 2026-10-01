@@ -28,16 +28,21 @@ class HomeBloc extends EffectBloc<HomeEvent, HomeState, HomeEffect> {
       emit(
         state.copyWith(
           items: event.items,
-          filteredItems: event.items,
+          filteredItems: _searchCoinsUseCase.call(
+            event.items,
+            state.searchQuery,
+          ),
           isLoading: false,
         ),
       );
     });
     on<SearchQueryChangedEvent>((event, emit) {
-      _searchCoins(event.query);
-    });
-    on<ChangedFilteredItemsEvent>((event, emit) {
-      emit(state.copyWith(filteredItems: event.filteredItems));
+      emit(
+        state.copyWith(
+          searchQuery: event.query,
+          filteredItems: _searchCoinsUseCase.call(state.items, event.query),
+        ),
+      );
     });
     on<LogOutEvent>((event, emit) {
       _logOut();
@@ -72,11 +77,6 @@ class HomeBloc extends EffectBloc<HomeEvent, HomeState, HomeEffect> {
         if (e is Exception) emitEffect(HomeShowError(e.toString()));
       },
     );
-  }
-
-  void _searchCoins(String query) {
-    final filtered = _searchCoinsUseCase.call(state.items, query);
-    add(ChangedFilteredItemsEvent(filteredItems: filtered));
   }
 
   Future<void> _logOut() async {

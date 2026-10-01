@@ -5,8 +5,8 @@ import '../../data/models/coin_model.dart';
 @injectable
 class SearchCoinsUseCase {
   List<CoinModel> call(List<CoinModel> coins, String query) {
-    if (query.isEmpty) return coins;
-    final lowerQuery = query.toLowerCase();
+    final lowerQuery = query.trim().toLowerCase();
+    if (lowerQuery.isEmpty) return coins;
     return coins
         .where(
           (coin) =>
