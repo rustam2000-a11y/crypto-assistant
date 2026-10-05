@@ -10,8 +10,8 @@ class SearchCoinsUseCase {
     return coins
         .where(
           (coin) =>
-              coin.name.toLowerCase().contains(lowerQuery) ||
-              coin.symbol.toLowerCase().contains(lowerQuery),
+              coin.name.toLowerCase().startsWith(lowerQuery) ||
+              coin.symbol.toLowerCase().startsWith(lowerQuery),
         )
         .toList();
   }
