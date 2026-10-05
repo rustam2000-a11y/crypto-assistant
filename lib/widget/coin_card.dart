@@ -19,6 +19,8 @@ class CoinCard extends StatelessWidget {
     required this.totalVolume,
     required this.high24h,
     required this.marketCapRank,
+    this.onTap,
+    this.onLongPress,
   });
 
   final String name;
@@ -29,59 +31,72 @@ class CoinCard extends StatelessWidget {
   final int totalVolume;
   final double? high24h;
   final int marketCapRank;
+  final VoidCallback? onTap;
+  final VoidCallback? onLongPress;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.containerColor,
-        borderRadius: BorderRadius.circular(18),
-        border: Border.all(color: AppColors.jacarta),
-      ),
-      child: Column(
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(
-                child: Row(
+    return Material(
+      color: Colors.transparent,
+      borderRadius: BorderRadius.circular(18),
+      child: Ink(
+        decoration: BoxDecoration(
+          color: AppColors.containerColor,
+          borderRadius: BorderRadius.circular(18),
+          border: Border.all(color: AppColors.jacarta),
+        ),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(18),
+          onTap: onTap,
+          onLongPress: onLongPress,
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    CoinAvatar(imageUrl: imageUrl),
-                    const SizedBox(width: 12),
                     Expanded(
-                      child: TitleTextColumn(
-                        title: name,
-                        text: '${symbol.toUpperCase()} - #$marketCapRank',
+                      child: Row(
+                        children: [
+                          CoinAvatar(imageUrl: imageUrl),
+                          const SizedBox(width: 12),
+                          Expanded(
+                            child: TitleTextColumn(
+                              title: name,
+                              text: '${symbol.toUpperCase()} - #$marketCapRank',
+                            ),
+                          ),
+                        ],
                       ),
+                    ),
+                    CoinPriceChange(
+                      currentPrice: currentPrice,
+                      priceChangePercentage24h: priceChangePercentage24h,
                     ),
                   ],
                 ),
-              ),
-              CoinPriceChange(
-                currentPrice: currentPrice,
-                priceChangePercentage24h: priceChangePercentage24h,
-              ),
-            ],
+                const SizedBox(height: 16),
+                Row(
+                  spacing: 20,
+                  children: [
+                    CoinStatColumn(
+                      title: S.of(context).volume24Hours,
+                      text: formatVolume(totalVolume),
+                    ),
+                    CoinStatColumn(
+                      title: S.of(context).max24Hours,
+                      text: high24h != null
+                          ? '\$${high24h!.toStringAsFixed(2)}'
+                          : '—',
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
-          const SizedBox(height: 16),
-          Row(
-            spacing: 20,
-            children: [
-              CoinStatColumn(
-                title: S.of(context).volume24Hours,
-                text: formatVolume(totalVolume),
-              ),
-              CoinStatColumn(
-                title: S.of(context).max24Hours,
-                text: high24h != null
-                    ? '\$${high24h!.toStringAsFixed(2)}'
-                    : '—',
-              ),
-            ],
-          ),
-        ],
+        ),
       ),
     );
   }

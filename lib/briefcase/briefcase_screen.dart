@@ -64,7 +64,15 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
             separatorBuilder: (_, __) => const SizedBox(height: 8),
             itemBuilder: (context, index) {
               final coin = state.coins[index];
-              return GestureDetector(
+              return CoinCard(
+                name: coin.name,
+                symbol: coin.symbol,
+                imageUrl: coin.image,
+                currentPrice: coin.currentPrice,
+                priceChangePercentage24h: coin.priceChangePercentage24h,
+                totalVolume: coin.totalVolume,
+                high24h: coin.high24h,
+                marketCapRank: coin.marketCapRank,
                 onTap: () {
                   Navigator.push(
                     context,
@@ -73,16 +81,6 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
                     ),
                   );
                 },
-                child: CoinCard(
-                  name: coin.name,
-                  symbol: coin.symbol,
-                  imageUrl: coin.image,
-                  currentPrice: coin.currentPrice,
-                  priceChangePercentage24h: coin.priceChangePercentage24h,
-                  totalVolume: coin.totalVolume,
-                  high24h: coin.high24h,
-                  marketCapRank: coin.marketCapRank,
-                ),
               );
             },
           );
