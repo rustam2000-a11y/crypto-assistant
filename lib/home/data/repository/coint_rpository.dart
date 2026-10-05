@@ -70,6 +70,10 @@ class CoinRepository extends CoinRepositoryI {
   @override
   Future<void> removeCoinFromBriefcase(String coinId) =>
       _api.removeCoinFromBriefcase(coinId);
+
+  @override
+  Future<void> removeCoinsFromBriefcase(List<String> coinIds) =>
+      _api.removeCoinsFromBriefcase(coinIds);
 }
 
 abstract class CoinRepositoryI {
@@ -78,4 +82,5 @@ abstract class CoinRepositoryI {
   Stream<List<PricePoint>> watchMarketChart(String id, {int days = 7});
   Future<void> addCoinToBriefcase(String coinId);
   Future<void> removeCoinFromBriefcase(String coinId);
+  Future<void> removeCoinsFromBriefcase(List<String> coinIds);
 }

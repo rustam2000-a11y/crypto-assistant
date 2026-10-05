@@ -73,12 +73,16 @@ class CoinApi extends CoinApI {
   }
 
   @override
-  Future<void> removeCoinFromBriefcase(String coinId) async {
+  Future<void> removeCoinFromBriefcase(String coinId) =>
+      removeCoinsFromBriefcase([coinId]);
+
+  @override
+  Future<void> removeCoinsFromBriefcase(List<String> coinIds) async {
     final uid = _auth.currentUser?.uid;
     if (uid == null) return;
 
     await _firestore.collection('user').doc(uid).set({
-      'coinIds': FieldValue.arrayRemove([coinId]),
+      'coinIds': FieldValue.arrayRemove(coinIds),
     }, SetOptions(merge: true));
   }
 }
@@ -90,4 +94,5 @@ abstract class CoinApI {
   Stream<double> watchPrice(String symbol);
   Future<void> addCoinToBriefcase(String coinId);
   Future<void> removeCoinFromBriefcase(String coinId);
+  Future<void> removeCoinsFromBriefcase(List<String> coinIds);
 }

@@ -27,7 +27,15 @@ class BriefcaseBloc
     on<BriefcaseCoinsLoadedEvent>((event, emit) {
       emit(state.copyWith(coins: event.coins, isLoading: false));
     });
-
+    on<BriefcaseToggleCoinSelectionEvent>((event, emit) {
+      _toggleCoinSelection(event.coinId);
+    });
+    on<BriefcaseSelectionChangedEvent>((event, emit) {
+      emit(state.copyWith(selectedCoinIds: event.selectedCoinIds));
+    });
+    on<BriefcaseRemoveSelectedCoinsEvent>((event, emit) {
+      _removeSelectedCoins();
+    });
     init();
   }
 
@@ -43,6 +51,7 @@ class BriefcaseBloc
           _coinsSubscription?.cancel();
           _coinsSubscription = null;
           add(const BriefcaseCoinsLoadedEvent(coins: []));
+          add(const BriefcaseSelectionChangedEvent(selectedCoinIds: {}));
           return;
         }
         add(const BriefcaseLoadingEvent(isLoading: true));
@@ -67,11 +76,34 @@ class BriefcaseBloc
         ).listen(
           (userCoins) {
             add(BriefcaseCoinsLoadedEvent(coins: userCoins));
+
           },
           onError: (Object e) {
             if (e is Exception) emitEffect(BriefcaseShowError(e.toString()));
           },
         );
+  }
+
+  void _toggleCoinSelection(String coinId) {
+    final selectedCoinIds = {...state.selectedCoinIds};
+    if (selectedCoinIds.contains(coinId)) {
+      selectedCoinIds.remove(coinId);
+    } else {
+      selectedCoinIds.add(coinId);
+    }
+    add(BriefcaseSelectionChangedEvent(selectedCoinIds: selectedCoinIds));
+  }
+
+
+  Future<void> _removeSelectedCoins() async {
+    final coinIds = state.selectedCoinIds.toList();
+    if (coinIds.isEmpty) return;
+    add(const BriefcaseSelectionChangedEvent(selectedCoinIds: {}));
+    try {
+      await _coinRepository.removeCoinsFromBriefcase(coinIds);
+    } on Exception catch (e) {
+      emitEffect(BriefcaseShowError(e.toString()));
+    }
   }
 
   @override

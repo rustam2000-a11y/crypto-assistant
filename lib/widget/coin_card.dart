@@ -19,6 +19,7 @@ class CoinCard extends StatelessWidget {
     required this.totalVolume,
     required this.high24h,
     required this.marketCapRank,
+    this.isSelected = false,
     this.onTap,
     this.onLongPress,
   });
@@ -31,6 +32,7 @@ class CoinCard extends StatelessWidget {
   final int totalVolume;
   final double? high24h;
   final int marketCapRank;
+  final bool isSelected;
   final VoidCallback? onTap;
   final VoidCallback? onLongPress;
 
@@ -41,9 +43,13 @@ class CoinCard extends StatelessWidget {
       borderRadius: BorderRadius.circular(18),
       child: Ink(
         decoration: BoxDecoration(
-          color: AppColors.containerColor,
+          color: isSelected
+              ? AppColors.selectedItemBackground
+              : AppColors.containerColor,
           borderRadius: BorderRadius.circular(18),
-          border: Border.all(color: AppColors.jacarta),
+          border: Border.all(
+            color: isSelected ? AppColors.activeBorder : AppColors.jacarta,
+          ),
         ),
         child: InkWell(
           borderRadius: BorderRadius.circular(18),

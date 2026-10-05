@@ -10,6 +10,7 @@ import '../presentation/app_colors.dart';
 import '../widget/coin_card.dart';
 import 'bloc/briefcase_bloc.dart';
 import 'bloc/briefcase_effect.dart';
+import 'bloc/briefcase_event.dart';
 import 'bloc/briefcase_state.dart';
 
 class BriefcaseScreen extends StatefulWidget {
@@ -36,56 +37,84 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: AppColors.haiti,
-      appBar: CustomAppBar(text: S.of(context).myBriefcase, leadingIcon: false),
-      body: BlocEffectBuilder<BriefcaseBloc, BriefcaseState, BriefcaseEffect>(
-        bloc: _bloc,
-        effectListener: (context, effect) {
-          switch (effect) {
-            case BriefcaseShowError(:final message):
-              ScaffoldMessenger.of(
-                context,
-              ).showSnackBar(SnackBar(content: Text(message)));
-          }
-        },
-        builder: (context, state) {
-          if (state.isLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-          if (state.coins.isEmpty) {
-            return Center(
-              child: CustomNewText(text: S.of(context).noItemsAddedYet),
-            );
-          }
-          return ListView.separated(
-            padding: const EdgeInsets.all(8),
-            itemCount: state.coins.length,
-            separatorBuilder: (_, __) => const SizedBox(height: 8),
-            itemBuilder: (context, index) {
-              final coin = state.coins[index];
-              return CoinCard(
-                name: coin.name,
-                symbol: coin.symbol,
-                imageUrl: coin.image,
-                currentPrice: coin.currentPrice,
-                priceChangePercentage24h: coin.priceChangePercentage24h,
-                totalVolume: coin.totalVolume,
-                high24h: coin.high24h,
-                marketCapRank: coin.marketCapRank,
-                onTap: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => CoinScreen(coinId: coin.id),
-                    ),
+    return BlocEffectBuilder<BriefcaseBloc, BriefcaseState, BriefcaseEffect>(
+      bloc: _bloc,
+      effectListener: (context, effect) {
+        switch (effect) {
+          case BriefcaseShowError(:final message):
+            ScaffoldMessenger.of(
+              context,
+            ).showSnackBar(SnackBar(content: Text(message)));
+        }
+      },
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: AppColors.haiti,
+          appBar: CustomAppBar(
+            text: S.of(context).myBriefcase,
+            leadingIcon: false,
+            action: [
+              if (state.selectedCoinIds.isNotEmpty)
+                InkWell(
+                  borderRadius: BorderRadius.circular(20),
+                  onTap: () =>
+                      _bloc.add(const BriefcaseRemoveSelectedCoinsEvent()),
+                  child: const Icon(
+                    Icons.delete_outline,
+                    color: AppColors.whiteColor,
+                  ),
+                ),
+            ],
+          ),
+          body: Builder(
+            builder: (context) {
+              if (state.isLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+              if (state.coins.isEmpty) {
+                return Center(
+                  child: CustomNewText(text: S.of(context).noItemsAddedYet),
+                );
+              }
+              return ListView.separated(
+                padding: const EdgeInsets.all(8),
+                itemCount: state.coins.length,
+                separatorBuilder: (_, __) => const SizedBox(height: 8),
+                itemBuilder: (context, index) {
+                  final coin = state.coins[index];
+                  void toggleSelection() => _bloc.add(
+                    BriefcaseToggleCoinSelectionEvent(coinId: coin.id),
+                  );
+                  return CoinCard(
+                    name: coin.name,
+                    symbol: coin.symbol,
+                    imageUrl: coin.image,
+                    currentPrice: coin.currentPrice,
+                    priceChangePercentage24h: coin.priceChangePercentage24h,
+                    totalVolume: coin.totalVolume,
+                    high24h: coin.high24h,
+                    marketCapRank: coin.marketCapRank,
+                    isSelected: state.selectedCoinIds.contains(coin.id),
+                    onLongPress: toggleSelection,
+                    onTap: () {
+                      if (state.selectedCoinIds.isNotEmpty) {
+                        toggleSelection();
+                        return;
+                      }
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) => CoinScreen(coinId: coin.id),
+                        ),
+                      );
+                    },
                   );
                 },
               );
             },
-          );
-        },
-      ),
+          ),
+        );
+      },
     );
   }
 }
