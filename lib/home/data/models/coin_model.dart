@@ -14,6 +14,9 @@ class CoinModel extends Equatable {
     required this.low24h,
     required this.priceChange24h,
     required this.priceChangePercentage24h, //Рост/падение в %
+    required this.priceChangePercentage1h,
+    required this.priceChangePercentage7d,
+    required this.sparkline7d, //Почасовые цены за 7 дней
     required this.marketCapChangePercentage24h,
     required this.ath, //самая высокая цена за всю историю монеты
     required this.athChangePercentage,
@@ -39,6 +42,17 @@ class CoinModel extends Equatable {
       priceChange24h: (json['price_change_24h'] as num?)?.toDouble(),
       priceChangePercentage24h: (json['price_change_percentage_24h'] as num?)
           ?.toDouble(),
+      priceChangePercentage1h:
+          (json['price_change_percentage_1h_in_currency'] as num?)?.toDouble(),
+      priceChangePercentage7d:
+          (json['price_change_percentage_7d_in_currency'] as num?)?.toDouble(),
+      sparkline7d:
+          ((json['sparkline_in_7d'] as Map<String, dynamic>?)?['price']
+                  as List<dynamic>?)
+              ?.whereType<num>()
+              .map((p) => p.toDouble())
+              .toList() ??
+          const [],
       marketCapChangePercentage24h:
           (json['market_cap_change_percentage_24h'] as num?)?.toDouble(),
       ath: (json['ath'] as num?)?.toDouble(),
@@ -63,6 +77,9 @@ class CoinModel extends Equatable {
   final double? low24h;
   final double? priceChange24h;
   final double? priceChangePercentage24h;
+  final double? priceChangePercentage1h;
+  final double? priceChangePercentage7d;
+  final List<double> sparkline7d;
   final double? marketCapChangePercentage24h;
   final double? ath;
   final double? athChangePercentage;
@@ -85,6 +102,9 @@ class CoinModel extends Equatable {
     double? low24h,
     double? priceChange24h,
     double? priceChangePercentage24h,
+    double? priceChangePercentage1h,
+    double? priceChangePercentage7d,
+    List<double>? sparkline7d,
     double? marketCapChangePercentage24h,
     double? ath,
     double? athChangePercentage,
@@ -108,6 +128,11 @@ class CoinModel extends Equatable {
       priceChange24h: priceChange24h ?? this.priceChange24h,
       priceChangePercentage24h:
           priceChangePercentage24h ?? this.priceChangePercentage24h,
+      priceChangePercentage1h:
+          priceChangePercentage1h ?? this.priceChangePercentage1h,
+      priceChangePercentage7d:
+          priceChangePercentage7d ?? this.priceChangePercentage7d,
+      sparkline7d: sparkline7d ?? this.sparkline7d,
       marketCapChangePercentage24h:
           marketCapChangePercentage24h ?? this.marketCapChangePercentage24h,
       ath: ath ?? this.ath,
@@ -134,6 +159,9 @@ class CoinModel extends Equatable {
     low24h,
     priceChange24h,
     priceChangePercentage24h,
+    priceChangePercentage1h,
+    priceChangePercentage7d,
+    sparkline7d,
     marketCapChangePercentage24h,
     ath,
     athChangePercentage,
