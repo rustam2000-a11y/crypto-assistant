@@ -6,7 +6,7 @@ import 'package:injectable/injectable.dart';
 @singleton
 class ApiClient {
   static const _baseUrl = 'https://api.coingecko.com/api/v3';
-  static const _apiKey = 'CG-YrYoxQ8vFMkqkLRfCGaDzHm7';
+  static const _apiKey = 'CG-LrEwdCwhJe6RH1cbFgtot9DG';
 
   Future<List<dynamic>> get(
     String path, {
