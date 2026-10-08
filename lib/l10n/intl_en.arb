@@ -53,5 +53,101 @@
   "failedToLogIn": "Failed to log in, please try again later",
   "weakPassword": "Password is too weak",
   "emailAlreadyInUse": "This email is already in use",
-  "failedToSignUp": "Failed to sign up, please try again later"
+  "failedToSignUp": "Failed to sign up, please try again later",
+  "pumpReversal": "Pump reversal",
+  "pumpReversalShort": "Short for 3–4 hours after a rejected pump",
+  "pumpReversalDescription": "The pump was rejected at the top: a long upper wick on high volume, or a break below the last hour's low after the peak. Short from the next 15-minute candle and hold 3–4 hours. Works only while BTC is down over 30 days and the market is falling this hour.",
+  "signalsActive": "Signals active",
+  "signalsPaused": "Signals paused",
+  "btcTrend30d": "BTC 30d",
+  "market1h": "Market 1h",
+  "pausedBullRegime": "BTC is up over 30 days. In this regime pumps tend to continue, so reversal signals are off.",
+  "pausedMarketRising": "The market is rising this hour. Waiting for it to turn down.",
+  "signalJournal": "Signal journal",
+  "journalEmpty": "No signals yet. They are recorded while the reversal screen is open.",
+  "journalNote": "Short from the next 15-minute candle, emergency stop 4% above the 24h high, fees 0.2% included. The result appears 4 hours after the signal.",
+  "formulaWithFilters": "Formula (all filters)",
+  "patternOnly": "Pattern only, no filters",
+  "profitable": "Profitable",
+  "averageResult": "Average",
+  "waitingForResult": "waiting for result",
+  "wickRejection": "Rejection wick",
+  "structureBreak": "Structure break",
+  "filtersPassed": "filters passed",
+  "filtersNotPassed": "filtered out",
+  "tradesCount": "Trades: {count}",
+  "@tradesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "hoursShort": "{count} h",
+  "@hoursShort": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "keyLevels": "Approaching a very strong level",
+  "keyLevelsShort": "Price near a level with 5+ strong reversals",
+  "keyLevelsDescription": "Coins whose price has come very close to a very strong level: over the last 20 days the price reversed from it at least 5 times with a strong move. A level above the price is resistance, below is support. If the price moves between confirmed levels, it is a corridor. A level is a reference for stops and targets, not a guarantee of a bounce.",
+  "resistance": "Resistance",
+  "support": "Support",
+  "corridorUpperBound": "Corridor top",
+  "corridorLowerBound": "Corridor bottom",
+  "touchesCount": "touches: {count}",
+  "@touchesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "distanceToLevel": "{percent}% away",
+  "@distanceToLevel": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "overbought": "Overheated, liquidity leaving",
+  "overboughtShort": "RSI 80+, volume and buyers fading",
+  "overboughtDescription": "The coin is strongly overheated: hourly RSI is 80 or higher, the 24h rise is at least 2× its usual daily move and the price is far above its 7-day average. Meanwhile liquidity is leaving: volume over the last 3 hours is 30%+ lower than at the height of the rally, and the share of aggressive buying is falling. This is a state of the coin, not a short signal: historically the price was lower 1–4 hours later in about half of the cases.",
+  "rise24h": "+{percent}% in 24h (×{times} usual move)",
+  "@rise24h": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "times": {
+        "type": "String"
+      }
+    }
+  },
+  "volumeChange": "volume {percent}%",
+  "@volumeChange": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "buyersShare": "buyers {now}% (was {before}%)",
+  "@buyersShare": {
+    "placeholders": {
+      "now": {
+        "type": "String"
+      },
+      "before": {
+        "type": "String"
+      }
+    }
+  },
+  "earlyFade": "Pump starting to fade",
+  "earlyFadeShort": "Fresh peak, RSI was 80+ and is turning down",
+  "earlyFadeDescription": "The coin rose unusually strongly for its volatility: the 24h or 7d rise is at least 2× its usual move and at least 4%. The peak was no more than 3 hours ago, RSI was 80+ within the day and has now dropped by 3–12 points, the price has pulled back 3–20% of the daily range from the high, and the live price is below the last hourly point while still up over 6 hours."
 }

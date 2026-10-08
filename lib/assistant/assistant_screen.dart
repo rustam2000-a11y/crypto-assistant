@@ -38,32 +38,26 @@ class AssistantScreen extends StatelessWidget {
                   Expanded(
                     child: AssistantCardInformation(
                       icon: AppImages.siren,
-                      text: S
-                          .of(context)
-                          .abnormalPriceMovementOverTheLast24Hours,
-                      description: S
-                          .of(context)
-                          .priceIncreasedecreaseByMoreThan10,
+                      text: S.of(context).keyLevels,
+                      description: S.of(context).keyLevelsShort,
                       borderColor: AppColors.borderRed,
                       onTap: () => _openDetails(
                         context,
                         FilterType.abnormalMovement,
-                        S.of(context).priceIncreasedecreaseByMoreThan10,
+                        S.of(context).keyLevelsDescription,
                       ),
                     ),
                   ),
                   Expanded(
                     child: AssistantCardInformation(
                       icon: AppImages.barChart,
-                      text: S.of(context).priceMovementOverTheLast24Hours,
-                      description: S
-                          .of(context)
-                          .priceIncreasedecreaseByMoreThan5,
+                      text: S.of(context).pumpReversal,
+                      description: S.of(context).pumpReversalShort,
                       borderColor: AppColors.borderOrange,
                       onTap: () => _openDetails(
                         context,
                         FilterType.priceMovement,
-                        S.of(context).priceIncreasedecreaseByMoreThan5,
+                        S.of(context).pumpReversalDescription,
                       ),
                     ),
                   ),
@@ -90,15 +84,13 @@ class AssistantScreen extends StatelessWidget {
                   Expanded(
                     child: AssistantCardInformation(
                       icon: AppImages.volatility,
-                      text: S.of(context).historicalMaximumminimum,
-                      description: S
-                          .of(context)
-                          .approachingItsHistoricalMaximumminimum,
+                      text: S.of(context).overbought,
+                      description: S.of(context).overboughtShort,
                       borderColor: AppColors.borderTeal,
                       onTap: () => _openDetails(
                         context,
                         FilterType.historicalExtremum,
-                        S.of(context).approachingItsHistoricalMaximumminimum,
+                        S.of(context).overboughtDescription,
                       ),
                     ),
                   ),
@@ -110,17 +102,13 @@ class AssistantScreen extends StatelessWidget {
                   Expanded(
                     child: AssistantCardInformation(
                       icon: AppImages.inflation,
-                      text: S.of(context).turnover,
-                      description: S
-                          .of(context)
-                          .abnormallyHighTradingActivityRelativeToCoinSize,
+                      text: S.of(context).earlyFade,
+                      description: S.of(context).earlyFadeShort,
                       borderColor: AppColors.amber,
                       onTap: () => _openDetails(
                         context,
                         FilterType.turnover,
-                        S
-                            .of(context)
-                            .abnormallyHighTradingActivityRelativeToCoinSize,
+                        S.of(context).earlyFadeDescription,
                       ),
                     ),
                   ),

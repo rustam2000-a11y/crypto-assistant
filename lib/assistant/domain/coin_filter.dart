@@ -1,23 +1,31 @@
+import 'dart:async';
 import 'dart:math';
 
 import '../../home/data/models/coin_model.dart';
 import 'filter_type.dart';
 
 abstract class CoinFilter {
-  List<CoinModel> filter(List<CoinModel> coins);
+  FutureOr<List<CoinModel>> filter(List<CoinModel> coins);
 
-  factory CoinFilter.forType(FilterType type) {
+  /// [pumpReversal], [keyLevels] и [overbought] работают со свечами Binance,
+  /// поэтому приходят из DI, а не создаются здесь.
+  factory CoinFilter.forType(
+    FilterType type, {
+    required CoinFilter pumpReversal,
+    required CoinFilter keyLevels,
+    required CoinFilter overbought,
+  }) {
     switch (type) {
       case FilterType.abnormalMovement:
-        return AbnormalMovementFilter();
+        return keyLevels;
       case FilterType.priceMovement:
-        return PriceMovementFilter();
+        return pumpReversal;
       case FilterType.highVolatility:
         return OverheatedFadingFilter();
       case FilterType.historicalExtremum:
-        return HistoricalExtremumFilter();
+        return overbought;
       case FilterType.turnover:
-        return TurnoverFilter();
+        return PriceMovementFilter();
       case FilterType.capitalInflow:
         return CapitalInflowFilter();
       case FilterType.dailyExtremum:
@@ -28,45 +36,12 @@ abstract class CoinFilter {
   }
 }
 
-class AbnormalMovementFilter implements CoinFilter {
-  // Минимальный отход от экстремума (в % от дневного диапазона high-low):
-  // меньше — импульс ещё жив.
-  static const double _minPullbackPercent = 4;
-  // Максимальный отход: больше — откат уже состоялся.
-  static const double _maxPullbackPercent = 50;
-
-  final CoinFilter _base = ConfirmedAnomalyFilter();
-
-  @override
-  List<CoinModel> filter(List<CoinModel> coins) {
-    return _base.filter(coins).where((coin) {
-      final high = coin.high24h;
-      final low = coin.low24h;
-      if (high == null || low == null || high == low) return false;
-
-      final range = high - low;
-      final change = coin.priceChangePercentage24h ?? 0;
-
-      // Рост → насколько цена опустилась от максимума.
-      // Падение → насколько цена отскочила от минимума.
-      final pullback = change > 0
-          ? (high - coin.currentPrice) / range * 100
-          : (coin.currentPrice - low) / range * 100;
-
-      return pullback >= _minPullbackPercent &&
-          pullback <= _maxPullbackPercent;
-    }).toList();
-  }
+/// Фильтр, который к каждой монете из результата даёт пояснение (по id монеты),
+/// например уровень или показатели перегрева.
+abstract class DetailedCoinFilter implements CoinFilter {
+  Map<String, Object> get details;
 }
 
-
-/// Ранний разворот после перегрева: монета выросла необычно сильно для СВОЕЙ
-/// волатильности, пик был только что, и импульс впервые начинает
-/// разворачиваться. Цель — поймать самое начало затухания, а не момент,
-/// когда откат уже идёт.
-///
-/// Все условия обязательные: для раннего сигнала это надёжнее,
-/// чем подсчёт «N из M».
 class PriceMovementFilter implements CoinFilter {
   // Перегрев: во сколько раз рост превышает типичный дневной ход монеты.
   static const double _minHeat = 2;
@@ -335,36 +310,6 @@ class OverheatedFadingFilter implements CoinFilter {
     if (stretch > _minStretch) signals++;
 
     return signals >= _minSignals;
-  }
-}
-
-// Исторический максимум/минимум: цена приблизилась к ATH или ATL.
-class HistoricalExtremumFilter implements CoinFilter {
-  static const double _thresholdPercent = 5;
-
-  @override
-  List<CoinModel> filter(List<CoinModel> coins) {
-    return coins.where((coin) {
-      final athChange = coin.athChangePercentage;
-      final atlChange = coin.atlChangePercentage;
-      final nearAth = athChange != null && athChange.abs() <= _thresholdPercent;
-      final nearAtl = atlChange != null && atlChange.abs() <= _thresholdPercent;
-      return nearAth || nearAtl;
-    }).toList();
-  }
-}
-
-// Оборачиваемость: аномально высокий объём торгов относительно капитализации.
-class TurnoverFilter implements CoinFilter {
-  static const double _thresholdRatio = 0.5;
-
-  @override
-  List<CoinModel> filter(List<CoinModel> coins) {
-    return coins.where((coin) {
-      if (coin.marketCap == 0) return false;
-      final turnoverRatio = coin.totalVolume / coin.marketCap;
-      return turnoverRatio > _thresholdRatio;
-    }).toList();
   }
 }
 

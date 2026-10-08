@@ -11,6 +11,16 @@
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 import 'package:crypto_assistant/assistant/bloc/filter_detailing_bloc.dart'
     as _i2;
+import 'package:crypto_assistant/assistant/bloc/signal_journal_bloc.dart'
+    as _i787;
+import 'package:crypto_assistant/assistant/data/signal_journal_repository.dart'
+    as _i542;
+import 'package:crypto_assistant/assistant/domain/key_levels/key_level_filter.dart'
+    as _i408;
+import 'package:crypto_assistant/assistant/domain/overbought/overbought_filter.dart'
+    as _i777;
+import 'package:crypto_assistant/assistant/domain/pump_reversal/pump_reversal_filter.dart'
+    as _i933;
 import 'package:crypto_assistant/auth/data/api/auth_api.dart' as _i375;
 import 'package:crypto_assistant/auth/data/repository/auth_repository.dart'
     as _i767;
@@ -23,10 +33,14 @@ import 'package:crypto_assistant/core/bloc/app_locale_bloc.dart' as _i684;
 import 'package:crypto_assistant/home/bloc/home_bloc.dart' as _i838;
 import 'package:crypto_assistant/home/data/api/coint_api.dart' as _i997;
 import 'package:crypto_assistant/home/data/client/api_client.dart' as _i292;
+import 'package:crypto_assistant/home/data/client/binance_futures_client.dart'
+    as _i806;
 import 'package:crypto_assistant/home/data/client/binance_socket_client.dart'
     as _i978;
 import 'package:crypto_assistant/home/data/repository/coint_rpository.dart'
     as _i404;
+import 'package:crypto_assistant/home/data/repository/hourly_candles_repository.dart'
+    as _i630;
 import 'package:crypto_assistant/home/domain/usecase/search_coins_usecase.dart'
     as _i976;
 import 'package:crypto_assistant/home/language/bloc/language_bloc.dart'
@@ -54,11 +68,40 @@ extension GetItInjectableX on _i174.GetIt {
       preResolve: true,
     );
     gh.singleton<_i292.ApiClient>(() => _i292.ApiClient());
+    gh.singleton<_i806.BinanceFuturesClient>(
+      () => _i806.BinanceFuturesClient(),
+    );
     gh.singleton<_i978.BinanceSocketClient>(() => _i978.BinanceSocketClient());
     gh.factory<_i234.LanguageApiI>(
       () => _i234.LanguageApi(gh<_i460.SharedPreferences>()),
     );
+    gh.lazySingleton<_i542.SignalJournalRepositoryI>(
+      () => _i542.SignalJournalRepository(
+        gh<_i460.SharedPreferences>(),
+        gh<_i806.BinanceFuturesClient>(),
+      ),
+    );
     gh.factory<_i375.AuthApiI>(() => _i375.AuthApi());
+    gh.lazySingleton<_i630.HourlyCandlesRepositoryI>(
+      () => _i630.HourlyCandlesRepository(gh<_i806.BinanceFuturesClient>()),
+    );
+    gh.lazySingleton<_i408.KeyLevelFilter>(
+      () => _i408.KeyLevelFilter(
+        gh<_i806.BinanceFuturesClient>(),
+        gh<_i630.HourlyCandlesRepositoryI>(),
+      ),
+    );
+    gh.lazySingleton<_i777.OverboughtFilter>(
+      () => _i777.OverboughtFilter(
+        gh<_i806.BinanceFuturesClient>(),
+        gh<_i630.HourlyCandlesRepositoryI>(),
+      ),
+    );
+    gh.factory<_i787.SignalJournalBloc>(
+      () => _i787.SignalJournalBloc(
+        repository: gh<_i542.SignalJournalRepositoryI>(),
+      ),
+    );
     gh.lazySingleton<_i576.LanguageRepositoryI>(
       () => _i576.LanguageRepository(api: gh<_i234.LanguageApiI>()),
     );
@@ -79,8 +122,11 @@ extension GetItInjectableX on _i174.GetIt {
         searchCoinsUseCase: gh<_i976.SearchCoinsUseCase>(),
       ),
     );
-    gh.factory<_i2.FilterDetailingBloc>(
-      () => _i2.FilterDetailingBloc(repository: gh<_i404.CoinRepositoryI>()),
+    gh.lazySingleton<_i933.PumpReversalFilter>(
+      () => _i933.PumpReversalFilter(
+        gh<_i806.BinanceFuturesClient>(),
+        gh<_i542.SignalJournalRepositoryI>(),
+      ),
     );
     gh.factory<_i168.LoginBloc>(
       () => _i168.LoginBloc(repository: gh<_i767.AuthRepositoryI>()),
@@ -108,6 +154,14 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i287.CoinBloc(
         coinRepository: gh<_i404.CoinRepositoryI>(),
         authRepository: gh<_i767.AuthRepositoryI>(),
+      ),
+    );
+    gh.factory<_i2.FilterDetailingBloc>(
+      () => _i2.FilterDetailingBloc(
+        repository: gh<_i404.CoinRepositoryI>(),
+        pumpReversal: gh<_i933.PumpReversalFilter>(),
+        keyLevels: gh<_i408.KeyLevelFilter>(),
+        overbought: gh<_i777.OverboughtFilter>(),
       ),
     );
     return this;

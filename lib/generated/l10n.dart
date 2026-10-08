@@ -489,6 +489,386 @@ class S {
       args: [],
     );
   }
+
+  /// `Pump reversal`
+  String get pumpReversal {
+    return Intl.message(
+      'Pump reversal',
+      name: 'pumpReversal',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Short for 3–4 hours after a rejected pump`
+  String get pumpReversalShort {
+    return Intl.message(
+      'Short for 3–4 hours after a rejected pump',
+      name: 'pumpReversalShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The pump was rejected at the top: a long upper wick on high volume, or a break below the last hour's low after the peak. Short from the next 15-minute candle and hold 3–4 hours. Works only while BTC is down over 30 days and the market is falling this hour.`
+  String get pumpReversalDescription {
+    return Intl.message(
+      'The pump was rejected at the top: a long upper wick on high volume, or a break below the last hour\'s low after the peak. Short from the next 15-minute candle and hold 3–4 hours. Works only while BTC is down over 30 days and the market is falling this hour.',
+      name: 'pumpReversalDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Signals active`
+  String get signalsActive {
+    return Intl.message(
+      'Signals active',
+      name: 'signalsActive',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Signals paused`
+  String get signalsPaused {
+    return Intl.message(
+      'Signals paused',
+      name: 'signalsPaused',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `BTC 30d`
+  String get btcTrend30d {
+    return Intl.message('BTC 30d', name: 'btcTrend30d', desc: '', args: []);
+  }
+
+  /// `Market 1h`
+  String get market1h {
+    return Intl.message('Market 1h', name: 'market1h', desc: '', args: []);
+  }
+
+  /// `BTC is up over 30 days. In this regime pumps tend to continue, so reversal signals are off.`
+  String get pausedBullRegime {
+    return Intl.message(
+      'BTC is up over 30 days. In this regime pumps tend to continue, so reversal signals are off.',
+      name: 'pausedBullRegime',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The market is rising this hour. Waiting for it to turn down.`
+  String get pausedMarketRising {
+    return Intl.message(
+      'The market is rising this hour. Waiting for it to turn down.',
+      name: 'pausedMarketRising',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Signal journal`
+  String get signalJournal {
+    return Intl.message(
+      'Signal journal',
+      name: 'signalJournal',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No signals yet. They are recorded while the reversal screen is open.`
+  String get journalEmpty {
+    return Intl.message(
+      'No signals yet. They are recorded while the reversal screen is open.',
+      name: 'journalEmpty',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Short from the next 15-minute candle, emergency stop 4% above the 24h high, fees 0.2% included. The result appears 4 hours after the signal.`
+  String get journalNote {
+    return Intl.message(
+      'Short from the next 15-minute candle, emergency stop 4% above the 24h high, fees 0.2% included. The result appears 4 hours after the signal.',
+      name: 'journalNote',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Formula (all filters)`
+  String get formulaWithFilters {
+    return Intl.message(
+      'Formula (all filters)',
+      name: 'formulaWithFilters',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Pattern only, no filters`
+  String get patternOnly {
+    return Intl.message(
+      'Pattern only, no filters',
+      name: 'patternOnly',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Profitable`
+  String get profitable {
+    return Intl.message('Profitable', name: 'profitable', desc: '', args: []);
+  }
+
+  /// `Average`
+  String get averageResult {
+    return Intl.message('Average', name: 'averageResult', desc: '', args: []);
+  }
+
+  /// `waiting for result`
+  String get waitingForResult {
+    return Intl.message(
+      'waiting for result',
+      name: 'waitingForResult',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Rejection wick`
+  String get wickRejection {
+    return Intl.message(
+      'Rejection wick',
+      name: 'wickRejection',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Structure break`
+  String get structureBreak {
+    return Intl.message(
+      'Structure break',
+      name: 'structureBreak',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `filters passed`
+  String get filtersPassed {
+    return Intl.message(
+      'filters passed',
+      name: 'filtersPassed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `filtered out`
+  String get filtersNotPassed {
+    return Intl.message(
+      'filtered out',
+      name: 'filtersNotPassed',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Trades: {count}`
+  String tradesCount(int count) {
+    return Intl.message(
+      'Trades: $count',
+      name: 'tradesCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{count} h`
+  String hoursShort(int count) {
+    return Intl.message(
+      '$count h',
+      name: 'hoursShort',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `Approaching a very strong level`
+  String get keyLevels {
+    return Intl.message(
+      'Approaching a very strong level',
+      name: 'keyLevels',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price near a level with 5+ strong reversals`
+  String get keyLevelsShort {
+    return Intl.message(
+      'Price near a level with 5+ strong reversals',
+      name: 'keyLevelsShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Coins whose price has come very close to a very strong level: over the last 20 days the price reversed from it at least 5 times with a strong move. A level above the price is resistance, below is support. If the price moves between confirmed levels, it is a corridor. A level is a reference for stops and targets, not a guarantee of a bounce.`
+  String get keyLevelsDescription {
+    return Intl.message(
+      'Coins whose price has come very close to a very strong level: over the last 20 days the price reversed from it at least 5 times with a strong move. A level above the price is resistance, below is support. If the price moves between confirmed levels, it is a corridor. A level is a reference for stops and targets, not a guarantee of a bounce.',
+      name: 'keyLevelsDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Resistance`
+  String get resistance {
+    return Intl.message('Resistance', name: 'resistance', desc: '', args: []);
+  }
+
+  /// `Support`
+  String get support {
+    return Intl.message('Support', name: 'support', desc: '', args: []);
+  }
+
+  /// `Corridor top`
+  String get corridorUpperBound {
+    return Intl.message(
+      'Corridor top',
+      name: 'corridorUpperBound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Corridor bottom`
+  String get corridorLowerBound {
+    return Intl.message(
+      'Corridor bottom',
+      name: 'corridorLowerBound',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `touches: {count}`
+  String touchesCount(int count) {
+    return Intl.message(
+      'touches: $count',
+      name: 'touchesCount',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `{percent}% away`
+  String distanceToLevel(String percent) {
+    return Intl.message(
+      '$percent% away',
+      name: 'distanceToLevel',
+      desc: '',
+      args: [percent],
+    );
+  }
+
+  /// `Overheated, liquidity leaving`
+  String get overbought {
+    return Intl.message(
+      'Overheated, liquidity leaving',
+      name: 'overbought',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `RSI 80+, volume and buyers fading`
+  String get overboughtShort {
+    return Intl.message(
+      'RSI 80+, volume and buyers fading',
+      name: 'overboughtShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The coin is strongly overheated: hourly RSI is 80 or higher, the 24h rise is at least 2× its usual daily move and the price is far above its 7-day average. Meanwhile liquidity is leaving: volume over the last 3 hours is 30%+ lower than at the height of the rally, and the share of aggressive buying is falling. This is a state of the coin, not a short signal: historically the price was lower 1–4 hours later in about half of the cases.`
+  String get overboughtDescription {
+    return Intl.message(
+      'The coin is strongly overheated: hourly RSI is 80 or higher, the 24h rise is at least 2× its usual daily move and the price is far above its 7-day average. Meanwhile liquidity is leaving: volume over the last 3 hours is 30%+ lower than at the height of the rally, and the share of aggressive buying is falling. This is a state of the coin, not a short signal: historically the price was lower 1–4 hours later in about half of the cases.',
+      name: 'overboughtDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `+{percent}% in 24h (×{times} usual move)`
+  String rise24h(String percent, String times) {
+    return Intl.message(
+      '+$percent% in 24h (×$times usual move)',
+      name: 'rise24h',
+      desc: '',
+      args: [percent, times],
+    );
+  }
+
+  /// `volume {percent}%`
+  String volumeChange(String percent) {
+    return Intl.message(
+      'volume $percent%',
+      name: 'volumeChange',
+      desc: '',
+      args: [percent],
+    );
+  }
+
+  /// `buyers {now}% (was {before}%)`
+  String buyersShare(String now, String before) {
+    return Intl.message(
+      'buyers $now% (was $before%)',
+      name: 'buyersShare',
+      desc: '',
+      args: [now, before],
+    );
+  }
+
+  /// `Pump starting to fade`
+  String get earlyFade {
+    return Intl.message(
+      'Pump starting to fade',
+      name: 'earlyFade',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Fresh peak, RSI was 80+ and is turning down`
+  String get earlyFadeShort {
+    return Intl.message(
+      'Fresh peak, RSI was 80+ and is turning down',
+      name: 'earlyFadeShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The coin rose unusually strongly for its volatility: the 24h or 7d rise is at least 2× its usual move and at least 4%. The peak was no more than 3 hours ago, RSI was 80+ within the day and has now dropped by 3–12 points, the price has pulled back 3–20% of the daily range from the high, and the live price is below the last hourly point while still up over 6 hours.`
+  String get earlyFadeDescription {
+    return Intl.message(
+      'The coin rose unusually strongly for its volatility: the 24h or 7d rise is at least 2× its usual move and at least 4%. The peak was no more than 3 hours ago, RSI was 80+ within the day and has now dropped by 3–12 points, the price has pulled back 3–20% of the daily range from the high, and the live price is below the last hourly point while still up over 6 hours.',
+      name: 'earlyFadeDescription',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
