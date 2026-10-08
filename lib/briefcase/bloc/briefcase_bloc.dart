@@ -20,9 +20,12 @@ class BriefcaseBloc
     required AuthRepositoryI authRepository,
   }) : _coinRepository = coinRepository,
        _authRepository = authRepository,
-       super(const BriefcaseState()) {
+       super(const BriefcaseState(isLoading: true)) {
     on<BriefcaseLoadingEvent>((event, emit) {
       emit(state.copyWith(isLoading: event.isLoading));
+    });
+    on<BriefcaseLoggedInStatusChangedEvent>((event, emit) {
+      emit(state.copyWith(isLoggedIn: event.isLoggedIn));
     });
     on<BriefcaseCoinsLoadedEvent>((event, emit) {
       emit(state.copyWith(coins: event.coins, isLoading: false));
@@ -47,6 +50,7 @@ class BriefcaseBloc
   void init() {
     _authSubscription = _authRepository.authStateChanges().listen(
       (isLoggedIn) {
+        add(BriefcaseLoggedInStatusChangedEvent(isLoggedIn: isLoggedIn));
         if (!isLoggedIn) {
           _coinsSubscription?.cancel();
           _coinsSubscription = null;
@@ -59,6 +63,7 @@ class BriefcaseBloc
       },
       onError: (Object e) {
         if (e is Exception) emitEffect(BriefcaseShowError(e.toString()));
+        add(const BriefcaseLoadingEvent(isLoading: false));
       },
     );
   }

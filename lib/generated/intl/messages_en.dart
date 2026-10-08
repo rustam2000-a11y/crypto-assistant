@@ -123,6 +123,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "search": MessageLookupByLibrary.simpleMessage("Search"),
     "signUp": MessageLookupByLibrary.simpleMessage("Sign up"),
+    "signUpToAddCoinsToYourBriefcaseAndSave":
+        MessageLookupByLibrary.simpleMessage(
+          "Sign up to add coins to your briefcase and save them",
+        ),
     "thePasswordMustBeAtLeast6CharactersLong":
         MessageLookupByLibrary.simpleMessage(
           "The password must be at least 6 characters long.",

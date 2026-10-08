@@ -16,6 +16,12 @@ class BriefcaseCoinsLoadedEvent extends BriefcaseEvent {
   final List<CoinModel> coins;
 }
 
+class BriefcaseLoggedInStatusChangedEvent extends BriefcaseEvent {
+  const BriefcaseLoggedInStatusChangedEvent({required this.isLoggedIn});
+
+  final bool isLoggedIn;
+}
+
 class BriefcaseToggleCoinSelectionEvent extends BriefcaseEvent {
   const BriefcaseToggleCoinSelectionEvent({required this.coinId});
 

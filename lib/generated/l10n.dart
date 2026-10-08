@@ -489,6 +489,16 @@ class S {
       args: [],
     );
   }
+
+  /// `Sign up to add coins to your briefcase and save them`
+  String get signUpToAddCoinsToYourBriefcaseAndSave {
+    return Intl.message(
+      'Sign up to add coins to your briefcase and save them',
+      name: 'signUpToAddCoinsToYourBriefcaseAndSave',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

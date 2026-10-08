@@ -2,12 +2,14 @@ import 'package:bloc_after_effect/bloc_after_effect.dart';
 import 'package:crypto_assistant/widget/custom_text.dart';
 import 'package:flutter/material.dart';
 
+import '../auth/login/login_screen.dart';
 import '../coin_card/coin_screen.dart';
 import '../home/home_widget/custom_app_bar.dart';
 import '../generated/l10n.dart';
 import '../injection.dart';
 import '../presentation/app_colors.dart';
 import '../widget/coin_card.dart';
+import '../widget/custom_button.dart';
 import 'bloc/briefcase_bloc.dart';
 import 'bloc/briefcase_effect.dart';
 import 'bloc/briefcase_event.dart';
@@ -70,6 +72,36 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
             builder: (context) {
               if (state.isLoading) {
                 return const Center(child: CircularProgressIndicator());
+              }
+              if (!state.isLoggedIn) {
+                return Center(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
+                    child: Column(
+                      spacing: 10,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        CustomNewText(
+                          text: S
+                              .of(context)
+                              .signUpToAddCoinsToYourBriefcaseAndSave,
+                          fontSize: 18,
+                        ),
+                        CustomButton(
+                          name: S.of(context).signUp,
+                          onTap: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => const LoginScreen(),
+                              ),
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                );
               }
               if (state.coins.isEmpty) {
                 return Center(
