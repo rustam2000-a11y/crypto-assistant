@@ -128,7 +128,7 @@ class MessageLookup extends MessageLookupByLibrary {
           "Зарегистрируйтесь, чтобы добавлять монеты в портфель и сохранять их",
         ),
     "theCoinIsAtItsDailyHighOrLow": MessageLookupByLibrary.simpleMessage(
-      "The coin is at its daily high or low",
+      "Монета на дневном максимуме или минимуме",
     ),
     "thePasswordMustBeAtLeast6CharactersLong":
         MessageLookupByLibrary.simpleMessage(
