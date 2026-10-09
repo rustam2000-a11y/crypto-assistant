@@ -710,20 +710,20 @@ class S {
     );
   }
 
-  /// `Price near a level with 5+ strong reversals`
+  /// `Price at a level with 3+ strong bounces of ~10%+`
   String get keyLevelsShort {
     return Intl.message(
-      'Price near a level with 5+ strong reversals',
+      'Price at a level with 3+ strong bounces of ~10%+',
       name: 'keyLevelsShort',
       desc: '',
       args: [],
     );
   }
 
-  /// `Coins whose price has come very close to a very strong level: over the last 20 days the price reversed from it at least 5 times with a strong move. A level above the price is resistance, below is support. If the price moves between confirmed levels, it is a corridor. A level is a reference for stops and targets, not a guarantee of a bounce.`
+  /// `Coins whose price is at a really strong level or approaching it. Levels come from 4-hour candles over 90 days: the price made a major reversal there (the highest or lowest price within ±24 hours) at least 3 times, and after each one moved away by at least 3 usual 4-hour moves within 48 hours, typically 10% or more. "At the level" means within ~0.3%; "approaching" means within ~1% and the level has not been touched in the last 8 hours. A coin that already touched the level and bounced away is not shown. A level is a reference for stops and targets, not a guarantee of a bounce.`
   String get keyLevelsDescription {
     return Intl.message(
-      'Coins whose price has come very close to a very strong level: over the last 20 days the price reversed from it at least 5 times with a strong move. A level above the price is resistance, below is support. If the price moves between confirmed levels, it is a corridor. A level is a reference for stops and targets, not a guarantee of a bounce.',
+      'Coins whose price is at a really strong level or approaching it. Levels come from 4-hour candles over 90 days: the price made a major reversal there (the highest or lowest price within ±24 hours) at least 3 times, and after each one moved away by at least 3 usual 4-hour moves within 48 hours, typically 10% or more. "At the level" means within ~0.3%; "approaching" means within ~1% and the level has not been touched in the last 8 hours. A coin that already touched the level and bounced away is not shown. A level is a reference for stops and targets, not a guarantee of a bounce.',
       name: 'keyLevelsDescription',
       desc: '',
       args: [],
@@ -757,16 +757,6 @@ class S {
       name: 'corridorLowerBound',
       desc: '',
       args: [],
-    );
-  }
-
-  /// `touches: {count}`
-  String touchesCount(int count) {
-    return Intl.message(
-      'touches: $count',
-      name: 'touchesCount',
-      desc: '',
-      args: [count],
     );
   }
 
@@ -867,6 +857,31 @@ class S {
       name: 'earlyFadeDescription',
       desc: '',
       args: [],
+    );
+  }
+
+  /// `at the level`
+  String get atLevel {
+    return Intl.message('at the level', name: 'atLevel', desc: '', args: []);
+  }
+
+  /// `approaching`
+  String get approachingLevel {
+    return Intl.message(
+      'approaching',
+      name: 'approachingLevel',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `strong bounces: {count} (avg {percent}%)`
+  String strongBounces(int count, String percent) {
+    return Intl.message(
+      'strong bounces: $count (avg $percent%)',
+      name: 'strongBounces',
+      desc: '',
+      args: [count, percent],
     );
   }
 }

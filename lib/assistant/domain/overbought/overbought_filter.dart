@@ -2,7 +2,7 @@ import 'package:injectable/injectable.dart';
 
 import '../../../home/data/client/binance_futures_client.dart';
 import '../../../home/data/models/coin_model.dart';
-import '../../../home/data/repository/hourly_candles_repository.dart';
+import '../../../home/data/repository/candles_repository.dart';
 import '../coin_filter.dart';
 import 'overbought_detector.dart';
 import 'overbought_signal.dart';
@@ -13,13 +13,15 @@ class OverboughtFilter implements DetailedCoinFilter {
   OverboughtFilter(this._binance, this._candles);
 
   final BinanceFuturesClient _binance;
-  final HourlyCandlesRepositoryI _candles;
+  final CandlesRepositoryI _candles;
   final _detector = const OverboughtDetector();
 
   // Без запроса свечей отсекаем монеты, которые не могли перегреться:
   // рост >= 2 дневных хода при ходе >= 1% — это от 2% за 24ч
   // (берём 1.5% с запасом на разницу CoinGecko и Binance).
   static const double _minChange24hPercent = 1.5;
+  // Неделя на волатильность и среднюю + разгон RSI.
+  static const int _candlesLimit = 540;
 
   Map<String, OverboughtSignal> _details = const {};
 
@@ -39,6 +41,8 @@ class OverboughtFilter implements DetailedCoinFilter {
     ];
     final candles = await _candles.closedCandles(
       contracts.map((c) => c.symbol),
+      interval: '1h',
+      limit: _candlesLimit,
     );
 
     final details = <String, OverboughtSignal>{};

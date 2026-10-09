@@ -37,10 +37,10 @@ import 'package:crypto_assistant/home/data/client/binance_futures_client.dart'
     as _i806;
 import 'package:crypto_assistant/home/data/client/binance_socket_client.dart'
     as _i978;
+import 'package:crypto_assistant/home/data/repository/candles_repository.dart'
+    as _i715;
 import 'package:crypto_assistant/home/data/repository/coint_rpository.dart'
     as _i404;
-import 'package:crypto_assistant/home/data/repository/hourly_candles_repository.dart'
-    as _i630;
 import 'package:crypto_assistant/home/domain/usecase/search_coins_usecase.dart'
     as _i976;
 import 'package:crypto_assistant/home/language/bloc/language_bloc.dart'
@@ -82,21 +82,6 @@ extension GetItInjectableX on _i174.GetIt {
       ),
     );
     gh.factory<_i375.AuthApiI>(() => _i375.AuthApi());
-    gh.lazySingleton<_i630.HourlyCandlesRepositoryI>(
-      () => _i630.HourlyCandlesRepository(gh<_i806.BinanceFuturesClient>()),
-    );
-    gh.lazySingleton<_i408.KeyLevelFilter>(
-      () => _i408.KeyLevelFilter(
-        gh<_i806.BinanceFuturesClient>(),
-        gh<_i630.HourlyCandlesRepositoryI>(),
-      ),
-    );
-    gh.lazySingleton<_i777.OverboughtFilter>(
-      () => _i777.OverboughtFilter(
-        gh<_i806.BinanceFuturesClient>(),
-        gh<_i630.HourlyCandlesRepositoryI>(),
-      ),
-    );
     gh.factory<_i787.SignalJournalBloc>(
       () => _i787.SignalJournalBloc(
         repository: gh<_i542.SignalJournalRepositoryI>(),
@@ -104,6 +89,9 @@ extension GetItInjectableX on _i174.GetIt {
     );
     gh.lazySingleton<_i576.LanguageRepositoryI>(
       () => _i576.LanguageRepository(api: gh<_i234.LanguageApiI>()),
+    );
+    gh.lazySingleton<_i715.CandlesRepositoryI>(
+      () => _i715.CandlesRepository(gh<_i806.BinanceFuturesClient>()),
     );
     gh.factory<_i997.CoinApI>(
       () =>
@@ -126,6 +114,18 @@ extension GetItInjectableX on _i174.GetIt {
       () => _i933.PumpReversalFilter(
         gh<_i806.BinanceFuturesClient>(),
         gh<_i542.SignalJournalRepositoryI>(),
+      ),
+    );
+    gh.lazySingleton<_i408.KeyLevelFilter>(
+      () => _i408.KeyLevelFilter(
+        gh<_i806.BinanceFuturesClient>(),
+        gh<_i715.CandlesRepositoryI>(),
+      ),
+    );
+    gh.lazySingleton<_i777.OverboughtFilter>(
+      () => _i777.OverboughtFilter(
+        gh<_i806.BinanceFuturesClient>(),
+        gh<_i715.CandlesRepositoryI>(),
       ),
     );
     gh.factory<_i168.LoginBloc>(

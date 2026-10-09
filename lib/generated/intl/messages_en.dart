@@ -29,7 +29,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m3(percent, times) =>
       "+${percent}% in 24h (×${times} usual move)";
 
-  static String m4(count) => "touches: ${count}";
+  static String m4(count, percent) =>
+      "strong bounces: ${count} (avg ${percent}%)";
 
   static String m5(count) => "Trades: ${count}";
 
@@ -56,6 +57,8 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Approaching its historical maximum/minimum",
         ),
+    "approachingLevel": MessageLookupByLibrary.simpleMessage("approaching"),
+    "atLevel": MessageLookupByLibrary.simpleMessage("at the level"),
     "averageResult": MessageLookupByLibrary.simpleMessage("Average"),
     "btcTrend30d": MessageLookupByLibrary.simpleMessage("BTC 30d"),
     "buyersShare": m0,
@@ -126,10 +129,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Approaching a very strong level",
     ),
     "keyLevelsDescription": MessageLookupByLibrary.simpleMessage(
-      "Coins whose price has come very close to a very strong level: over the last 20 days the price reversed from it at least 5 times with a strong move. A level above the price is resistance, below is support. If the price moves between confirmed levels, it is a corridor. A level is a reference for stops and targets, not a guarantee of a bounce.",
+      "Coins whose price is at a really strong level or approaching it. Levels come from 4-hour candles over 90 days: the price made a major reversal there (the highest or lowest price within ±24 hours) at least 3 times, and after each one moved away by at least 3 usual 4-hour moves within 48 hours, typically 10% or more. \"At the level\" means within ~0.3%; \"approaching\" means within ~1% and the level has not been touched in the last 8 hours. A coin that already touched the level and bounced away is not shown. A level is a reference for stops and targets, not a guarantee of a bounce.",
     ),
     "keyLevelsShort": MessageLookupByLibrary.simpleMessage(
-      "Price near a level with 5+ strong reversals",
+      "Price at a level with 3+ strong bounces of ~10%+",
     ),
     "language": MessageLookupByLibrary.simpleMessage("Language"),
     "logIn": MessageLookupByLibrary.simpleMessage("Log in"),
@@ -206,13 +209,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "signalJournal": MessageLookupByLibrary.simpleMessage("Signal journal"),
     "signalsActive": MessageLookupByLibrary.simpleMessage("Signals active"),
     "signalsPaused": MessageLookupByLibrary.simpleMessage("Signals paused"),
+    "strongBounces": m4,
     "structureBreak": MessageLookupByLibrary.simpleMessage("Structure break"),
     "support": MessageLookupByLibrary.simpleMessage("Support"),
     "thePasswordMustBeAtLeast6CharactersLong":
         MessageLookupByLibrary.simpleMessage(
           "The password must be at least 6 characters long.",
         ),
-    "touchesCount": m4,
     "tradesCount": m5,
     "turnover": MessageLookupByLibrary.simpleMessage("Turnover"),
     "volume24Hours": MessageLookupByLibrary.simpleMessage("Volume 24 hours"),

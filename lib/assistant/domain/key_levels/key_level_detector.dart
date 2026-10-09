@@ -1,132 +1,180 @@
 import 'dart:math';
 
 import '../../../home/data/models/candle.dart';
-import 'key_level.dart';
 
-/// Очень сильные уровни по часовым свечам: цены, от которых за последние
-/// 20 дней было 5+ сильных разворотов (и сверху, и снизу — пробитое
-/// сопротивление часто становится поддержкой).
+/// Сильный уровень: цена, от которой было несколько крупных отскоков.
+typedef StrongLevel = ({double price, int touches, double avgBouncePercent});
+
+/// Уровни и типичный ход монеты по последней закрытой 4ч свече.
+typedef LevelAnalysis = ({List<StrongLevel> levels, double atr});
+
+/// Реально сильные уровни по 4-часовым свечам за 90 дней.
 ///
-/// На истории Binance (120 ликвидных монет, окт 2025 — сен 2026) отскок от
-/// таких уровней случался не чаще, чем от случайной цены на том же
-/// расстоянии — и для 1ч/20д, и для 4ч/90д уровней, при любом числе касаний,
-/// режиме рынка, RSI и скорости подхода. Уровень — ориентир для стопов и
-/// целей, а не прогноз отскока.
+/// Касание уровня — крупный разворот: самая высокая/низкая цена за ±24 часа,
+/// после которой цена за 48 часов ушла минимум на 3 обычных 4ч хода
+/// (обычно 10%+). Уровень — узкая зона (±0.25 хода), где таких разворотов
+/// минимум 3. Пробитое сопротивление часто становится поддержкой, поэтому
+/// считаются и вершины, и впадины.
+///
+/// На истории отскок от уровней (в любом их определении) случался не чаще,
+/// чем от случайной цены на том же расстоянии: уровень — ориентир, а не
+/// прогноз.
 class KeyLevelDetector {
   const KeyLevelDetector();
 
-  static const int lookbackBars = 480; // 20 дней часовых свечей
-  static const int _atrBars = 48;
-  // Разворот: экстремум среди 4 свечей слева и справа...
-  static const int _swingBars = 4;
-  // ...после которого цена за 12 часов ушла минимум на 2 ATR.
-  static const int _reactionBars = 12;
-  static const double _minReactionAtr = 2;
-  // Развороты ближе 0.5 ATR друг к другу — один уровень.
-  static const double _clusterAtr = 0.5;
-  static const int _minTouches = 5;
-  // «Подошла к уровню» — ближе 0.5 ATR.
-  static const double _nearAtr = 0.5;
-  // Коридор: двое суток цена между уровнями, ширина от 3 ATR.
-  static const int _corridorBars = 48;
+  /// Свечей запрашивать: 90 дней + неделя на ATR первых разворотов.
+  static const int candlesLimit = 600;
+  static const int _lookbackBars = 540;
+  static const int _atrBars = 42; // 7 дней
+  static const int _swingBars = 6; // ±24 часа
+  static const int _reactionBars = 12; // 48 часов
+  static const double _minReactionAtr = 3;
+  static const double _zoneAtr = 0.25;
+  static const int _minTouches = 3;
+
+  /// Цена «на уровне» — ближе 0.1 хода (обычно ~0.3%).
+  static const double atLevelAtr = 0.1;
+
+  /// Цена «подходит» — ближе 0.35 хода (обычно ~1%).
+  static const double approachAtr = 0.35;
+
+  // Коридор: 48 часов цена между уровнями, ширина от 3 ходов.
+  static const int _corridorBars = 12;
   static const double _minCorridorAtr = 3;
 
-  static const int requiredCandles = _atrBars + _swingBars * 2 + 1;
-
-  /// Ближайший сильный уровень, к которому подошла [price], или null.
-  KeyLevel? nearestLevel(List<Candle> candles, double price) {
-    if (candles.length < requiredCandles || price <= 0) return null;
+  LevelAnalysis? analyze(List<Candle> candles) {
+    if (candles.length < _atrBars + _swingBars * 2 + 1) return null;
     final atr = _atrSeries(candles);
     final t = candles.length - 1;
     final atrNow = atr[t];
     if (atrNow == null || atrNow <= 0) return null;
+    return (levels: _levels(candles, atr, t, atrNow), atr: atrNow);
+  }
 
-    final levels = _levels(candles, atr, t, atrNow);
-    ({double price, int touches})? nearest;
-    for (final level in levels) {
-      final distance = (level.price - price).abs();
-      if (distance > _nearAtr * atrNow) continue;
-      if (nearest == null || distance < (nearest.price - price).abs()) {
-        nearest = level;
+  /// Ближайший к [price] уровень и расстояние до него в ходах (ATR).
+  ({StrongLevel level, double distanceAtr})? nearest(
+    LevelAnalysis analysis,
+    double price,
+  ) {
+    StrongLevel? best;
+    for (final level in analysis.levels) {
+      if (best == null ||
+          (level.price - price).abs() < (best.price - price).abs()) {
+        best = level;
       }
     }
-    if (nearest == null) return null;
-
-    final corridor = _corridor(candles, levels, price, atrNow);
-    return KeyLevel(
-      price: nearest.price,
-      touches: nearest.touches,
-      isResistance: nearest.price > price,
-      distancePercent: (nearest.price - price).abs() / price * 100,
-      corridor: corridor,
+    if (best == null) return null;
+    return (
+      level: best,
+      distanceAtr: (best.price - price).abs() / analysis.atr,
     );
   }
 
-  List<({double price, int touches})> _levels(
+  /// Цена уже доходила до уровня в [recent] свечах — касание было, монета
+  /// не «подходит», а уже отреагировала.
+  bool touchedRecently(
+    StrongLevel level,
+    double price,
+    double atr,
+    List<Candle> recent,
+  ) {
+    final zone = atLevelAtr * atr;
+    final isResistance = level.price > price;
+    return recent.any(
+      (c) => isResistance
+          ? c.high >= level.price - zone
+          : c.low <= level.price + zone,
+    );
+  }
+
+  /// Коридор между ближайшими уровнями сверху и снизу, если цена 48 часов
+  /// ходит между ними.
+  ({double low, double high})? corridor(
+    List<Candle> candles,
+    LevelAnalysis analysis,
+    double price,
+  ) {
+    final above = analysis.levels.where((l) => l.price > price);
+    final below = analysis.levels.where((l) => l.price < price);
+    if (above.isEmpty || below.isEmpty) return null;
+    final high = above.map((l) => l.price).reduce(min);
+    final low = below.map((l) => l.price).reduce(max);
+    if (high - low < _minCorridorAtr * analysis.atr) return null;
+    final margin = _zoneAtr * analysis.atr;
+    for (var k = candles.length - _corridorBars; k < candles.length; k++) {
+      final close = candles[k].close;
+      if (close < low - margin || close > high + margin) return null;
+    }
+    return (low: low, high: high);
+  }
+
+  List<StrongLevel> _levels(
     List<Candle> c,
     List<double?> atr,
     int t,
     double atrNow,
   ) {
-    final points = <double>[];
-    final from = max(_swingBars, t - lookbackBars + 1);
-    // Разворот подтверждён, когда прошло окно реакции.
+    // Развороты, подтверждённые к последней свече (прошло окно реакции).
+    final pivots = <({double price, double bounce})>[];
+    final from = max(_swingBars, t - _lookbackBars + 1);
     final to = t - max(_swingBars, _reactionBars);
     for (var k = from; k <= to; k++) {
       final a = atr[k];
       if (a == null) continue;
       final end = min(c.length, k + 1 + _reactionBars);
-      if (c[k].high >= _maxHigh(c, k - _swingBars, k + _swingBars) &&
-          c[k].high - _minLow(c, k + 1, end - 1) >= _minReactionAtr * a) {
-        points.add(c[k].high);
+      if (c[k].high >= _maxHigh(c, k - _swingBars, k + _swingBars)) {
+        final move = c[k].high - _minLow(c, k + 1, end - 1);
+        if (move >= _minReactionAtr * a) {
+          pivots.add((price: c[k].high, bounce: move / c[k].high * 100));
+        }
       }
-      if (c[k].low <= _minLow(c, k - _swingBars, k + _swingBars) &&
-          _maxHigh(c, k + 1, end - 1) - c[k].low >= _minReactionAtr * a) {
-        points.add(c[k].low);
+      if (c[k].low <= _minLow(c, k - _swingBars, k + _swingBars)) {
+        final move = _maxHigh(c, k + 1, end - 1) - c[k].low;
+        if (move >= _minReactionAtr * a) {
+          pivots.add((price: c[k].low, bounce: move / c[k].low * 100));
+        }
       }
     }
-    points.sort();
+    pivots.sort((a, b) => a.price.compareTo(b.price));
 
-    final tolerance = _clusterAtr * atrNow;
-    final clusters = <List<double>>[];
-    for (final point in points) {
-      final current = clusters.isEmpty ? null : clusters.last;
-      if (current != null && point - _mean(current) <= tolerance) {
-        current.add(point);
-      } else {
-        clusters.add([point]);
+    // Узкие зоны: вокруг разворота с наибольшим числом соседей в ±zone,
+    // без «перетекания» зоны от точки к точке.
+    final zone = _zoneAtr * atrNow;
+    final used = List<bool>.filled(pivots.length, false);
+    final levels = <StrongLevel>[];
+    while (true) {
+      List<int>? best;
+      for (var i = 0; i < pivots.length; i++) {
+        if (used[i]) continue;
+        final members = [
+          for (var j = 0; j < pivots.length; j++)
+            if (!used[j] && (pivots[j].price - pivots[i].price).abs() <= zone)
+              j,
+        ];
+        if (best == null || members.length > best.length) best = members;
       }
+      if (best == null || best.length < _minTouches) break;
+      for (final j in best) {
+        used[j] = true;
+      }
+      final prices = [for (final j in best) pivots[j].price];
+      final bounces = [for (final j in best) pivots[j].bounce];
+      levels.add((
+        price: _median(prices),
+        touches: best.length,
+        avgBouncePercent: bounces.reduce((a, b) => a + b) / bounces.length,
+      ));
     }
-    return [
-      for (final cluster in clusters)
-        if (cluster.length >= _minTouches)
-          (price: _median(cluster), touches: cluster.length),
-    ];
+    return levels;
   }
 
-  ({double low, double high})? _corridor(
-    List<Candle> c,
-    List<({double price, int touches})> levels,
-    double price,
-    double atrNow,
-  ) {
-    final above = levels.where((l) => l.price > price).map((l) => l.price);
-    final below = levels.where((l) => l.price < price).map((l) => l.price);
-    if (above.isEmpty || below.isEmpty) return null;
-    final high = above.reduce(min);
-    final low = below.reduce(max);
-    if (high - low < _minCorridorAtr * atrNow) return null;
-    final margin = _clusterAtr * atrNow;
-    for (var k = c.length - _corridorBars; k < c.length; k++) {
-      if (c[k].close < low - margin || c[k].close > high + margin) return null;
-    }
-    return (low: low, high: high);
-  }
-
-  // ATR: среднее истинного диапазона за 48 часов (null, пока данных мало).
+  // ATR: среднее истинного диапазона за 7 дней (null, пока данных мало).
   static List<double?> _atrSeries(List<Candle> c) {
-    final tr = <double>[
-      for (var k = 0; k < c.length; k++)
+    final result = List<double?>.filled(c.length, null);
+    final tr = <double>[];
+    var sum = 0.0;
+    for (var k = 0; k < c.length; k++) {
+      tr.add(
         k == 0
             ? c[k].high - c[k].low
             : [
@@ -134,10 +182,7 @@ class KeyLevelDetector {
                 (c[k].high - c[k - 1].close).abs(),
                 (c[k].low - c[k - 1].close).abs(),
               ].reduce(max),
-    ];
-    final result = List<double?>.filled(c.length, null);
-    var sum = 0.0;
-    for (var k = 0; k < c.length; k++) {
+      );
       sum += tr[k];
       if (k >= _atrBars) sum -= tr[k - _atrBars];
       if (k >= _atrBars - 1) result[k] = sum / _atrBars;
@@ -161,9 +206,7 @@ class KeyLevelDetector {
     return value;
   }
 
-  static double _mean(List<double> values) =>
-      values.reduce((a, b) => a + b) / values.length;
-
+  // Значения уже отсортированы по цене.
   static double _median(List<double> sorted) {
     final mid = sorted.length ~/ 2;
     return sorted.length.isOdd

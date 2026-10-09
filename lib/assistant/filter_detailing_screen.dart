@@ -216,13 +216,16 @@ class _KeyLevelLine extends StatelessWidget {
     final range = corridor == null
         ? ''
         : '  ·  ${formatPrice(corridor.low)}–${formatPrice(corridor.high)}';
+    final state = level.isAtLevel
+        ? S.of(context).atLevel
+        : S.of(context).approachingLevel;
     return Padding(
       padding: const EdgeInsets.only(top: 6, left: 4, right: 4),
       child: CustomNewText(
         text:
-            '$kind ${formatPrice(level.price)}$range  ·  '
-            '${S.of(context).touchesCount(level.touches)}  ·  '
-            '${S.of(context).distanceToLevel(level.distancePercent.toStringAsFixed(1))}',
+            '$kind ${formatPrice(level.price)}$range  ·  $state  ·  '
+            '${S.of(context).strongBounces(level.touches, level.avgBouncePercent.toStringAsFixed(0))}  ·  '
+            '${S.of(context).distanceToLevel(level.distancePercent.toStringAsFixed(2))}',
         fontSize: 13,
         color: level.isResistance ? AppColors.borderRed : AppColors.positive,
         textAlign: TextAlign.start,

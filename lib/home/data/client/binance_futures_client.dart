@@ -56,6 +56,31 @@ class BinanceFuturesClient {
     return null;
   }
 
+  /// Текущие цены всех контрактов одним запросом.
+  Future<Map<String, double>> lastPrices() async {
+    final data = await _get('/fapi/v1/ticker/price') as List<dynamic>;
+    return {
+      for (final item in data.cast<Map<String, dynamic>>())
+        item['symbol'] as String: double.parse(item['price'] as String),
+    };
+  }
+
+  /// Последние свечи вместе с ещё не закрытой, от старых к новым.
+  Future<List<Candle>> recentKlines(
+    String symbol, {
+    required String interval,
+    required int limit,
+  }) async {
+    final data =
+        await _get('/fapi/v1/klines', {
+              'symbol': symbol,
+              'interval': interval,
+              'limit': '$limit',
+            })
+            as List<dynamic>;
+    return data.map((k) => Candle.fromJson(k as List<dynamic>)).toList();
+  }
+
   /// Только закрытые свечи, от старых к новым.
   Future<List<Candle>> closedKlines(
     String symbol, {

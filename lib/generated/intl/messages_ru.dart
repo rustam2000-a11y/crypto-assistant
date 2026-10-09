@@ -29,7 +29,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m3(percent, times) =>
       "+${percent}% за 24 ч (×${times} обычного хода)";
 
-  static String m4(count) => "касаний: ${count}";
+  static String m4(count, percent) =>
+      "сильных отскоков: ${count} (в ср. ${percent}%)";
 
   static String m5(count) => "Сделок: ${count}";
 
@@ -58,6 +59,8 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Приближается к своему историческому максимуму/минимуму",
         ),
+    "approachingLevel": MessageLookupByLibrary.simpleMessage("подходит"),
+    "atLevel": MessageLookupByLibrary.simpleMessage("на уровне"),
     "averageResult": MessageLookupByLibrary.simpleMessage("Среднее"),
     "btcTrend30d": MessageLookupByLibrary.simpleMessage("BTC за 30 дн."),
     "buyersShare": m0,
@@ -128,10 +131,10 @@ class MessageLookup extends MessageLookupByLibrary {
       "Подход к очень сильному уровню",
     ),
     "keyLevelsDescription": MessageLookupByLibrary.simpleMessage(
-      "Монеты, цена которых вплотную подошла к очень сильному уровню: за последние 20 дней от него было минимум 5 сильных разворотов. Уровень над ценой — сопротивление, под ценой — поддержка. Если цена ходит между подтверждёнными уровнями — это коридор. Уровень — ориентир для стопов и целей, а не гарантия отскока.",
+      "Монеты, цена которых стоит на реально сильном уровне или подходит к нему. Уровни строятся по 4-часовым свечам за 90 дней: цена минимум 3 раза делала там крупный разворот (самая высокая или низкая цена за ±24 часа) и после каждого уходила минимум на 3 обычных 4-часовых хода за 48 часов — как правило, на 10% и больше. «На уровне» — ближе ~0,3%; «подходит» — ближе ~1%, и за последние 8 часов цена уровня не касалась. Если цена уже коснулась уровня и отскочила, монета не показывается. Уровень — ориентир для стопов и целей, а не гарантия отскока.",
     ),
     "keyLevelsShort": MessageLookupByLibrary.simpleMessage(
-      "Цена у уровня с 5+ сильными разворотами",
+      "Цена у уровня с 3+ сильными отскоками по ~10%+",
     ),
     "language": MessageLookupByLibrary.simpleMessage("Язык"),
     "logIn": MessageLookupByLibrary.simpleMessage("Войти"),
@@ -210,13 +213,13 @@ class MessageLookup extends MessageLookupByLibrary {
     "signalJournal": MessageLookupByLibrary.simpleMessage("Журнал сигналов"),
     "signalsActive": MessageLookupByLibrary.simpleMessage("Сигналы активны"),
     "signalsPaused": MessageLookupByLibrary.simpleMessage("Сигналы на паузе"),
+    "strongBounces": m4,
     "structureBreak": MessageLookupByLibrary.simpleMessage("Слом структуры"),
     "support": MessageLookupByLibrary.simpleMessage("Поддержка"),
     "thePasswordMustBeAtLeast6CharactersLong":
         MessageLookupByLibrary.simpleMessage(
           "Пароль должен содержать не менее 6 символов",
         ),
-    "touchesCount": m4,
     "tradesCount": m5,
     "turnover": MessageLookupByLibrary.simpleMessage("Оборачиваемость"),
     "volume24Hours": MessageLookupByLibrary.simpleMessage("Объём за 24 часа"),
