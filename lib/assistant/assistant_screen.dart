@@ -69,15 +69,13 @@ class AssistantScreen extends StatelessWidget {
                   Expanded(
                     child: AssistantCardInformation(
                       icon: AppImages.inflationRate,
-                      text: S.of(context).highVolatility,
-                      description: S
-                          .of(context)
-                          .priceFluctuationRangeOverTheLast24Hours,
+                      text: S.of(context).overheatedFading,
+                      description: S.of(context).overheatedFadingShort,
                       borderColor: AppColors.borderGreen,
                       onTap: () => _openDetails(
                         context,
                         FilterType.highVolatility,
-                        S.of(context).priceFluctuationRangeOverTheLast24Hours,
+                        S.of(context).overheatedFadingDescription,
                       ),
                     ),
                   ),
@@ -115,17 +113,13 @@ class AssistantScreen extends StatelessWidget {
                   Expanded(
                     child: AssistantCardInformation(
                       icon: AppImages.currency,
-                      text: S.of(context).capitalInflow,
-                      description: S
-                          .of(context)
-                          .marketCapIncreaseoutflowOfMoreThan5Over24Hours,
+                      text: S.of(context).capitalFlow,
+                      description: S.of(context).capitalFlowShort,
                       borderColor: AppColors.magenta,
                       onTap: () => _openDetails(
                         context,
                         FilterType.capitalInflow,
-                        S
-                            .of(context)
-                            .marketCapIncreaseoutflowOfMoreThan5Over24Hours,
+                        S.of(context).capitalFlowDescription,
                       ),
                     ),
                   ),
@@ -138,16 +132,12 @@ class AssistantScreen extends StatelessWidget {
                     child: AssistantCardInformation(
                       icon: AppImages.analyze,
                       text: S.of(context).nearDailyPeakbottom,
-                      description: S
-                          .of(context)
-                          .abnormallyHighTradingActivityRelativeToCoinSize,
+                      description: S.of(context).dailyExtremumShort,
                       borderColor: AppColors.borderGreen,
                       onTap: () => _openDetails(
                         context,
                         FilterType.dailyExtremum,
-                        S
-                            .of(context)
-                            .abnormallyHighTradingActivityRelativeToCoinSize,
+                        S.of(context).dailyExtremumDescription,
                       ),
                     ),
                   ),
@@ -155,16 +145,12 @@ class AssistantScreen extends StatelessWidget {
                     child: AssistantCardInformation(
                       icon: AppImages.high,
                       text: S.of(context).confirmedAnomaly,
-                      description: S
-                          .of(context)
-                          .priceIsCurrentlyAtTheUpperOrLowerBoundaryOf,
+                      description: S.of(context).confirmedAnomalyShort,
                       borderColor: AppColors.whiteColor,
                       onTap: () => _openDetails(
                         context,
                         FilterType.confirmedAnomaly,
-                        S
-                            .of(context)
-                            .priceIsCurrentlyAtTheUpperOrLowerBoundaryOf,
+                        S.of(context).confirmedAnomalyDescription,
                       ),
                     ),
                   ),

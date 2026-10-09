@@ -64,10 +64,25 @@ class MessageLookup extends MessageLookupByLibrary {
     "averageResult": MessageLookupByLibrary.simpleMessage("Среднее"),
     "btcTrend30d": MessageLookupByLibrary.simpleMessage("BTC за 30 дн."),
     "buyersShare": m0,
+    "capitalFlow": MessageLookupByLibrary.simpleMessage(
+      "Приток и отток капитала",
+    ),
+    "capitalFlowDescription": MessageLookupByLibrary.simpleMessage(
+      "Монеты, капитализация которых за 24 часа выросла больше чем на 5% (приток денег) или упала больше чем на 5% (отток). Рост капитализации может быть связан и с разлоком монет, а не только с ростом цены.",
+    ),
+    "capitalFlowShort": MessageLookupByLibrary.simpleMessage(
+      "Капитализация ±5% и больше за 24 часа",
+    ),
     "capitalInflow": MessageLookupByLibrary.simpleMessage("Приток капитала"),
     "capitalization": MessageLookupByLibrary.simpleMessage("Капитализация"),
     "confirmedAnomaly": MessageLookupByLibrary.simpleMessage(
       "Подтверждённая аномалия",
+    ),
+    "confirmedAnomalyDescription": MessageLookupByLibrary.simpleMessage(
+      "Сильное движение, подтверждённое объёмом: цена за 24 часа изменилась больше чем на 7% (вверх или вниз), а объём торгов за сутки больше 30% капитализации монеты. Например, при капитализации \$100 млн за сутки наторговали больше чем на \$30 млн.",
+    ),
+    "confirmedAnomalyShort": MessageLookupByLibrary.simpleMessage(
+      "Цена ±7% на объёме больше 30% капитализации",
     ),
     "corridorLowerBound": MessageLookupByLibrary.simpleMessage("Низ коридора"),
     "corridorUpperBound": MessageLookupByLibrary.simpleMessage("Верх коридора"),
@@ -76,6 +91,12 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Текущая позиция цены в дневном диапазоне (0–100%):",
         ),
+    "dailyExtremumDescription": MessageLookupByLibrary.simpleMessage(
+      "Монеты, цена которых сейчас у края своего диапазона за 24 часа: в верхних 5% (у дневного максимума) или в нижних 5% (у дневного минимума). Например, если за сутки монета ходила от 1,00 до 1,20, она попадёт в список при цене от 1,19 или до 1,01. Направление дальнейшего движения формула не предсказывает.",
+    ),
+    "dailyExtremumShort": MessageLookupByLibrary.simpleMessage(
+      "Цена в верхних или нижних 5% дневного диапазона",
+    ),
     "detailing": MessageLookupByLibrary.simpleMessage("Детализация"),
     "distanceToLevel": m1,
     "dontHaveAnAccount": MessageLookupByLibrary.simpleMessage("Нет аккаунта?"),
@@ -165,6 +186,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "overboughtShort": MessageLookupByLibrary.simpleMessage(
       "RSI 80+, объём и покупатели выдыхаются",
+    ),
+    "overheatedFading": MessageLookupByLibrary.simpleMessage(
+      "Перегрев и затухание",
+    ),
+    "overheatedFadingDescription": MessageLookupByLibrary.simpleMessage(
+      "Монета сильно разогналась: рост за 24 ч или 7 дн. не меньше 4% и минимум в 2 раза больше её обычного хода, при этом она ещё не упала сильнее обычного дневного хода. Из четырёх признаков остывания сработали минимум три: RSI за сутки был 85+ и опустился на 5+ пунктов; цена отошла от дневного максимума на 15–50% дневного диапазона; последний час и последние 6 часов в минусе; цена выше средней за 7 дней больше чем на 1,5 обычных дневных хода.",
+    ),
+    "overheatedFadingShort": MessageLookupByLibrary.simpleMessage(
+      "Перегрев + 3 из 4 признаков остывания",
     ),
     "password": MessageLookupByLibrary.simpleMessage("Пароль"),
     "patternOnly": MessageLookupByLibrary.simpleMessage(

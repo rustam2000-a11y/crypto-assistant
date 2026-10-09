@@ -62,10 +62,25 @@ class MessageLookup extends MessageLookupByLibrary {
     "averageResult": MessageLookupByLibrary.simpleMessage("Average"),
     "btcTrend30d": MessageLookupByLibrary.simpleMessage("BTC 30d"),
     "buyersShare": m0,
+    "capitalFlow": MessageLookupByLibrary.simpleMessage(
+      "Capital inflow and outflow",
+    ),
+    "capitalFlowDescription": MessageLookupByLibrary.simpleMessage(
+      "Coins whose market cap rose by more than 5% in 24 hours (money flowing in) or fell by more than 5% (money flowing out). A market cap increase can also come from a token unlock, not only from a price rise.",
+    ),
+    "capitalFlowShort": MessageLookupByLibrary.simpleMessage(
+      "Market cap ±5% or more in 24 hours",
+    ),
     "capitalInflow": MessageLookupByLibrary.simpleMessage("Capital inflow"),
     "capitalization": MessageLookupByLibrary.simpleMessage("Capitalization"),
     "confirmedAnomaly": MessageLookupByLibrary.simpleMessage(
       "Confirmed anomaly",
+    ),
+    "confirmedAnomalyDescription": MessageLookupByLibrary.simpleMessage(
+      "A strong move confirmed by volume: the price changed by more than 7% in 24 hours (up or down), and the daily trading volume is more than 30% of the coin\'s market cap. For example, with a \$100M market cap, more than \$30M was traded during the day.",
+    ),
+    "confirmedAnomalyShort": MessageLookupByLibrary.simpleMessage(
+      "Price ±7% on volume above 30% of market cap",
     ),
     "corridorLowerBound": MessageLookupByLibrary.simpleMessage(
       "Corridor bottom",
@@ -78,6 +93,12 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Current price position in daily range (0–100%):",
         ),
+    "dailyExtremumDescription": MessageLookupByLibrary.simpleMessage(
+      "Coins whose price is now at the edge of its 24-hour range: in the top 5% (near the daily high) or the bottom 5% (near the daily low). For example, if a coin traded between 1.00 and 1.20 over the day, it is listed at a price of 1.19 or above, or 1.01 or below. The formula does not predict the direction of the next move.",
+    ),
+    "dailyExtremumShort": MessageLookupByLibrary.simpleMessage(
+      "Price in the top or bottom 5% of the daily range",
+    ),
     "detailing": MessageLookupByLibrary.simpleMessage("Detailing"),
     "distanceToLevel": m1,
     "dontHaveAnAccount": MessageLookupByLibrary.simpleMessage(
@@ -163,6 +184,15 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "overboughtShort": MessageLookupByLibrary.simpleMessage(
       "RSI 80+, volume and buyers fading",
+    ),
+    "overheatedFading": MessageLookupByLibrary.simpleMessage(
+      "Overheated and fading",
+    ),
+    "overheatedFadingDescription": MessageLookupByLibrary.simpleMessage(
+      "The coin has run up hard: the 24h or 7d rise is at least 4% and at least 2× its usual move, and it has not yet dropped more than its usual daily move. At least three of four cooling signs are present: RSI was 85+ within the day and has dropped by 5+ points; the price has pulled back 15–50% of the daily range from the high; the last hour and the last 6 hours are negative; the price is more than 1.5 usual daily moves above its 7-day average.",
+    ),
+    "overheatedFadingShort": MessageLookupByLibrary.simpleMessage(
+      "Overheated + 3 of 4 cooling signs",
     ),
     "password": MessageLookupByLibrary.simpleMessage("Password"),
     "patternOnly": MessageLookupByLibrary.simpleMessage(

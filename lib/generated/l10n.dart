@@ -884,6 +884,106 @@ class S {
       args: [count, percent],
     );
   }
+
+  /// `Overheated and fading`
+  String get overheatedFading {
+    return Intl.message(
+      'Overheated and fading',
+      name: 'overheatedFading',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Overheated + 3 of 4 cooling signs`
+  String get overheatedFadingShort {
+    return Intl.message(
+      'Overheated + 3 of 4 cooling signs',
+      name: 'overheatedFadingShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `The coin has run up hard: the 24h or 7d rise is at least 4% and at least 2× its usual move, and it has not yet dropped more than its usual daily move. At least three of four cooling signs are present: RSI was 85+ within the day and has dropped by 5+ points; the price has pulled back 15–50% of the daily range from the high; the last hour and the last 6 hours are negative; the price is more than 1.5 usual daily moves above its 7-day average.`
+  String get overheatedFadingDescription {
+    return Intl.message(
+      'The coin has run up hard: the 24h or 7d rise is at least 4% and at least 2× its usual move, and it has not yet dropped more than its usual daily move. At least three of four cooling signs are present: RSI was 85+ within the day and has dropped by 5+ points; the price has pulled back 15–50% of the daily range from the high; the last hour and the last 6 hours are negative; the price is more than 1.5 usual daily moves above its 7-day average.',
+      name: 'overheatedFadingDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Capital inflow and outflow`
+  String get capitalFlow {
+    return Intl.message(
+      'Capital inflow and outflow',
+      name: 'capitalFlow',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Market cap ±5% or more in 24 hours`
+  String get capitalFlowShort {
+    return Intl.message(
+      'Market cap ±5% or more in 24 hours',
+      name: 'capitalFlowShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Coins whose market cap rose by more than 5% in 24 hours (money flowing in) or fell by more than 5% (money flowing out). A market cap increase can also come from a token unlock, not only from a price rise.`
+  String get capitalFlowDescription {
+    return Intl.message(
+      'Coins whose market cap rose by more than 5% in 24 hours (money flowing in) or fell by more than 5% (money flowing out). A market cap increase can also come from a token unlock, not only from a price rise.',
+      name: 'capitalFlowDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price in the top or bottom 5% of the daily range`
+  String get dailyExtremumShort {
+    return Intl.message(
+      'Price in the top or bottom 5% of the daily range',
+      name: 'dailyExtremumShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Coins whose price is now at the edge of its 24-hour range: in the top 5% (near the daily high) or the bottom 5% (near the daily low). For example, if a coin traded between 1.00 and 1.20 over the day, it is listed at a price of 1.19 or above, or 1.01 or below. The formula does not predict the direction of the next move.`
+  String get dailyExtremumDescription {
+    return Intl.message(
+      'Coins whose price is now at the edge of its 24-hour range: in the top 5% (near the daily high) or the bottom 5% (near the daily low). For example, if a coin traded between 1.00 and 1.20 over the day, it is listed at a price of 1.19 or above, or 1.01 or below. The formula does not predict the direction of the next move.',
+      name: 'dailyExtremumDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Price ±7% on volume above 30% of market cap`
+  String get confirmedAnomalyShort {
+    return Intl.message(
+      'Price ±7% on volume above 30% of market cap',
+      name: 'confirmedAnomalyShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A strong move confirmed by volume: the price changed by more than 7% in 24 hours (up or down), and the daily trading volume is more than 30% of the coin's market cap. For example, with a $100M market cap, more than $30M was traded during the day.`
+  String get confirmedAnomalyDescription {
+    return Intl.message(
+      'A strong move confirmed by volume: the price changed by more than 7% in 24 hours (up or down), and the daily trading volume is more than 30% of the coin\'s market cap. For example, with a \$100M market cap, more than \$30M was traded during the day.',
+      name: 'confirmedAnomalyDescription',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
