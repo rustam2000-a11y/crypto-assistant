@@ -111,9 +111,7 @@ class AssistantScreen extends StatelessWidget {
                     child: AssistantCardInformation(
                       icon: AppImages.inflation,
                       text: S.of(context).turnover,
-                      description: S
-                          .of(context)
-                          .abnormallyHighTradingActivityRelativeToCoinSize,
+                      description: S.of(context).theCoinIsAtItsDailyHighOrLow,
                       borderColor: AppColors.amber,
                       onTap: () => _openDetails(
                         context,

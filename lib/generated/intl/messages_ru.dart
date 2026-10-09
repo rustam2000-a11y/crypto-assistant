@@ -127,6 +127,9 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Зарегистрируйтесь, чтобы добавлять монеты в портфель и сохранять их",
         ),
+    "theCoinIsAtItsDailyHighOrLow": MessageLookupByLibrary.simpleMessage(
+      "The coin is at its daily high or low",
+    ),
     "thePasswordMustBeAtLeast6CharactersLong":
         MessageLookupByLibrary.simpleMessage(
           "Пароль должен содержать не менее 6 символов",

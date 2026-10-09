@@ -499,6 +499,16 @@ class S {
       args: [],
     );
   }
+
+  /// `The coin is at its daily high or low`
+  String get theCoinIsAtItsDailyHighOrLow {
+    return Intl.message(
+      'The coin is at its daily high or low',
+      name: 'theCoinIsAtItsDailyHighOrLow',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

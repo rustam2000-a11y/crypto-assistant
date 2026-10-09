@@ -127,6 +127,9 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Sign up to add coins to your briefcase and save them",
         ),
+    "theCoinIsAtItsDailyHighOrLow": MessageLookupByLibrary.simpleMessage(
+      "The coin is at its daily high or low",
+    ),
     "thePasswordMustBeAtLeast6CharactersLong":
         MessageLookupByLibrary.simpleMessage(
           "The password must be at least 6 characters long.",

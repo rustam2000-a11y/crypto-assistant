@@ -54,5 +54,6 @@
   "weakPassword": "Password is too weak",
   "emailAlreadyInUse": "This email is already in use",
   "failedToSignUp": "Failed to sign up, please try again later",
-  "signUpToAddCoinsToYourBriefcaseAndSave": "Sign up to add coins to your briefcase and save them"
+  "signUpToAddCoinsToYourBriefcaseAndSave": "Sign up to add coins to your briefcase and save them",
+  "theCoinIsAtItsDailyHighOrLow": "The coin is at its daily high or low"
 }

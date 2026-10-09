@@ -51,5 +51,6 @@
   "weakPassword": "Пароль слишком простой",
   "emailAlreadyInUse": "Этот email уже используется",
   "failedToSignUp": "Не удалось зарегистрироваться, попробуйте позже",
-  "signUpToAddCoinsToYourBriefcaseAndSave": "Зарегистрируйтесь, чтобы добавлять монеты в портфель и сохранять их"
+  "signUpToAddCoinsToYourBriefcaseAndSave": "Зарегистрируйтесь, чтобы добавлять монеты в портфель и сохранять их",
+  "theCoinIsAtItsDailyHighOrLow": "Монета на дневном максимуме или минимуме"
 }
