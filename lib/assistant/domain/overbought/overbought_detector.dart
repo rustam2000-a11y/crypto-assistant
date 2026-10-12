@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import '../../../home/data/models/candle.dart';
+import '../indicators.dart';
 import 'overbought_signal.dart';
 
 /// Перегрев, при котором уходит ликвидность, по закрытым часовым свечам.
@@ -36,10 +37,10 @@ class OverboughtDetector {
     final t = candles.length - 1;
     final close = candles[t].close;
 
-    final rsi = _rsi(candles);
+    final rsi = wilderRsi(candles, period: _rsiPeriod);
     if (rsi < _minRsi) return null;
 
-    final volatility = _dailyVolatility(candles, t);
+    final volatility = dailyVolatility(candles, bars: _weekBars);
     if (volatility < _minDailyVolatility) return null;
     final rise = log(close / candles[t - 24].close);
     final heat = rise / volatility;
@@ -73,34 +74,6 @@ class OverboughtDetector {
       buyersSharePercent: buyers * 100,
       previousBuyersSharePercent: previousBuyers * 100,
     );
-  }
-
-  // RSI Уайлдера по всей истории: экспоненциальное сглаживание 1/14,
-  // первое изменение считается нулевым.
-  static double _rsi(List<Candle> c) {
-    const alpha = 1 / _rsiPeriod;
-    var gain = 0.0;
-    var loss = 0.0;
-    for (var k = 1; k < c.length; k++) {
-      final change = c[k].close - c[k - 1].close;
-      gain = (1 - alpha) * gain + alpha * max(change, 0.0);
-      loss = (1 - alpha) * loss + alpha * max(-change, 0.0);
-    }
-    return loss == 0 ? 100 : 100 - 100 / (1 + gain / loss);
-  }
-
-  // Медиана |часовых лог-доходностей| за неделю × 1.4826 × √24 — обычный
-  // дневной ход без влияния самого пампа (в долях).
-  static double _dailyVolatility(List<Candle> c, int t) {
-    final moves = <double>[
-      for (var k = t - _weekBars + 1; k <= t; k++)
-        log(c[k].close / c[k - 1].close).abs(),
-    ]..sort();
-    final mid = moves.length ~/ 2;
-    final median = moves.length.isOdd
-        ? moves[mid]
-        : (moves[mid - 1] + moves[mid]) / 2;
-    return median * 1.4826 * sqrt(24);
   }
 
   static ({double volume, double buys}) _flow(

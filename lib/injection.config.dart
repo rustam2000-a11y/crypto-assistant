@@ -17,8 +17,12 @@ import 'package:crypto_assistant/assistant/data/signal_journal_repository.dart'
     as _i542;
 import 'package:crypto_assistant/assistant/domain/key_levels/key_level_filter.dart'
     as _i408;
+import 'package:crypto_assistant/assistant/domain/level_radar/level_radar_filter.dart'
+    as _i24;
 import 'package:crypto_assistant/assistant/domain/overbought/overbought_filter.dart'
     as _i777;
+import 'package:crypto_assistant/assistant/domain/overload/overload_filter.dart'
+    as _i401;
 import 'package:crypto_assistant/assistant/domain/pump_reversal/pump_reversal_filter.dart'
     as _i933;
 import 'package:crypto_assistant/auth/data/api/auth_api.dart' as _i375;
@@ -122,8 +126,20 @@ extension GetItInjectableX on _i174.GetIt {
         gh<_i715.CandlesRepositoryI>(),
       ),
     );
+    gh.lazySingleton<_i24.LevelRadarFilter>(
+      () => _i24.LevelRadarFilter(
+        gh<_i806.BinanceFuturesClient>(),
+        gh<_i715.CandlesRepositoryI>(),
+      ),
+    );
     gh.lazySingleton<_i777.OverboughtFilter>(
       () => _i777.OverboughtFilter(
+        gh<_i806.BinanceFuturesClient>(),
+        gh<_i715.CandlesRepositoryI>(),
+      ),
+    );
+    gh.lazySingleton<_i401.OverloadFilter>(
+      () => _i401.OverloadFilter(
         gh<_i806.BinanceFuturesClient>(),
         gh<_i715.CandlesRepositoryI>(),
       ),
@@ -162,6 +178,8 @@ extension GetItInjectableX on _i174.GetIt {
         pumpReversal: gh<_i933.PumpReversalFilter>(),
         keyLevels: gh<_i408.KeyLevelFilter>(),
         overbought: gh<_i777.OverboughtFilter>(),
+        levelRadar: gh<_i24.LevelRadarFilter>(),
+        overload: gh<_i401.OverloadFilter>(),
       ),
     );
     return this;

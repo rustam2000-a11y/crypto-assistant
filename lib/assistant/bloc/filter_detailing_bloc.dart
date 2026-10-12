@@ -9,7 +9,9 @@ import '../../home/data/repository/coint_rpository.dart';
 import '../domain/coin_filter.dart';
 import '../domain/filter_type.dart';
 import '../domain/key_levels/key_level_filter.dart';
+import '../domain/level_radar/level_radar_filter.dart';
 import '../domain/overbought/overbought_filter.dart';
+import '../domain/overload/overload_filter.dart';
 import '../domain/pump_reversal/pump_reversal_filter.dart';
 import 'filter_detailing_effect.dart';
 import 'filter_detailing_event.dart';
@@ -28,10 +30,14 @@ class FilterDetailingBloc
     required PumpReversalFilter pumpReversal,
     required KeyLevelFilter keyLevels,
     required OverboughtFilter overbought,
+    required LevelRadarFilter levelRadar,
+    required OverloadFilter overload,
   }) : _repository = repository,
        _pumpReversal = pumpReversal,
        _keyLevels = keyLevels,
        _overbought = overbought,
+       _levelRadar = levelRadar,
+       _overload = overload,
        super(const FilterDetailingState()) {
     on<LoadFilteredCoinsEvent>((event, emit) {
       _watchCoins(event.type);
@@ -58,6 +64,8 @@ class FilterDetailingBloc
   final PumpReversalFilter _pumpReversal;
   final KeyLevelFilter _keyLevels;
   final OverboughtFilter _overbought;
+  final LevelRadarFilter _levelRadar;
+  final OverloadFilter _overload;
   StreamSubscription<List<CoinModel>>? _coinsSubscription;
 
   void _watchCoins(FilterType type) {
@@ -67,6 +75,8 @@ class FilterDetailingBloc
       pumpReversal: _pumpReversal,
       keyLevels: _keyLevels,
       overbought: _overbought,
+      levelRadar: _levelRadar,
+      overload: _overload,
     );
     final isReversal = identical(filter, _pumpReversal);
     var coins = _repository.watchCoins();

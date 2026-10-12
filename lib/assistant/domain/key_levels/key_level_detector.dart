@@ -87,6 +87,40 @@ class KeyLevelDetector {
     );
   }
 
+  /// Во сколько раз объём, проторгованный за 90 дней в зоне уровня, больше
+  /// объёма обычной зоны той же ширины. Объём свечи распределяется поровну
+  /// по её ценовому диапазону.
+  double volumeMultiple(
+    List<Candle> candles,
+    LevelAnalysis analysis,
+    double level,
+  ) {
+    final from = max(0, candles.length - _lookbackBars);
+    var low = double.infinity;
+    var high = -double.infinity;
+    for (var k = from; k < candles.length; k++) {
+      low = min(low, candles[k].low);
+      high = max(high, candles[k].high);
+    }
+    final width = 2 * _zoneAtr * analysis.atr;
+    final count = ((high - low) / width).floor() + 1;
+    if (width <= 0 || count > 2000) return 0;
+    final bins = List<double>.filled(count, 0);
+    for (var k = from; k < candles.length; k++) {
+      final c = candles[k];
+      final first = ((c.low - low) / width).floor();
+      final last = ((c.high - low) / width).floor();
+      final share = c.quoteVolume / (last - first + 1);
+      for (var b = first; b <= last; b++) {
+        bins[b] += share;
+      }
+    }
+    final traded = bins.where((v) => v > 0).toList()..sort();
+    final index = ((level - low) / width).floor();
+    if (traded.isEmpty || index < 0 || index >= count) return 0;
+    return bins[index] / _median(traded);
+  }
+
   /// Коридор между ближайшими уровнями сверху и снизу, если цена 48 часов
   /// ходит между ними.
   ({double low, double high})? corridor(

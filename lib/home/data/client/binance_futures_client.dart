@@ -65,6 +65,52 @@ class BinanceFuturesClient {
     };
   }
 
+  /// Текущая ставка фандинга всех контрактов (за 8 часов, в долях).
+  Future<Map<String, double>> fundingRates() async {
+    final data = await _get('/fapi/v1/premiumIndex') as List<dynamic>;
+    return {
+      for (final item in data.cast<Map<String, dynamic>>())
+        if (double.tryParse(item['lastFundingRate'] as String? ?? '')
+            case final rate?)
+          item['symbol'] as String: rate,
+    };
+  }
+
+  /// Изменение открытого интереса (в USDT) за последние [hours] часов, в долях.
+  Future<double?> openInterestChange(
+    String symbol, {
+    required int hours,
+  }) async {
+    final data =
+        await _get('/futures/data/openInterestHist', {
+              'symbol': symbol,
+              'period': '1h',
+              'limit': '${hours + 1}',
+            })
+            as List<dynamic>;
+    if (data.length < hours + 1) return null;
+    double value(Object? item) => double.parse(
+      (item! as Map<String, dynamic>)['sumOpenInterestValue'] as String,
+    );
+    final before = value(data.first);
+    return before > 0 ? value(data.last) / before - 1 : null;
+  }
+
+  /// Соотношение лонг/шорт по позициям топ-трейдеров за последний час.
+  Future<double?> topTraderPositionRatio(String symbol) async {
+    final data =
+        await _get('/futures/data/topLongShortPositionRatio', {
+              'symbol': symbol,
+              'period': '1h',
+              'limit': '1',
+            })
+            as List<dynamic>;
+    if (data.isEmpty) return null;
+    return double.tryParse(
+      (data.last as Map<String, dynamic>)['longShortRatio'] as String,
+    );
+  }
+
   /// Последние свечи вместе с ещё не закрытой, от старых к новым.
   Future<List<Candle>> recentKlines(
     String symbol, {

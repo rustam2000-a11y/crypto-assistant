@@ -7,13 +7,15 @@ import 'filter_type.dart';
 abstract class CoinFilter {
   FutureOr<List<CoinModel>> filter(List<CoinModel> coins);
 
-  /// [pumpReversal], [keyLevels] и [overbought] работают со свечами Binance,
-  /// поэтому приходят из DI, а не создаются здесь.
+  /// [pumpReversal], [keyLevels], [overbought], [levelRadar] и [overload]
+  /// работают с данными Binance, поэтому приходят из DI, а не создаются здесь.
   factory CoinFilter.forType(
     FilterType type, {
     required CoinFilter pumpReversal,
     required CoinFilter keyLevels,
     required CoinFilter overbought,
+    required CoinFilter levelRadar,
+    required CoinFilter overload,
   }) {
     switch (type) {
       case FilterType.abnormalMovement:
@@ -27,9 +29,9 @@ abstract class CoinFilter {
       case FilterType.turnover:
         return PriceMovementFilter();
       case FilterType.capitalInflow:
-        return CapitalInflowFilter();
+        return overload;
       case FilterType.dailyExtremum:
-        return DailyExtremumFilter();
+        return levelRadar;
       case FilterType.confirmedAnomaly:
         return ConfirmedAnomalyFilter();
     }
@@ -310,34 +312,6 @@ class OverheatedFadingFilter implements CoinFilter {
     if (stretch > _minStretch) signals++;
 
     return signals >= _minSignals;
-  }
-}
-
-// Приток капитала: рост/отток капитализации выше 5% за 24 часа.
-class CapitalInflowFilter implements CoinFilter {
-  static const double _thresholdPercent = 5;
-
-  @override
-  List<CoinModel> filter(List<CoinModel> coins) {
-    return coins
-        .where((coin) => (coin.marketCapChangePercentage24h ?? 0).abs() > _thresholdPercent)
-        .toList();
-  }
-}
-
-// У дневного пика/дна: текущая цена у верхней или нижней границы диапазона high24h/low24h.
-class DailyExtremumFilter implements CoinFilter {
-  static const double _thresholdPercent = 5;
-
-  @override
-  List<CoinModel> filter(List<CoinModel> coins) {
-    return coins.where((coin) {
-      final high = coin.high24h;
-      final low = coin.low24h;
-      if (high == null || low == null || high == low) return false;
-      final position = (coin.currentPrice - low) / (high - low) * 100;
-      return position <= _thresholdPercent || position >= 100 - _thresholdPercent;
-    }).toList();
   }
 }
 

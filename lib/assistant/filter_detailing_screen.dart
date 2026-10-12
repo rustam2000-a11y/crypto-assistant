@@ -16,7 +16,9 @@ import 'bloc/filter_detailing_event.dart';
 import 'bloc/filter_detailing_state.dart';
 import 'domain/filter_type.dart';
 import 'domain/key_levels/key_level.dart';
+import 'domain/level_radar/level_approach.dart';
 import 'domain/overbought/overbought_signal.dart';
+import 'domain/overload/overload_signal.dart';
 import 'domain/pump_reversal/pump_reversal_status.dart';
 import 'signal_journal_screen.dart';
 
@@ -146,6 +148,12 @@ class _FilterDetailingScreenState extends State<FilterDetailingScreen> {
                               final OverboughtSignal signal => _OverboughtLine(
                                 signal: signal,
                               ),
+                              final LevelApproach approach => _LevelApproachLine(
+                                approach: approach,
+                              ),
+                              final OverloadSignal signal => _OverloadLine(
+                                signal: signal,
+                              ),
                               _ => const SizedBox.shrink(),
                             },
                           ],
@@ -250,6 +258,87 @@ class _OverboughtLine extends StatelessWidget {
             '${S.of(context).rise24h(fixed(signal.rise24hPercent), signal.heat.toStringAsFixed(1))}  ·  '
             '${S.of(context).volumeChange(fixed(signal.volumeChangePercent))}  ·  '
             '${S.of(context).buyersShare(fixed(signal.buyersSharePercent), fixed(signal.previousBuyersSharePercent))}',
+        fontSize: 13,
+        color: AppColors.amber,
+        textAlign: TextAlign.start,
+      ),
+    );
+  }
+}
+
+class _LevelApproachLine extends StatelessWidget {
+  const _LevelApproachLine({required this.approach});
+
+  final LevelApproach approach;
+
+  @override
+  Widget build(BuildContext context) {
+    final s = S.of(context);
+    final kind = approach.isResistance ? s.resistance : s.support;
+    final state = approach.isAtLevel
+        ? s.atLevel
+        : s.radarApproaching(approach.distancePercent.toStringAsFixed(2));
+    return Padding(
+      padding: const EdgeInsets.only(top: 6, left: 4, right: 4),
+      child: CustomNewText(
+        text:
+            '$kind ${formatPrice(approach.levelPrice)}  ·  $state  ·  '
+            '${s.volumeAtLevel(approach.volumeMultiple.toStringAsFixed(1))}  ·  '
+            '${s.strongBounces(approach.touches, approach.avgBouncePercent.toStringAsFixed(0))}',
+        fontSize: 13,
+        color: approach.isResistance ? AppColors.borderRed : AppColors.positive,
+        textAlign: TextAlign.start,
+      ),
+    );
+  }
+}
+
+class _OverloadLine extends StatelessWidget {
+  const _OverloadLine({required this.signal});
+
+  final OverloadSignal signal;
+
+  @override
+  Widget build(BuildContext context) {
+    final s = S.of(context);
+    String percent(double share, {int digits = 0}) =>
+        '${share >= 0 ? '+' : ''}${(share * 100).toStringAsFixed(digits)}';
+    final items = [
+      for (final sign in OverloadSign.values)
+        if (signal.points.contains(sign))
+          switch (sign) {
+            OverloadSign.extension => s.overloadExtension(
+              signal.extension.toStringAsFixed(1),
+            ),
+            OverloadSign.rsi1h => s.overloadRsi1h(
+              signal.rsi1h.toStringAsFixed(0),
+            ),
+            OverloadSign.rsi4h => s.overloadRsi4h(
+              signal.rsi4h.toStringAsFixed(0),
+            ),
+            OverloadSign.openInterest => s.overloadOpenInterest(
+              percent(signal.openInterestChange ?? 0),
+            ),
+            OverloadSign.funding => s.overloadFunding(
+              (signal.fundingRate! * 100).toStringAsFixed(3),
+            ),
+            OverloadSign.topTraders => s.overloadTopTraders(
+              signal.topTraderRatio!.toStringAsFixed(1),
+            ),
+            OverloadSign.volumeSpike => s.overloadVolume(
+              signal.volumeSpike.toStringAsFixed(1),
+            ),
+          },
+    ];
+    final squeeze = signal.squeezeRisk
+        ? '\n${s.overloadSqueeze(percent(signal.openInterestChange!))}'
+        : '';
+    return Padding(
+      padding: const EdgeInsets.only(top: 6, left: 4, right: 4),
+      child: CustomNewText(
+        text:
+            '${s.overloadPoints(signal.points.length)}: ${items.join(' · ')}'
+            '$squeeze',
         fontSize: 13,
         color: AppColors.amber,
         textAlign: TextAlign.start,

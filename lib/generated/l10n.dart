@@ -984,6 +984,176 @@ class S {
       args: [],
     );
   }
+
+  /// `Radar: approaching a strong level`
+  String get levelRadar {
+    return Intl.message(
+      'Radar: approaching a strong level',
+      name: 'levelRadar',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `At a high-volume level or less than 1% away`
+  String get levelRadarShort {
+    return Intl.message(
+      'At a high-volume level or less than 1% away',
+      name: 'levelRadarShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Coins that are at a strong level right now or less than 1% away from it. The level comes from 4-hour candles over 90 days: at least 3 major reversals with strong bounces (usually 10%+), and at least 1.5× more volume was traded at that price than at a typical price. "At the level" means within ~0.3%. "Approaching" means less than 1% to go, the price is moving toward the level over the last 4 hours and has not touched it in the last 8 hours. Historically an approaching price reached such a level within 2 hours in 63–68% of cases and within 4 hours in 70–76%. Once the price is at the level, over the next 4 hours the level was broken more often than it produced a strong bounce: this is an important price, not a promised bounce.`
+  String get levelRadarDescription {
+    return Intl.message(
+      'Coins that are at a strong level right now or less than 1% away from it. The level comes from 4-hour candles over 90 days: at least 3 major reversals with strong bounces (usually 10%+), and at least 1.5× more volume was traded at that price than at a typical price. "At the level" means within ~0.3%. "Approaching" means less than 1% to go, the price is moving toward the level over the last 4 hours and has not touched it in the last 8 hours. Historically an approaching price reached such a level within 2 hours in 63–68% of cases and within 4 hours in 70–76%. Once the price is at the level, over the next 4 hours the level was broken more often than it produced a strong bounce: this is an important price, not a promised bounce.',
+      name: 'levelRadarDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `volume ×{times}`
+  String volumeAtLevel(String times) {
+    return Intl.message(
+      'volume ×$times',
+      name: 'volumeAtLevel',
+      desc: '',
+      args: [times],
+    );
+  }
+
+  /// `Overload index`
+  String get overloadIndex {
+    return Intl.message(
+      'Overload index',
+      name: 'overloadIndex',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `3+ of 7 signs of overheating and leverage`
+  String get overloadIndexShort {
+    return Intl.message(
+      '3+ of 7 signs of overheating and leverage',
+      name: 'overloadIndexShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `A coin that has run above its average (price above the hourly EMA20 and up over 6 hours) with at least 3 of 7 signs of overload: 1) the price is more than 2.5 usual hourly moves above EMA20; 2) hourly RSI 72+; 3) 4-hour RSI 67+; 4) open interest up 15%+ in a day — leverage is being added; 5) funding 0.02%+, twice the standard — longs are overpaying; 6) top traders' long/short position ratio 2+; 7) volume over the last 2 hours is 2× higher than before. The thresholds are the top ~20% of all overextended coins in history, so large caps get in too. This is how overloaded the coin is, not a forecast: historically pullbacks after overload were no more frequent than usual, and when open interest doubled in a day the rise more often continued — that is flagged separately.`
+  String get overloadIndexDescription {
+    return Intl.message(
+      'A coin that has run above its average (price above the hourly EMA20 and up over 6 hours) with at least 3 of 7 signs of overload: 1) the price is more than 2.5 usual hourly moves above EMA20; 2) hourly RSI 72+; 3) 4-hour RSI 67+; 4) open interest up 15%+ in a day — leverage is being added; 5) funding 0.02%+, twice the standard — longs are overpaying; 6) top traders\' long/short position ratio 2+; 7) volume over the last 2 hours is 2× higher than before. The thresholds are the top ~20% of all overextended coins in history, so large caps get in too. This is how overloaded the coin is, not a forecast: historically pullbacks after overload were no more frequent than usual, and when open interest doubled in a day the rise more often continued — that is flagged separately.',
+      name: 'overloadIndexDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Overload {count}/7`
+  String overloadPoints(int count) {
+    return Intl.message(
+      'Overload $count/7',
+      name: 'overloadPoints',
+      desc: '',
+      args: [count],
+    );
+  }
+
+  /// `stretch ×{value}`
+  String overloadExtension(String value) {
+    return Intl.message(
+      'stretch ×$value',
+      name: 'overloadExtension',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `RSI 1h {value}`
+  String overloadRsi1h(String value) {
+    return Intl.message(
+      'RSI 1h $value',
+      name: 'overloadRsi1h',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `RSI 4h {value}`
+  String overloadRsi4h(String value) {
+    return Intl.message(
+      'RSI 4h $value',
+      name: 'overloadRsi4h',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `OI {percent}%`
+  String overloadOpenInterest(String percent) {
+    return Intl.message(
+      'OI $percent%',
+      name: 'overloadOpenInterest',
+      desc: '',
+      args: [percent],
+    );
+  }
+
+  /// `funding {percent}%`
+  String overloadFunding(String percent) {
+    return Intl.message(
+      'funding $percent%',
+      name: 'overloadFunding',
+      desc: '',
+      args: [percent],
+    );
+  }
+
+  /// `top traders L/S {value}`
+  String overloadTopTraders(String value) {
+    return Intl.message(
+      'top traders L/S $value',
+      name: 'overloadTopTraders',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `volume ×{value}`
+  String overloadVolume(String value) {
+    return Intl.message(
+      'volume ×$value',
+      name: 'overloadVolume',
+      desc: '',
+      args: [value],
+    );
+  }
+
+  /// `⚠ leverage {percent}% in a day — historically the rise more often continued`
+  String overloadSqueeze(String percent) {
+    return Intl.message(
+      '⚠ leverage $percent% in a day — historically the rise more often continued',
+      name: 'overloadSqueeze',
+      desc: '',
+      args: [percent],
+    );
+  }
+
+  /// `approaching, {percent}% to go (reached within 2 h ~65%)`
+  String radarApproaching(String percent) {
+    return Intl.message(
+      'approaching, $percent% to go (reached within 2 h ~65%)',
+      name: 'radarApproaching',
+      desc: '',
+      args: [percent],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

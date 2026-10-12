@@ -113,13 +113,13 @@ class AssistantScreen extends StatelessWidget {
                   Expanded(
                     child: AssistantCardInformation(
                       icon: AppImages.currency,
-                      text: S.of(context).capitalFlow,
-                      description: S.of(context).capitalFlowShort,
+                      text: S.of(context).overloadIndex,
+                      description: S.of(context).overloadIndexShort,
                       borderColor: AppColors.magenta,
                       onTap: () => _openDetails(
                         context,
                         FilterType.capitalInflow,
-                        S.of(context).capitalFlowDescription,
+                        S.of(context).overloadIndexDescription,
                       ),
                     ),
                   ),
@@ -131,13 +131,13 @@ class AssistantScreen extends StatelessWidget {
                   Expanded(
                     child: AssistantCardInformation(
                       icon: AppImages.analyze,
-                      text: S.of(context).nearDailyPeakbottom,
-                      description: S.of(context).dailyExtremumShort,
+                      text: S.of(context).levelRadar,
+                      description: S.of(context).levelRadarShort,
                       borderColor: AppColors.borderGreen,
                       onTap: () => _openDetails(
                         context,
                         FilterType.dailyExtremum,
-                        S.of(context).dailyExtremumDescription,
+                        S.of(context).levelRadarDescription,
                       ),
                     ),
                   ),

@@ -26,15 +26,39 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m2(count) => "${count} h";
 
-  static String m3(percent, times) =>
+  static String m3(value) => "stretch ×${value}";
+
+  static String m4(percent) => "funding ${percent}%";
+
+  static String m5(percent) => "OI ${percent}%";
+
+  static String m6(count) => "Overload ${count}/7";
+
+  static String m7(value) => "RSI 1h ${value}";
+
+  static String m8(value) => "RSI 4h ${value}";
+
+  static String m9(percent) =>
+      "⚠ leverage ${percent}% in a day — historically the rise more often continued";
+
+  static String m10(value) => "top traders L/S ${value}";
+
+  static String m11(value) => "volume ×${value}";
+
+  static String m12(percent) =>
+      "approaching, ${percent}% to go (reached within 2 h ~65%)";
+
+  static String m13(percent, times) =>
       "+${percent}% in 24h (×${times} usual move)";
 
-  static String m4(count, percent) =>
+  static String m14(count, percent) =>
       "strong bounces: ${count} (avg ${percent}%)";
 
-  static String m5(count) => "Trades: ${count}";
+  static String m15(count) => "Trades: ${count}";
 
-  static String m6(percent) => "volume ${percent}%";
+  static String m16(times) => "volume ×${times}";
+
+  static String m17(percent) => "volume ${percent}%";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -156,6 +180,15 @@ class MessageLookup extends MessageLookupByLibrary {
       "Price at a level with 3+ strong bounces of ~10%+",
     ),
     "language": MessageLookupByLibrary.simpleMessage("Language"),
+    "levelRadar": MessageLookupByLibrary.simpleMessage(
+      "Radar: approaching a strong level",
+    ),
+    "levelRadarDescription": MessageLookupByLibrary.simpleMessage(
+      "Coins that are at a strong level right now or less than 1% away from it. The level comes from 4-hour candles over 90 days: at least 3 major reversals with strong bounces (usually 10%+), and at least 1.5× more volume was traded at that price than at a typical price. \"At the level\" means within ~0.3%. \"Approaching\" means less than 1% to go, the price is moving toward the level over the last 4 hours and has not touched it in the last 8 hours. Historically an approaching price reached such a level within 2 hours in 63–68% of cases and within 4 hours in 70–76%. Once the price is at the level, over the next 4 hours the level was broken more often than it produced a strong bounce: this is an important price, not a promised bounce.",
+    ),
+    "levelRadarShort": MessageLookupByLibrary.simpleMessage(
+      "At a high-volume level or less than 1% away",
+    ),
     "logIn": MessageLookupByLibrary.simpleMessage("Log in"),
     "logInToKeepFollowingTheMarket": MessageLookupByLibrary.simpleMessage(
       "Log in to keep following the market",
@@ -194,6 +227,22 @@ class MessageLookup extends MessageLookupByLibrary {
     "overheatedFadingShort": MessageLookupByLibrary.simpleMessage(
       "Overheated + 3 of 4 cooling signs",
     ),
+    "overloadExtension": m3,
+    "overloadFunding": m4,
+    "overloadIndex": MessageLookupByLibrary.simpleMessage("Overload index"),
+    "overloadIndexDescription": MessageLookupByLibrary.simpleMessage(
+      "A coin that has run above its average (price above the hourly EMA20 and up over 6 hours) with at least 3 of 7 signs of overload: 1) the price is more than 2.5 usual hourly moves above EMA20; 2) hourly RSI 72+; 3) 4-hour RSI 67+; 4) open interest up 15%+ in a day — leverage is being added; 5) funding 0.02%+, twice the standard — longs are overpaying; 6) top traders\' long/short position ratio 2+; 7) volume over the last 2 hours is 2× higher than before. The thresholds are the top ~20% of all overextended coins in history, so large caps get in too. This is how overloaded the coin is, not a forecast: historically pullbacks after overload were no more frequent than usual, and when open interest doubled in a day the rise more often continued — that is flagged separately.",
+    ),
+    "overloadIndexShort": MessageLookupByLibrary.simpleMessage(
+      "3+ of 7 signs of overheating and leverage",
+    ),
+    "overloadOpenInterest": m5,
+    "overloadPoints": m6,
+    "overloadRsi1h": m7,
+    "overloadRsi4h": m8,
+    "overloadSqueeze": m9,
+    "overloadTopTraders": m10,
+    "overloadVolume": m11,
     "password": MessageLookupByLibrary.simpleMessage("Password"),
     "patternOnly": MessageLookupByLibrary.simpleMessage(
       "Pattern only, no filters",
@@ -229,27 +278,29 @@ class MessageLookup extends MessageLookupByLibrary {
     "pumpReversalShort": MessageLookupByLibrary.simpleMessage(
       "Short for 3–4 hours after a rejected pump",
     ),
+    "radarApproaching": m12,
     "removeFromFavorites": MessageLookupByLibrary.simpleMessage(
       "Remove from favorites",
     ),
     "resistance": MessageLookupByLibrary.simpleMessage("Resistance"),
-    "rise24h": m3,
+    "rise24h": m13,
     "search": MessageLookupByLibrary.simpleMessage("Search"),
     "signUp": MessageLookupByLibrary.simpleMessage("Sign up"),
     "signalJournal": MessageLookupByLibrary.simpleMessage("Signal journal"),
     "signalsActive": MessageLookupByLibrary.simpleMessage("Signals active"),
     "signalsPaused": MessageLookupByLibrary.simpleMessage("Signals paused"),
-    "strongBounces": m4,
+    "strongBounces": m14,
     "structureBreak": MessageLookupByLibrary.simpleMessage("Structure break"),
     "support": MessageLookupByLibrary.simpleMessage("Support"),
     "thePasswordMustBeAtLeast6CharactersLong":
         MessageLookupByLibrary.simpleMessage(
           "The password must be at least 6 characters long.",
         ),
-    "tradesCount": m5,
+    "tradesCount": m15,
     "turnover": MessageLookupByLibrary.simpleMessage("Turnover"),
     "volume24Hours": MessageLookupByLibrary.simpleMessage("Volume 24 hours"),
-    "volumeChange": m6,
+    "volumeAtLevel": m16,
+    "volumeChange": m17,
     "waitingForResult": MessageLookupByLibrary.simpleMessage(
       "waiting for result",
     ),
