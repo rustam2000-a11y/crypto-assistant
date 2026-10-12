@@ -4,14 +4,17 @@ import '../../../home/data/models/candle.dart';
 import '../key_levels/key_level_detector.dart';
 import 'level_approach.dart';
 
-/// Радар: цена на сильном уровне (3+ крупных отскока за 90 дней) с крупным
-/// проторгованным объёмом или вплотную подходит к нему — до уровня меньше 1%.
+/// Радар: цена на сильном уровне (см. [KeyLevelDetector]: 2+ крупных отскока
+/// в среднем от 10%, уровень почти не пробивался, монета живая), на свечах
+/// отскоков от которого шёл крупный объём, или вплотную подходит к нему —
+/// до уровня меньше 1%.
 ///
-/// На истории Binance (150 ликвидных монет, окт 2025 — сен 2026) «подходит»
-/// доходила до уровня за 2 часа в 63–68% случаев, за 4 часа — в 70–76%.
-/// Когда цена уже на уровне, в ближайшие 4 часа уровень чаще пробивался,
-/// чем давал сильный отскок, — радар показывает важную цену, а не обещает
-/// отскок.
+/// На истории Binance (150 ликвидных монет, окт 2025 — сен 2026) на радаре
+/// в среднем было ~0.8 монеты одновременно, часто пусто (у прежних, более
+/// слабых уровней — ~4). «Подходит» доходила до уровня за 2 часа в ~80%
+/// случаев, за 4 часа — в ~84% (около 100 случаев за год). Когда цена уже
+/// на уровне, в ближайшие 4 часа уровень чаще пробивался, чем давал сильный
+/// отскок, — радар показывает важную цену, а не обещает отскок.
 class LevelRadar {
   const LevelRadar();
 
@@ -28,28 +31,24 @@ class LevelRadar {
   static const int _touchHours = 8;
 
   LevelApproach? approach({
-    required KeyLevelDetector detector,
     required LevelAnalysis analysis,
-    required List<Candle> candles4h,
     required List<Candle> hourly,
     required double price,
   }) {
     if (hourly.length < _touchHours + 1) return null;
     final atr = analysis.atr;
 
-    // Ближайший сильный уровень с крупным объёмом.
-    ({StrongLevel level, double volume})? target;
-    for (final level in analysis.levels) {
-      final volume = detector.volumeMultiple(candles4h, analysis, level.price);
-      if (volume < _minVolumeMultiple) continue;
-      if (target == null ||
-          (level.price - price).abs() < (target.level.price - price).abs()) {
-        target = (level: level, volume: volume);
+    // Ближайший сильный уровень с крупным объёмом на отскоках.
+    StrongLevel? level;
+    for (final candidate in analysis.levels) {
+      if (candidate.volumeMultiple < _minVolumeMultiple) continue;
+      if (level == null ||
+          (candidate.price - price).abs() < (level.price - price).abs()) {
+        level = candidate;
       }
     }
-    if (target == null) return null;
+    if (level == null) return null;
 
-    final level = target.level;
     final distance = (level.price - price).abs();
     final distancePercent = distance / price * 100;
     if (distance > _maxDistanceAtr * atr ||
@@ -78,7 +77,7 @@ class LevelRadar {
       isAtLevel: isAtLevel,
       touches: level.touches,
       avgBouncePercent: level.avgBouncePercent,
-      volumeMultiple: target.volume,
+      volumeMultiple: level.volumeMultiple,
       distancePercent: distancePercent,
     );
   }

@@ -10,7 +10,7 @@ const _bars = KeyLevelDetector.candlesLimit;
 const _hour = 60 * 60 * 1000;
 
 /// 4ч свечи: цена ходит между 100 и 130 (крупные развороты), у вершины —
-/// в 5 раз больший объём: там «крупный капитал».
+/// в 5 раз больший объём: на отскоках от неё «крупный капитал».
 List<Candle> _range4h() {
   double price(int k) {
     final phase = k % 24;
@@ -22,7 +22,7 @@ List<Candle> _range4h() {
       () {
         final open = price(max(0, k - 1));
         final close = price(k);
-        final volume = close >= 125 ? 5000.0 : 1000.0;
+        final volume = close >= 125 ? 5e7 : 1e7;
         return Candle(
           openTime: k * 4 * _hour,
           closeTime: (k + 1) * 4 * _hour - 1,
@@ -68,16 +68,18 @@ void main() {
   final candles = _range4h();
   final analysis = detector.analyze(candles)!;
 
-  LevelApproach? run(List<Candle> hourly, double price) => radar.approach(
-    detector: detector,
-    analysis: analysis,
-    candles4h: candles,
-    hourly: hourly,
-    price: price,
-  );
+  LevelApproach? run(List<Candle> hourly, double price) =>
+      radar.approach(analysis: analysis, hourly: hourly, price: price);
 
-  test('на уровне с крупными отскоками объём выше обычного', () {
-    expect(detector.volumeMultiple(candles, analysis, 130.1), greaterThan(1.5));
+  test('объём на свечах отскока: у вершины крупный, у дна обычный', () {
+    final levels = [...analysis.levels]
+      ..sort((a, b) => a.price.compareTo(b.price));
+    expect(levels.first.volumeMultiple, closeTo(1, 0.01));
+    expect(levels.last.volumeMultiple, closeTo(5, 0.01));
+  });
+
+  test('на уровне без крупного объёма на отскоках — нет сигнала', () {
+    expect(run(_hourly(from: 100, to: 100), 100), isNull);
   });
 
   test('цена уже на сильном уровне', () {

@@ -1,6 +1,7 @@
 import 'package:equatable/equatable.dart';
 
-/// Монета на сильном уровне с крупным объёмом или вплотную подходит к нему.
+/// Монета на сильном уровне с крупным объёмом на отскоках или вплотную
+/// подходит к нему.
 class LevelApproach extends Equatable {
   const LevelApproach({
     required this.levelPrice,
@@ -24,7 +25,7 @@ class LevelApproach extends Equatable {
   final int touches;
   final double avgBouncePercent;
 
-  /// Во сколько раз объём на уровне больше обычного.
+  /// Во сколько раз оборот свечей отскока от уровня больше обычного.
   final double volumeMultiple;
 
   final double distancePercent;

@@ -46,7 +46,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static String m11(value) => "volume ×${value}";
 
   static String m12(percent) =>
-      "approaching, ${percent}% to go (reached within 2 h ~65%)";
+      "approaching, ${percent}% to go (reached within 2 h ~80%)";
 
   static String m13(percent, times) =>
       "+${percent}% in 24h (×${times} usual move)";
@@ -56,7 +56,7 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m15(count) => "Trades: ${count}";
 
-  static String m16(times) => "volume ×${times}";
+  static String m16(times) => "volume on bounces ×${times}";
 
   static String m17(percent) => "volume ${percent}%";
 
@@ -174,20 +174,20 @@ class MessageLookup extends MessageLookupByLibrary {
       "Approaching a very strong level",
     ),
     "keyLevelsDescription": MessageLookupByLibrary.simpleMessage(
-      "Coins whose price is at a really strong level or approaching it. Levels come from 4-hour candles over 90 days: the price made a major reversal there (the highest or lowest price within ±24 hours) at least 3 times, and after each one moved away by at least 3 usual 4-hour moves within 48 hours, typically 10% or more. \"At the level\" means within ~0.3%; \"approaching\" means within ~1% and the level has not been touched in the last 8 hours. A coin that already touched the level and bounced away is not shown. A level is a reference for stops and targets, not a guarantee of a bounce.",
+      "Coins whose price is at a really strong level or approaching it. Levels come from 4-hour candles over 90 days: the price made a major reversal there (the highest or lowest price within ±24 hours) at least 2 times, and after each one moved away by at least 3 usual 4-hour moves within 48 hours, 10% or more on average. Since the first touch the level has barely been broken: 4-hour candles closed on the other side at most twice (a role flip or a false breakout that came back). The middle of a range that the price crosses back and forth is not a level. Active coins only: a usual 4-hour move of 1.5%+ and futures turnover of \$10M+ per day. \"At the level\" means within ~0.3%; \"approaching\" means within ~1% and the level has not been touched in the last 8 hours. A coin that already touched the level and bounced away is not shown. Historically the price moved further away from such levels after a touch than from the previous, weaker ones (median 4.4% vs 3.6% within 48 hours), but the level held no more often than a random price: it is a reference for stops and targets, not a guarantee of a bounce.",
     ),
     "keyLevelsShort": MessageLookupByLibrary.simpleMessage(
-      "Price at a level with 3+ strong bounces of ~10%+",
+      "Price at a strong level: 2+ bounces averaging 10%+, active coins",
     ),
     "language": MessageLookupByLibrary.simpleMessage("Language"),
     "levelRadar": MessageLookupByLibrary.simpleMessage(
       "Radar: approaching a strong level",
     ),
     "levelRadarDescription": MessageLookupByLibrary.simpleMessage(
-      "Coins that are at a strong level right now or less than 1% away from it. The level comes from 4-hour candles over 90 days: at least 3 major reversals with strong bounces (usually 10%+), and at least 1.5× more volume was traded at that price than at a typical price. \"At the level\" means within ~0.3%. \"Approaching\" means less than 1% to go, the price is moving toward the level over the last 4 hours and has not touched it in the last 8 hours. Historically an approaching price reached such a level within 2 hours in 63–68% of cases and within 4 hours in 70–76%. Once the price is at the level, over the next 4 hours the level was broken more often than it produced a strong bounce: this is an important price, not a promised bounce.",
+      "Coins that are at a strong level right now or less than 1% away from it. The level comes from 4-hour candles over 90 days: at least 2 major reversals with bounces averaging 10%+, the level has barely been broken (4-hour closes on the other side at most twice), and the bounce candles traded at least 1.5× the usual turnover — big money stepped in there. Active coins only: a usual 4-hour move of 1.5%+ and futures turnover of \$10M+ per day. \"At the level\" means within ~0.3%. \"Approaching\" means less than 1% to go, the price is moving toward the level over the last 4 hours and has not touched it in the last 8 hours. The levels are strict, so there are few coins: historically fewer than one at a time on average, and the list is often empty. An approaching price reached such a level within 2 hours in about 80% of cases and within 4 hours in 84% (about 100 cases per year). Once the price is at the level, over the next 4 hours the level was broken more often than it produced a strong bounce: this is an important price, not a promised bounce.",
     ),
     "levelRadarShort": MessageLookupByLibrary.simpleMessage(
-      "At a high-volume level or less than 1% away",
+      "At a strong level with heavy volume on bounces or less than 1% away",
     ),
     "logIn": MessageLookupByLibrary.simpleMessage("Log in"),
     "logInToKeepFollowingTheMarket": MessageLookupByLibrary.simpleMessage(

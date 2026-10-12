@@ -8,14 +8,24 @@ const _bars = KeyLevelDetector.candlesLimit;
 const _barMs = 4 * 60 * 60 * 1000;
 
 /// Свечи по ценам закрытия: open — прошлое закрытие, тени по 0.1.
-List<Candle> _candles(double Function(int k) price, {int count = _bars}) {
+/// Оборот по умолчанию — $60 млн в сутки: монета живая.
+List<Candle> _candles(
+  double Function(int k) price, {
+  int count = _bars,
+  double volume = 1e7,
+}) {
   return [
     for (var k = 0; k < count; k++)
-      _candle(k, open: price(max(0, k - 1)), close: price(k)),
+      _candle(k, open: price(max(0, k - 1)), close: price(k), volume: volume),
   ];
 }
 
-Candle _candle(int k, {required double open, required double close}) {
+Candle _candle(
+  int k, {
+  required double open,
+  required double close,
+  required double volume,
+}) {
   return Candle(
     openTime: k * _barMs,
     closeTime: (k + 1) * _barMs - 1,
@@ -23,8 +33,8 @@ Candle _candle(int k, {required double open, required double close}) {
     high: max(open, close) + 0.1,
     low: min(open, close) - 0.1,
     close: close,
-    quoteVolume: 1000,
-    takerBuyQuoteVolume: 500,
+    quoteVolume: volume,
+    takerBuyQuoteVolume: volume / 2,
   );
 }
 
@@ -33,6 +43,15 @@ Candle _candle(int k, {required double open, required double close}) {
 double _range(int k) {
   final phase = k % 24;
   return 100 + (phase <= 12 ? phase : 24 - phase) * 2.5;
+}
+
+/// Дно всегда 100, вершины чередуются: 120, 140, 120, 140... Цена 120
+/// трижды и больше разворачивалась, но каждый второй цикл проходит её
+/// насквозь — это середина боковика, а не уровень.
+double _chop(int k) {
+  final phase = k % 24;
+  final top = (k ~/ 24).isEven ? 20.0 : 40.0;
+  return 100 + (phase <= 12 ? phase : 24 - phase) * top / 12;
 }
 
 /// Последние часы перед проверкой: цена держалась не выше [high].
@@ -98,10 +117,30 @@ void main() {
     expect(corridor.high, closeTo(130.1, 0.01));
   });
 
+  test('уровень, который цена много раз пробивала, — не уровень', () {
+    final prices =
+        detector.analyze(_candles(_chop))!.levels.map((l) => l.price).toList()
+          ..sort();
+    expect(prices, hasLength(2));
+    expect(prices.first, closeTo(99.9, 0.01));
+    expect(prices.last, closeTo(140.1, 0.01));
+  });
+
   test('ровный тренд без повторных разворотов — уровней нет', () {
-    final trend = detector.analyze(_candles((k) => 100 + k * 0.5))!;
+    final trend = detector.analyze(
+      _candles((k) => 100 * pow(1.04, k).toDouble()),
+    )!;
     expect(trend.levels, isEmpty);
     expect(detector.nearest(trend, 300), isNull);
+  });
+
+  test('вялая монета: мелкий ход — уровней не ищем', () {
+    final calm = _candles((k) => 100 + _range(k) / 100);
+    expect(detector.analyze(calm), isNull);
+  });
+
+  test('вялая монета: оборот меньше \$10 млн в сутки — уровней не ищем', () {
+    expect(detector.analyze(_candles(_range, volume: 1e6)), isNull);
   });
 
   test('мало свечей — нет результата', () {

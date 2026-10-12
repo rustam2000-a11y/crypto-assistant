@@ -3,7 +3,14 @@ import 'dart:math';
 import '../../../home/data/models/candle.dart';
 
 /// Сильный уровень: цена, от которой было несколько крупных отскоков.
-typedef StrongLevel = ({double price, int touches, double avgBouncePercent});
+/// [volumeMultiple] — во сколько раз оборот свечей отскока больше обычного
+/// оборота 4ч свечи за 90 дней.
+typedef StrongLevel = ({
+  double price,
+  int touches,
+  double avgBouncePercent,
+  double volumeMultiple,
+});
 
 /// Уровни и типичный ход монеты по последней закрытой 4ч свече.
 typedef LevelAnalysis = ({List<StrongLevel> levels, double atr});
@@ -11,14 +18,24 @@ typedef LevelAnalysis = ({List<StrongLevel> levels, double atr});
 /// Реально сильные уровни по 4-часовым свечам за 90 дней.
 ///
 /// Касание уровня — крупный разворот: самая высокая/низкая цена за ±24 часа,
-/// после которой цена за 48 часов ушла минимум на 3 обычных 4ч хода
-/// (обычно 10%+). Уровень — узкая зона (±0.25 хода), где таких разворотов
-/// минимум 3. Пробитое сопротивление часто становится поддержкой, поэтому
-/// считаются и вершины, и впадины.
+/// после которой цена за 48 часов ушла минимум на 3 обычных 4ч хода.
+/// Уровень — узкая зона (±0.25 хода), где таких разворотов минимум 2,
+/// отскоки от неё в среднем от 10%, и с первого касания 4ч свечи закрывались
+/// по другую сторону уровня не больше двух раз: сопротивление может стать
+/// поддержкой, может быть ложный пробой с возвратом, но цена посреди
+/// боковика, которую рынок ходит туда-обратно, — не уровень. Считаются и
+/// вершины, и впадины.
 ///
-/// На истории отскок от уровней (в любом их определении) случался не чаще,
-/// чем от случайной цены на том же расстоянии: уровень — ориентир, а не
-/// прогноз.
+/// Уровни ищутся только у живых монет: обычный 4ч ход от 1.5% цены и оборот
+/// фьючерса от $10 млн в сутки. У вялых монет «крупный разворот» — это
+/// 1–3%, а размер отскока на истории почти целиком определялся
+/// волатильностью монеты.
+///
+/// На истории Binance (150 ликвидных монет, окт 2025 — сен 2026) после
+/// касания таких уровней медианный ход от уровня за 48 часов — 4.4% (у
+/// прежних уровней — 3.6%), ход 5%+ — в 46% касаний (было 40%). Но
+/// удерживался уровень не чаще, чем случайная цена на том же расстоянии:
+/// уровень — ориентир, а не прогноз.
 class KeyLevelDetector {
   const KeyLevelDetector();
 
@@ -30,7 +47,13 @@ class KeyLevelDetector {
   static const int _reactionBars = 12; // 48 часов
   static const double _minReactionAtr = 3;
   static const double _zoneAtr = 0.25;
-  static const int _minTouches = 3;
+  static const int _minTouches = 2;
+  static const double _minAvgBouncePercent = 10;
+  static const int _maxBreaks = 2;
+
+  // Живая монета: обычный 4ч ход и средний суточный оборот за 7 дней.
+  static const double _minAtrPercent = 1.5;
+  static const double _minDailyTurnover = 10e6;
 
   /// Цена «на уровне» — ближе 0.1 хода (обычно ~0.3%).
   static const double atLevelAtr = 0.1;
@@ -48,7 +71,18 @@ class KeyLevelDetector {
     final t = candles.length - 1;
     final atrNow = atr[t];
     if (atrNow == null || atrNow <= 0) return null;
+    if (!_isLively(candles, atrNow)) return null;
     return (levels: _levels(candles, atr, t, atrNow), atr: atrNow);
+  }
+
+  // Вялая монета: мелкий ход или почти нет оборота — уровней не ищем.
+  static bool _isLively(List<Candle> c, double atr) {
+    if (atr / c.last.close * 100 < _minAtrPercent) return false;
+    var turnover = 0.0;
+    for (var k = c.length - _atrBars; k < c.length; k++) {
+      turnover += c[k].quoteVolume;
+    }
+    return turnover / 7 >= _minDailyTurnover;
   }
 
   /// Ближайший к [price] уровень и расстояние до него в ходах (ATR).
@@ -87,40 +121,6 @@ class KeyLevelDetector {
     );
   }
 
-  /// Во сколько раз объём, проторгованный за 90 дней в зоне уровня, больше
-  /// объёма обычной зоны той же ширины. Объём свечи распределяется поровну
-  /// по её ценовому диапазону.
-  double volumeMultiple(
-    List<Candle> candles,
-    LevelAnalysis analysis,
-    double level,
-  ) {
-    final from = max(0, candles.length - _lookbackBars);
-    var low = double.infinity;
-    var high = -double.infinity;
-    for (var k = from; k < candles.length; k++) {
-      low = min(low, candles[k].low);
-      high = max(high, candles[k].high);
-    }
-    final width = 2 * _zoneAtr * analysis.atr;
-    final count = ((high - low) / width).floor() + 1;
-    if (width <= 0 || count > 2000) return 0;
-    final bins = List<double>.filled(count, 0);
-    for (var k = from; k < candles.length; k++) {
-      final c = candles[k];
-      final first = ((c.low - low) / width).floor();
-      final last = ((c.high - low) / width).floor();
-      final share = c.quoteVolume / (last - first + 1);
-      for (var b = first; b <= last; b++) {
-        bins[b] += share;
-      }
-    }
-    final traded = bins.where((v) => v > 0).toList()..sort();
-    final index = ((level - low) / width).floor();
-    if (traded.isEmpty || index < 0 || index >= count) return 0;
-    return bins[index] / _median(traded);
-  }
-
   /// Коридор между ближайшими уровнями сверху и снизу, если цена 48 часов
   /// ходит между ними.
   ({double low, double high})? corridor(
@@ -149,7 +149,7 @@ class KeyLevelDetector {
     double atrNow,
   ) {
     // Развороты, подтверждённые к последней свече (прошло окно реакции).
-    final pivots = <({double price, double bounce})>[];
+    final pivots = <({int bar, double price, double bounce})>[];
     final from = max(_swingBars, t - _lookbackBars + 1);
     final to = t - max(_swingBars, _reactionBars);
     for (var k = from; k <= to; k++) {
@@ -159,17 +159,29 @@ class KeyLevelDetector {
       if (c[k].high >= _maxHigh(c, k - _swingBars, k + _swingBars)) {
         final move = c[k].high - _minLow(c, k + 1, end - 1);
         if (move >= _minReactionAtr * a) {
-          pivots.add((price: c[k].high, bounce: move / c[k].high * 100));
+          pivots.add((
+            bar: k,
+            price: c[k].high,
+            bounce: move / c[k].high * 100,
+          ));
         }
       }
       if (c[k].low <= _minLow(c, k - _swingBars, k + _swingBars)) {
         final move = _maxHigh(c, k + 1, end - 1) - c[k].low;
         if (move >= _minReactionAtr * a) {
-          pivots.add((price: c[k].low, bounce: move / c[k].low * 100));
+          pivots.add((bar: k, price: c[k].low, bounce: move / c[k].low * 100));
         }
       }
     }
     pivots.sort((a, b) => a.price.compareTo(b.price));
+
+    // Обычный оборот 4ч свечи за 90 дней.
+    final typicalVolume = _median(
+      [
+        for (var k = max(0, t - _lookbackBars + 1); k <= t; k++)
+          c[k].quoteVolume,
+      ]..sort(),
+    );
 
     // Узкие зоны: вокруг разворота с наибольшим числом соседей в ±zone,
     // без «перетекания» зоны от точки к точке.
@@ -193,13 +205,51 @@ class KeyLevelDetector {
       }
       final prices = [for (final j in best) pivots[j].price];
       final bounces = [for (final j in best) pivots[j].bounce];
+      final price = _median(prices);
+      final avgBounce = bounces.reduce((a, b) => a + b) / bounces.length;
+      final firstTouch = best.map((j) => pivots[j].bar).reduce(min);
+      if (avgBounce < _minAvgBouncePercent ||
+          _breaks(c, firstTouch, t, price, zone) > _maxBreaks) {
+        continue;
+      }
+      final touchVolume =
+          best
+              .map((j) => c[pivots[j].bar].quoteVolume)
+              .reduce((a, b) => a + b) /
+          best.length;
       levels.add((
-        price: _median(prices),
+        price: price,
         touches: best.length,
-        avgBouncePercent: bounces.reduce((a, b) => a + b) / bounces.length,
+        avgBouncePercent: avgBounce,
+        volumeMultiple: typicalVolume > 0 ? touchVolume / typicalVolume : 0,
       ));
     }
     return levels;
+  }
+
+  // Сколько раз 4ч закрытие с первого касания перешло на другую сторону
+  // уровня (закрытия внутри зоны ±[zone] не считаются).
+  static int _breaks(
+    List<Candle> c,
+    int from,
+    int to,
+    double level,
+    double zone,
+  ) {
+    var breaks = 0;
+    var side = 0;
+    for (var k = from; k <= to; k++) {
+      final close = c[k].close;
+      final now = close > level + zone
+          ? 1
+          : close < level - zone
+          ? -1
+          : 0;
+      if (now == 0) continue;
+      if (side != 0 && now != side) breaks++;
+      side = now;
+    }
+    return breaks;
   }
 
   // ATR: среднее истинного диапазона за 7 дней (null, пока данных мало).

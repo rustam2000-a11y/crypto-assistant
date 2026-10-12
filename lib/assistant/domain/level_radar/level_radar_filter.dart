@@ -8,7 +8,8 @@ import '../key_levels/key_level_detector.dart';
 import 'level_approach.dart';
 import 'level_radar.dart';
 
-/// Монеты на сильном уровне с крупным объёмом или вплотную к нему (< 1%).
+/// Монеты на сильном уровне с крупным объёмом на отскоках или вплотную к нему
+/// (< 1%).
 @lazySingleton
 class LevelRadarFilter implements DetailedCoinFilter {
   LevelRadarFilter(this._binance, this._candles);
@@ -57,9 +58,7 @@ class LevelRadarFilter implements DetailedCoinFilter {
       final analysis = _analysisCache[history] ??= _detector.analyze(history);
       if (analysis == null) continue;
       final approach = _radar.approach(
-        detector: _detector,
         analysis: analysis,
-        candles4h: history,
         hourly: lastHours,
         price: price,
       );
