@@ -54,3 +54,4 @@ class BinanceSocketClient {
     _channel?.sink.add(jsonEncode(payload));
   }
 }
+
