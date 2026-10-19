@@ -1,10 +1,9 @@
-import 'package:crypto_assistant/core/ui/device_layout.dart';
-import 'package:crypto_assistant/presentation/app_colors.dart';
-import 'package:crypto_assistant/widget/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import '../core/ui/device_layout.dart';
 import '../core/ui/ui_provider.dart';
+import '../presentation/app_colors.dart';
+import 'custom_text.dart';
 
 class CoinStatColumn extends StatelessWidget {
   const CoinStatColumn({super.key, required this.title, required this.text});
@@ -19,12 +18,15 @@ class CoinStatColumn extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       spacing: 4,
       children: [
-        CustomNewText(text: title, fontSize: isTablet?15:11, color: AppColors.victoria),
+        CustomNewText(
+          text: title,
+          fontSize: isTablet ? 15 : 11,
+          color: AppColors.victoria,
+        ),
         CustomNewText(
           text: text,
-          fontSize: isTablet?17:13,
+          fontSize: isTablet ? 17 : 13,
           color: AppColors.blueBell,
-          fontWeight: FontWeight.w500,
         ),
       ],
     );

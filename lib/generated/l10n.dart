@@ -529,6 +529,11 @@ class S {
   String get exit {
     return Intl.message('Exit', name: 'exit', desc: '', args: []);
   }
+
+  /// `or`
+  String get or {
+    return Intl.message('or', name: 'or', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

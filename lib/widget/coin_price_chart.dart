@@ -1,8 +1,7 @@
-import 'package:crypto_assistant/core/ui/device_layout.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import '../core/ui/device_layout.dart';
 import '../core/ui/ui_provider.dart';
 import '../generated/l10n.dart';
 import '../home/data/models/chart_period.dart';
@@ -83,11 +82,7 @@ class CoinPriceChart extends StatelessWidget {
                   FlLine(color: lineColor, strokeWidth: 1),
                   FlDotData(
                     getDotPainter: (spot, percent, bar, index) =>
-                        FlDotCirclePainter(
-                          radius: 4,
-                          color: lineColor,
-                          strokeWidth: 0,
-                        ),
+                        FlDotCirclePainter(radius: 4, color: lineColor),
                   ),
                 );
               }).toList();
@@ -112,7 +107,6 @@ class CoinPriceChart extends StatelessWidget {
               spots: spots,
               isCurved: true,
               color: lineColor,
-              barWidth: 2,
               dotData: const FlDotData(show: false),
               belowBarData: BarAreaData(
                 show: true,
@@ -182,7 +176,7 @@ class _PeriodChip extends StatelessWidget {
           label,
           style: TextStyle(
             color: isSelected ? AppColors.whiteColor : AppColors.textSecondary,
-            fontSize: isTablet?17:13,
+            fontSize: isTablet ? 17 : 13,
             fontWeight: FontWeight.w500,
           ),
         ),

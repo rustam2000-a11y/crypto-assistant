@@ -1,8 +1,8 @@
 import 'package:bloc_after_effect/bloc_after_effect.dart';
-import 'package:crypto_assistant/presentation/app_images.dart';
 import 'package:flutter/material.dart';
 import '../../generated/l10n.dart';
 import '../../injection.dart';
+import '../../presentation/app_images.dart';
 import '../../widget/custom_button.dart';
 import 'bloc/language_bloc.dart';
 import 'bloc/language_effect.dart';

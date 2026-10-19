@@ -105,6 +105,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "noItemsAddedYet": MessageLookupByLibrary.simpleMessage(
       "Нет монет в портфеле",
     ),
+    "or": MessageLookupByLibrary.simpleMessage("или"),
     "password": MessageLookupByLibrary.simpleMessage("Пароль"),
     "priceFluctuationRangeOverTheLast24Hours":
         MessageLookupByLibrary.simpleMessage(

@@ -1,17 +1,12 @@
-import 'package:crypto_assistant/core/ui/device_layout.dart';
-import 'package:crypto_assistant/presentation/app_colors.dart';
-import 'package:crypto_assistant/widget/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import '../core/ui/device_layout.dart';
 import '../core/ui/ui_provider.dart';
+import '../presentation/app_colors.dart';
+import 'custom_text.dart';
 
 class CoinStatCard extends StatelessWidget {
-  const CoinStatCard({
-    super.key,
-    required this.title,
-    required this.value,
-  });
+  const CoinStatCard({super.key, required this.title, required this.value});
 
   final String title;
   final String value;
@@ -31,14 +26,13 @@ class CoinStatCard extends StatelessWidget {
         children: [
           CustomNewText(
             text: title,
-            fontSize: isTablet?16:12,
+            fontSize: isTablet ? 16 : 12,
             fontWeight: FontWeight.w400,
             color: AppColors.textSecondary,
           ),
           CustomNewText(
             text: value,
-            fontSize: isTablet?20:15,
-            fontWeight: FontWeight.w500,
+            fontSize: isTablet ? 20 : 15,
             color: AppColors.whiteColor,
           ),
         ],

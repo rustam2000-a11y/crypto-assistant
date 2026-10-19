@@ -1,15 +1,14 @@
-import 'package:crypto_assistant/core/ui/device_layout.dart';
-import 'package:crypto_assistant/widget/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../coin_card/coin_screen.dart';
+import '../core/ui/device_layout.dart';
 import '../core/ui/ui_provider.dart';
 import '../generated/l10n.dart';
 import '../home/home_widget/custom_app_bar.dart';
 import '../injection.dart';
 import '../presentation/app_colors.dart';
 import '../widget/coin_card.dart';
+import '../widget/custom_text.dart';
 import 'bloc/filter_detailing_bloc.dart';
 import 'bloc/filter_detailing_event.dart';
 import 'bloc/filter_detailing_state.dart';
@@ -34,7 +33,8 @@ class _FilterDetailingScreenState extends State<FilterDetailingScreen> {
 
   @override
   void initState() {
-    _bloc = getIt<FilterDetailingBloc>()..add(LoadFilteredCoinsEvent(widget.type));
+    _bloc = getIt<FilterDetailingBloc>()
+      ..add(LoadFilteredCoinsEvent(widget.type));
     super.initState();
   }
 
@@ -56,13 +56,16 @@ class _FilterDetailingScreenState extends State<FilterDetailingScreen> {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Container(
-                padding: EdgeInsets.all(12),
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(18),
-                  border: Border.all(color: AppColors.blueBell),
-
-                ),
-                child: CustomNewText(text: widget.description,fontSize: isTablet?20:14,)),
+              padding: const EdgeInsets.all(12),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(18),
+                border: Border.all(color: AppColors.blueBell),
+              ),
+              child: CustomNewText(
+                text: widget.description,
+                fontSize: isTablet ? 20 : 14,
+              ),
+            ),
             const SizedBox(height: 8),
             Expanded(
               child: BlocBuilder<FilterDetailingBloc, FilterDetailingState>(
@@ -72,7 +75,7 @@ class _FilterDetailingScreenState extends State<FilterDetailingScreen> {
                     return const Center(child: CircularProgressIndicator());
                   }
                   if (state.coins.isEmpty) {
-                    return  Center(child: Text(S.of(context).noData));
+                    return Center(child: Text(S.of(context).noData));
                   }
                   return ListView.separated(
                     padding: const EdgeInsets.all(8),
@@ -92,7 +95,7 @@ class _FilterDetailingScreenState extends State<FilterDetailingScreen> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(
+                            MaterialPageRoute<void>(
                               builder: (_) => CoinScreen(coinId: coin.id),
                             ),
                           );

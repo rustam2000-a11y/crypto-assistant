@@ -8,11 +8,6 @@ class UserModel extends Equatable {
     required this.coinIds,
   });
 
-  final String id;
-  final String name;
-  final String email;
-  final List<String> coinIds;
-
   factory UserModel.fromDocument(Map<String, dynamic> json) {
     return UserModel(
       id: json['uid'] as String,
@@ -21,6 +16,11 @@ class UserModel extends Equatable {
       coinIds: (json['coinIds'] as List<dynamic>?)?.cast<String>() ?? const [],
     );
   }
+
+  final String id;
+  final String name;
+  final String email;
+  final List<String> coinIds;
 
   @override
   List<Object?> get props => [id, name, email, coinIds];
@@ -38,12 +38,8 @@ class UserModel extends Equatable {
       coinIds: coinIds ?? this.coinIds,
     );
   }
+
   Map<String, dynamic> toDocument() {
-    return {
-      'uid': id,
-      'name': name,
-      'email': email,
-      'coinIds': coinIds,
-    };
+    return {'uid': id, 'name': name, 'email': email, 'coinIds': coinIds};
   }
 }

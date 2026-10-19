@@ -1,21 +1,20 @@
 import 'package:bloc_after_effect/bloc_after_effect.dart';
-import 'package:crypto_assistant/home/home_widget/custom_app_bar.dart';
-import 'package:crypto_assistant/presentation/app_images.dart';
-import 'package:crypto_assistant/auth/registration/registration_screen.dart';
-import 'package:crypto_assistant/widget/custom_button.dart';
-import 'package:crypto_assistant/widget/custom_text.dart';
-import 'package:crypto_assistant/widget/login_title.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../core/errors/auth_error_type.dart';
 import '../../core/ui/device_layout.dart';
 import '../../core/ui/ui_provider.dart';
 import '../../generated/l10n.dart';
+import '../../home/home_widget/custom_app_bar.dart';
 import '../../injection.dart';
 import '../../presentation/app_colors.dart';
+import '../../presentation/app_images.dart';
+import '../../widget/custom_button.dart';
 import '../../widget/custom_divider.dart';
+import '../../widget/custom_text.dart';
 import '../../widget/custom_text_field.dart';
+import '../../widget/login_title.dart';
+import '../registration/registration_screen.dart';
 import 'bloc/login_bloc.dart';
 import 'bloc/login_effect.dart';
 import 'bloc/login_event.dart';
@@ -74,20 +73,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   firstText: S.of(context).welcomeBack,
                   secondaryText: S.of(context).logInToKeepFollowingTheMarket,
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 CustomTextField(
                   label: 'Email',
                   onChanged: (value) => _bloc.add(LoginEmailChanged(value)),
                   hintText: 'Email',
                   leftIcon: Icons.email_outlined,
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 CustomPasswordTextField(
                   label: S.of(context).password,
                   error: state.error,
                   onChanged: (value) => _bloc.add(LoginPasswordChanged(value)),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 if (state.isLoading)
                   const Center(child: CircularProgressIndicator())
                 else
@@ -96,9 +95,9 @@ class _LoginScreenState extends State<LoginScreen> {
                     name: S.of(context).logIn,
                   ),
 
-                SizedBox(height: 30),
-                CustomDivider(),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
+                const CustomDivider(),
+                const SizedBox(height: 30),
                 Row(
                   spacing: 12,
                   children: [
@@ -128,7 +127,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 ),
               ],
             ),
-            Spacer(),
+            const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               spacing: 5,
@@ -142,7 +141,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     final registered = await Navigator.push<bool>(
                       context,
                       MaterialPageRoute(
-                        builder: (context) => RegistrationScreen(),
+                        builder: (context) => const RegistrationScreen(),
                       ),
                     );
                     if (registered == true && context.mounted) {
@@ -161,7 +160,7 @@ class _LoginScreenState extends State<LoginScreen> {
         );
 
         return Scaffold(
-          appBar: CustomAppBar(text: ''),
+          appBar: const CustomAppBar(text: ''),
           backgroundColor: AppColors.haiti,
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

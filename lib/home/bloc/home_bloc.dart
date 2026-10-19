@@ -60,7 +60,7 @@ class HomeBloc extends EffectBloc<HomeEvent, HomeState, HomeEffect> {
   StreamSubscription<bool>? _authSubscription;
 
   void _init() {
-    add(LoadingEvent(isLoading: true));
+    add(const LoadingEvent(isLoading: true));
     _coinsSubscription = _coinRepository.watchCoins().listen(
       (coins) {
         add(LoadItemsEvent(items: coins));
@@ -82,7 +82,7 @@ class HomeBloc extends EffectBloc<HomeEvent, HomeState, HomeEffect> {
   Future<void> _logOut() async {
     try {
       await _authRepository.logout();
-      emitEffect(Ext());
+      emitEffect(const Ext());
     } on Exception catch (e) {
       emitEffect(HomeShowError(e.toString()));
     }

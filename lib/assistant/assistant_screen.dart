@@ -14,7 +14,7 @@ class AssistantScreen extends StatelessWidget {
   void _openDetails(BuildContext context, FilterType type, String description) {
     Navigator.push(
       context,
-      MaterialPageRoute(
+      MaterialPageRoute<void>(
         builder: (_) =>
             FilterDetailingScreen(type: type, description: description),
       ),

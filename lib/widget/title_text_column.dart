@@ -1,11 +1,9 @@
-import 'package:crypto_assistant/core/ui/device_layout.dart';
-import 'package:crypto_assistant/presentation/app_colors.dart';
-import 'package:crypto_assistant/widget/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import '../core/ui/device_layout.dart';
 import '../core/ui/ui_provider.dart';
-
+import '../presentation/app_colors.dart';
+import 'custom_text.dart';
 
 class TitleTextColumn extends StatelessWidget {
   const TitleTextColumn({
@@ -33,7 +31,6 @@ class TitleTextColumn extends StatelessWidget {
         CustomNewText(
           text: title,
           fontSize: fonSizeFirst ?? (isTablet ? 18 : 14),
-          fontWeight: FontWeight.w500,
           color: AppColors.titanWhite,
           maxLines: 1,
           overflow: TextOverflow.ellipsis,
@@ -41,7 +38,6 @@ class TitleTextColumn extends StatelessWidget {
         CustomNewText(
           text: text,
           fontSize: fonSizeFirst ?? (isTablet ? 18 : 12),
-          fontWeight: FontWeight.w500,
           color: AppColors.victoria,
         ),
       ],

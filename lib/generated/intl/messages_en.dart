@@ -105,6 +105,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "noItemsAddedYet": MessageLookupByLibrary.simpleMessage(
       "No coins in portfolio",
     ),
+    "or": MessageLookupByLibrary.simpleMessage("or"),
     "password": MessageLookupByLibrary.simpleMessage("Password"),
     "priceFluctuationRangeOverTheLast24Hours":
         MessageLookupByLibrary.simpleMessage(

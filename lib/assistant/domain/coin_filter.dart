@@ -2,8 +2,6 @@ import '../../home/data/models/coin_model.dart';
 import 'filter_type.dart';
 
 abstract class CoinFilter {
-  List<CoinModel> filter(List<CoinModel> coins);
-
   factory CoinFilter.forType(FilterType type) {
     switch (type) {
       case FilterType.abnormalMovement:
@@ -24,6 +22,8 @@ abstract class CoinFilter {
         return ConfirmedAnomalyFilter();
     }
   }
+
+  List<CoinModel> filter(List<CoinModel> coins);
 }
 
 // Аномальное движение цены за последние 24 часа: рост/падение выше чем на 10%.
@@ -33,7 +33,10 @@ class AbnormalMovementFilter implements CoinFilter {
   @override
   List<CoinModel> filter(List<CoinModel> coins) {
     return coins
-        .where((coin) => (coin.priceChangePercentage24h ?? 0).abs() > _thresholdPercent)
+        .where(
+          (coin) =>
+              (coin.priceChangePercentage24h ?? 0).abs() > _thresholdPercent,
+        )
         .toList();
   }
 }
@@ -45,7 +48,10 @@ class PriceMovementFilter implements CoinFilter {
   @override
   List<CoinModel> filter(List<CoinModel> coins) {
     return coins
-        .where((coin) => (coin.priceChangePercentage24h ?? 0).abs() > _thresholdPercent)
+        .where(
+          (coin) =>
+              (coin.priceChangePercentage24h ?? 0).abs() > _thresholdPercent,
+        )
         .toList();
   }
 }
@@ -103,7 +109,11 @@ class CapitalInflowFilter implements CoinFilter {
   @override
   List<CoinModel> filter(List<CoinModel> coins) {
     return coins
-        .where((coin) => (coin.marketCapChangePercentage24h ?? 0).abs() > _thresholdPercent)
+        .where(
+          (coin) =>
+              (coin.marketCapChangePercentage24h ?? 0).abs() >
+              _thresholdPercent,
+        )
         .toList();
   }
 }
@@ -119,7 +129,8 @@ class DailyExtremumFilter implements CoinFilter {
       final low = coin.low24h;
       if (high == null || low == null || high == low) return false;
       final position = (coin.currentPrice - low) / (high - low) * 100;
-      return position <= _thresholdPercent || position >= 100 - _thresholdPercent;
+      return position <= _thresholdPercent ||
+          position >= 100 - _thresholdPercent;
     }).toList();
   }
 }
@@ -132,7 +143,8 @@ class ConfirmedAnomalyFilter implements CoinFilter {
   @override
   List<CoinModel> filter(List<CoinModel> coins) {
     return coins.where((coin) {
-      final priceAnomaly = (coin.priceChangePercentage24h ?? 0).abs() > _priceThresholdPercent;
+      final priceAnomaly =
+          (coin.priceChangePercentage24h ?? 0).abs() > _priceThresholdPercent;
       if (!priceAnomaly || coin.marketCap == 0) return false;
       final turnoverRatio = coin.totalVolume / coin.marketCap;
       return turnoverRatio > _turnoverThresholdRatio;

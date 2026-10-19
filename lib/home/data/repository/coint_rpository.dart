@@ -12,7 +12,7 @@ class CoinRepository extends CoinRepositoryI {
 
   @override
   Stream<List<CoinModel>> watchCoins() {
-    return Stream.periodic(const Duration(seconds: 60))
+    return Stream<void>.periodic(const Duration(seconds: 60))
         .startWith(null)
         .switchMap((_) => Stream.fromFuture(_api.fetch()))
         .switchMap((coins) {
@@ -30,7 +30,7 @@ class CoinRepository extends CoinRepositoryI {
 
   @override
   Stream<CoinModel> watchCoin(String id) {
-    return Stream.periodic(const Duration(seconds: 60))
+    return Stream<void>.periodic(const Duration(seconds: 60))
         .startWith(null)
         .switchMap((_) => Stream.fromFuture(_api.fetchById(id)))
         .switchMap(
@@ -45,7 +45,7 @@ class CoinRepository extends CoinRepositoryI {
   Stream<List<PricePoint>> watchMarketChart(String id, {int days = 7}) {
     return Stream.fromFuture(_api.fetchById(id)).switchMap((coin) {
       final livePrice = _api.watchPrice(coin.symbol);
-      return Stream.periodic(const Duration(seconds: 60))
+      return Stream<void>.periodic(const Duration(seconds: 60))
           .startWith(null)
           .switchMap(
             (_) => Stream.fromFuture(_api.fetchMarketChart(id, days: days)),
@@ -78,9 +78,14 @@ class CoinRepository extends CoinRepositoryI {
 
 abstract class CoinRepositoryI {
   Stream<List<CoinModel>> watchCoins();
+
   Stream<CoinModel> watchCoin(String id);
+
   Stream<List<PricePoint>> watchMarketChart(String id, {int days = 7});
+
   Future<void> addCoinToBriefcase(String coinId);
+
   Future<void> removeCoinFromBriefcase(String coinId);
+
   Future<void> removeCoinsFromBriefcase(List<String> coinIds);
 }

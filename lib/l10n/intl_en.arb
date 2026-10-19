@@ -58,5 +58,6 @@
   "theCoinIsAtItsDailyHighOrLow": "The coin is at its daily high or low",
   "areYouSureYouWantToLogOutOfYour": "Are you sure you want to log out of your account?",
   "cancel": "Cancel",
-  "exit": "Exit"
+  "exit": "Exit",
+  "or": "or"
 }

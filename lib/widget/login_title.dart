@@ -1,6 +1,6 @@
-import 'package:crypto_assistant/presentation/app_colors.dart';
-import 'package:crypto_assistant/widget/custom_text.dart';
 import 'package:flutter/material.dart';
+import '../presentation/app_colors.dart';
+import 'custom_text.dart';
 
 class LoginTitle extends StatelessWidget {
   const LoginTitle({

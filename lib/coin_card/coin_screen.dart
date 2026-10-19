@@ -1,20 +1,18 @@
 import 'package:bloc_after_effect/bloc_after_effect.dart';
-import 'package:crypto_assistant/core/ui/device_layout.dart';
-import 'package:crypto_assistant/home/home_widget/custom_app_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import '../auth/login/login_screen.dart';
+import '../core/ui/device_layout.dart';
 import '../core/ui/ui_provider.dart';
 import '../generated/l10n.dart';
+import '../home/home_widget/custom_app_bar.dart';
 import '../injection.dart';
-import '../auth/login/login_screen.dart';
 import '../presentation/app_colors.dart';
 import '../widget/coin_avatar.dart';
 import '../widget/coin_price_change.dart';
 import '../widget/coin_price_chart.dart';
 import '../widget/coin_stat_card.dart';
 import '../widget/custom_button.dart';
-
 import '../widget/format_utils.dart';
 import '../widget/title_text_column.dart';
 import 'bloc/coin_bloc.dart';
@@ -60,7 +58,9 @@ class _CoinScreenState extends State<CoinScreen> {
           case CoinNavigateToLogin():
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => LoginScreen()),
+              MaterialPageRoute<void>(
+                builder: (context) => const LoginScreen(),
+              ),
             );
         }
       },
@@ -86,10 +86,7 @@ class _CoinScreenState extends State<CoinScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Padding(
-                              padding: const EdgeInsets.symmetric(
-                                horizontal: 0,
-                                vertical: 10,
-                              ),
+                              padding: const EdgeInsets.symmetric(vertical: 10),
                               child: Column(
                                 children: [
                                   Row(
@@ -207,7 +204,7 @@ class _CoinScreenState extends State<CoinScreen> {
                             ),
                           ],
                         ),
-                        SizedBox(height: 15),
+                        const SizedBox(height: 15),
                         const SizedBox(height: 20),
                         SafeArea(
                           top: false,

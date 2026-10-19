@@ -55,5 +55,6 @@
   "theCoinIsAtItsDailyHighOrLow": "Монета на дневном максимуме или минимуме",
   "areYouSureYouWantToLogOutOfYour": "Вы уверены что хотите выйти из своего аккаунта?",
   "cancel": "Cancel",
-  "exit": "Exit"
+  "exit": "Exit",
+  "or": "или"
 }

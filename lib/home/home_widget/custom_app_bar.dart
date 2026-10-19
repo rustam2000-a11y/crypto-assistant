@@ -1,10 +1,9 @@
-import 'package:crypto_assistant/core/ui/device_layout.dart';
-import 'package:crypto_assistant/widget/custom_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import '../../core/ui/device_layout.dart';
 import '../../core/ui/ui_provider.dart';
 import '../../presentation/app_colors.dart';
+import '../../widget/custom_text.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   const CustomAppBar({
@@ -27,7 +26,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: CustomNewText(
         text: text,
         color: AppColors.whiteColor,
-        fontSize: isTablet?22:16,
+        fontSize: isTablet ? 22 : 16,
         fontWeight: FontWeight.w600,
       ),
       backgroundColor: colors,
@@ -36,10 +35,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       leading: leadingIcon
           ? IconButton(
               onPressed: Navigator.of(context).pop,
-              icon: Icon(Icons.arrow_back_ios_new),
+              icon: const Icon(Icons.arrow_back_ios_new),
               color: Colors.white,
             )
-          : SizedBox(),
+          : const SizedBox(),
       actions: [
         if (action != null)
           Padding(

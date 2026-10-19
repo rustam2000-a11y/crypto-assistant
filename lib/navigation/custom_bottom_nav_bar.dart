@@ -1,7 +1,6 @@
-import 'package:crypto_assistant/core/ui/device_layout.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import '../core/ui/device_layout.dart';
 import '../core/ui/ui_provider.dart';
 import '../presentation/app_colors.dart';
 import 'app_page.dart';
@@ -54,20 +53,18 @@ class _NavBarItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final isTablet = context.watch<UiProvider>().deviceLayout.isTabletMode;
-    return
-
-      InkWell(
-        onTap: onTap,
-        child: Container(
-          padding: EdgeInsets.symmetric(horizontal: isTablet?20: 14),
-          color: Colors.transparent,
-          child: Image.asset(
-            page.icon,
-            width: isTablet?24:20,
-            height: isTablet?24:20,
-            color: isSelected ? AppColors.whiteColor : AppColors.blueBell,
-          ),
+    return InkWell(
+      onTap: onTap,
+      child: Container(
+        padding: EdgeInsets.symmetric(horizontal: isTablet ? 20 : 14),
+        color: Colors.transparent,
+        child: Image.asset(
+          page.icon,
+          width: isTablet ? 24 : 20,
+          height: isTablet ? 24 : 20,
+          color: isSelected ? AppColors.whiteColor : AppColors.blueBell,
         ),
-      );
+      ),
+    );
   }
 }

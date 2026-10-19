@@ -1,10 +1,10 @@
-import 'package:crypto_assistant/presentation/app_colors.dart';
-import 'package:crypto_assistant/widget/custom_text.dart';
 import 'package:flutter/material.dart';
 
 import '../../generated/l10n.dart';
+import '../../presentation/app_colors.dart';
 import '../../presentation/app_images.dart';
 import '../../widget/custom_button.dart';
+import '../../widget/custom_text.dart';
 
 class ConfirmationDialog extends StatelessWidget {
   const ConfirmationDialog({super.key, required this.onTap});
@@ -17,13 +17,13 @@ class ConfirmationDialog extends StatelessWidget {
       backgroundColor: AppColors.bunting,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
       child: Padding(
-        padding: EdgeInsets.all(22),
+        padding: const EdgeInsets.all(22),
         child: Column(
           mainAxisSize: MainAxisSize.min,
           spacing: 12,
           children: [
             Container(
-              padding: EdgeInsets.all(14),
+              padding: const EdgeInsets.all(14),
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
                 color: AppColors.borderRed.withValues(alpha: 0.4),

@@ -1,4 +1,3 @@
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:injectable/injectable.dart';
@@ -10,12 +9,12 @@ import '../models/price_point.dart';
 
 @Injectable(as: CoinApI)
 class CoinApi extends CoinApI {
+  CoinApi(this._client, this._binanceSocket);
+
   final ApiClient _client;
   final BinanceSocketClient _binanceSocket;
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-
-  CoinApi(this._client, this._binanceSocket);
 
   @override
   Future<List<CoinModel>> fetch() async {
@@ -28,7 +27,7 @@ class CoinApi extends CoinApI {
         'page': '1',
       },
     );
-    final coins = data.map((d)=> CoinModel.fromJson(d)).toList();
+    final coins = data.map((d) => CoinModel.fromJson(d)).toList();
     return coins;
   }
 
@@ -36,10 +35,7 @@ class CoinApi extends CoinApI {
   Future<CoinModel> fetchById(String id) async {
     final data = await _client.get(
       '/coins/markets',
-      queryParams: {
-        'vs_currency': 'usd',
-        'ids': id,
-      },
+      queryParams: {'vs_currency': 'usd', 'ids': id},
     );
     return CoinModel.fromJson(data.first);
   }
@@ -48,15 +44,10 @@ class CoinApi extends CoinApI {
   Future<List<PricePoint>> fetchMarketChart(String id, {int days = 7}) async {
     final data = await _client.getMap(
       '/coins/$id/market_chart',
-      queryParams: {
-        'vs_currency': 'usd',
-        'days': '$days',
-      },
+      queryParams: {'vs_currency': 'usd', 'days': '$days'},
     );
     final prices = data['prices'] as List<dynamic>;
-    return prices
-        .map((p) => PricePoint.fromJson(p as List<dynamic>))
-        .toList();
+    return prices.map((p) => PricePoint.fromJson(p as List<dynamic>)).toList();
   }
 
   @override
@@ -89,10 +80,16 @@ class CoinApi extends CoinApI {
 
 abstract class CoinApI {
   Future<List<CoinModel>> fetch();
+
   Future<CoinModel> fetchById(String id);
+
   Future<List<PricePoint>> fetchMarketChart(String id, {int days = 7});
+
   Stream<double> watchPrice(String symbol);
+
   Future<void> addCoinToBriefcase(String coinId);
+
   Future<void> removeCoinFromBriefcase(String coinId);
+
   Future<void> removeCoinsFromBriefcase(List<String> coinIds);
 }

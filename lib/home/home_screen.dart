@@ -1,19 +1,18 @@
 import 'package:bloc_after_effect/bloc_after_effect.dart';
-import 'package:crypto_assistant/core/ui/device_layout.dart';
-import 'package:crypto_assistant/home/bloc/home_bloc.dart';
-import 'package:crypto_assistant/home/bloc/home_effect.dart';
-import 'package:crypto_assistant/home/bloc/home_event.dart';
-import 'package:crypto_assistant/home/bloc/home_state.dart';
-import 'package:crypto_assistant/presentation/app_colors.dart';
-import 'package:crypto_assistant/presentation/app_images.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
 import '../coin_card/coin_screen.dart';
+import '../core/ui/device_layout.dart';
 import '../core/ui/ui_provider.dart';
 import '../generated/l10n.dart';
 import '../injection.dart';
+import '../presentation/app_colors.dart';
+import '../presentation/app_images.dart';
 import '../widget/coin_card.dart';
+import 'bloc/home_bloc.dart';
+import 'bloc/home_effect.dart';
+import 'bloc/home_event.dart';
+import 'bloc/home_state.dart';
 import 'home_widget/coin_search_field.dart';
 import 'home_widget/confirmation_dialog.dart';
 import 'home_widget/custom_app_bar.dart';
@@ -60,17 +59,17 @@ class _HomeScreenState extends State<HomeScreen> {
         return Scaffold(
           backgroundColor: AppColors.haiti,
           appBar: CustomAppBar(
-            text: "Crypto Assistant",
+            text: 'Crypto Assistant',
             leadingIcon: false,
             action: [
               InkWell(
                 borderRadius: BorderRadius.circular(20),
                 onTap: () {
-                  showModalBottomSheet(
+                  showModalBottomSheet<void>(
                     context: context,
                     isScrollControlled: true,
                     builder: (context) {
-                      return LanguageBottomSheet();
+                      return const LanguageBottomSheet();
                     },
                   );
                 },
@@ -84,10 +83,14 @@ class _HomeScreenState extends State<HomeScreen> {
               if (state.isLoggedIn)
                 InkWell(
                   borderRadius: BorderRadius.circular(20),
-                  onTap: ()  {
+                  onTap: () {
                     showDialog<bool>(
                       context: context,
-                      builder: (_) => ConfirmationDialog(onTap: () { _bloc.add(const LogOutEvent());},),
+                      builder: (_) => ConfirmationDialog(
+                        onTap: () {
+                          _bloc.add(const LogOutEvent());
+                        },
+                      ),
                     );
                   },
                   child: Image.asset(
@@ -134,7 +137,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
+                              MaterialPageRoute<void>(
                                 builder: (_) => CoinScreen(coinId: coin.id),
                               ),
                             );

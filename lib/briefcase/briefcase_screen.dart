@@ -1,15 +1,14 @@
 import 'package:bloc_after_effect/bloc_after_effect.dart';
-import 'package:crypto_assistant/widget/custom_text.dart';
 import 'package:flutter/material.dart';
-
 import '../auth/login/login_screen.dart';
 import '../coin_card/coin_screen.dart';
-import '../home/home_widget/custom_app_bar.dart';
 import '../generated/l10n.dart';
+import '../home/home_widget/custom_app_bar.dart';
 import '../injection.dart';
 import '../presentation/app_colors.dart';
 import '../widget/coin_card.dart';
 import '../widget/custom_button.dart';
+import '../widget/custom_text.dart';
 import 'bloc/briefcase_bloc.dart';
 import 'bloc/briefcase_effect.dart';
 import 'bloc/briefcase_event.dart';
@@ -92,7 +91,7 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
                           onTap: () {
                             Navigator.push(
                               context,
-                              MaterialPageRoute(
+                              MaterialPageRoute<void>(
                                 builder: (_) => const LoginScreen(),
                               ),
                             );
@@ -135,7 +134,7 @@ class _BriefcaseScreenState extends State<BriefcaseScreen> {
                       }
                       Navigator.push(
                         context,
-                        MaterialPageRoute(
+                        MaterialPageRoute<void>(
                           builder: (_) => CoinScreen(coinId: coin.id),
                         ),
                       );

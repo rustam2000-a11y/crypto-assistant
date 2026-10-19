@@ -1,6 +1,7 @@
-import 'package:crypto_assistant/presentation/app_colors.dart';
-import 'package:crypto_assistant/widget/custom_text.dart';
 import 'package:flutter/material.dart';
+
+import '../../presentation/app_colors.dart';
+import '../../widget/custom_text.dart';
 
 class LanguageCardWidget extends StatelessWidget {
   const LanguageCardWidget({
@@ -20,9 +21,8 @@ class LanguageCardWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      child: Container
-        (
-        padding: EdgeInsets.all(10),
+      child: Container(
+        padding: const EdgeInsets.all(10),
         decoration: BoxDecoration(
           color: active ? AppColors.selectedItemBackground : Colors.transparent,
           borderRadius: BorderRadius.circular(20),
@@ -32,8 +32,11 @@ class LanguageCardWidget extends StatelessWidget {
           children: [
             Image.asset(icon, height: 20, width: 20),
             CustomNewText(text: language, fontSize: 18),
-            Spacer(),
-            active ? Icon(Icons.check, color: AppColors.negative) : SizedBox(),
+            const Spacer(),
+            if (active)
+              const Icon(Icons.check, color: AppColors.negative)
+            else
+              const SizedBox(),
           ],
         ),
       ),

@@ -1,13 +1,21 @@
-import 'package:crypto_assistant/presentation/app_colors.dart';
-import 'package:crypto_assistant/widget/custom_text.dart';
 import 'package:flutter/material.dart';
+import '../presentation/app_colors.dart';
+import 'custom_text.dart';
 
 class CustomButton extends StatelessWidget {
-  const CustomButton({super.key, required this.onTap, required this.name,  this.icon, this.color});
+  const CustomButton({
+    super.key,
+    required this.onTap,
+    required this.name,
+    this.icon,
+    this.color,
+  });
+
   final String name;
   final Color? color;
   final String? icon;
-final VoidCallback onTap;
+  final VoidCallback onTap;
+
   @override
   Widget build(BuildContext context) {
     return Material(
@@ -16,16 +24,14 @@ final VoidCallback onTap;
       child: InkWell(
         onTap: onTap,
         child: Container(
-          constraints: BoxConstraints(
-            maxWidth: 400,
-          ),
-          padding: EdgeInsets.symmetric(vertical: 16),
+          constraints: const BoxConstraints(maxWidth: 400),
+          padding: const EdgeInsets.symmetric(vertical: 16),
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               if (icon != null) ...[
                 Image.asset(icon!, width: 20, height: 20),
-                SizedBox(width: 8),
+                const SizedBox(width: 8),
               ],
               CustomNewText(
                 text: name,

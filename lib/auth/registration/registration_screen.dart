@@ -1,5 +1,4 @@
 import 'package:bloc_after_effect/bloc_after_effect.dart';
-import 'package:crypto_assistant/widget/login_title.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../core/errors/auth_error_type.dart';
@@ -14,6 +13,7 @@ import '../../widget/custom_button.dart';
 import '../../widget/custom_divider.dart';
 import '../../widget/custom_text.dart';
 import '../../widget/custom_text_field.dart';
+import '../../widget/login_title.dart';
 import 'bloc/registration_bloc.dart';
 import 'bloc/registration_effect.dart';
 import 'bloc/registration_event.dart';
@@ -78,28 +78,28 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                   firstText: S.of(context).createAnAccount,
                   secondaryText: S.of(context).itTakesLessThanAMinute,
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 CustomTextField(
                   label: S.of(context).name,
                   onChanged: (value) => _bloc.add(RegisterNameChanged(value)),
                   hintText: 'Name',
                   leftIcon: Icons.email_outlined,
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 CustomTextField(
                   label: 'Email',
                   onChanged: (value) => _bloc.add(RegisterEmailChanged(value)),
                   hintText: 'Email',
                   leftIcon: Icons.email_outlined,
                 ),
-                SizedBox(height: 15),
+                const SizedBox(height: 15),
                 CustomPasswordTextField(
                   label: S.of(context).password,
                   error: state.error,
                   onChanged: (value) =>
                       _bloc.add(RegisterPasswordChanged(value)),
                 ),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
                 if (state.isLoading)
                   const Center(child: CircularProgressIndicator())
                 else
@@ -107,9 +107,9 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                     onTap: () => _bloc.add(const RegisterWithEmailPressed()),
                     name: S.of(context).signUp,
                   ),
-                SizedBox(height: 30),
-                CustomDivider(),
-                SizedBox(height: 30),
+                const SizedBox(height: 30),
+                const CustomDivider(),
+                const SizedBox(height: 30),
                 Row(
                   spacing: 12,
                   children: [
@@ -139,7 +139,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
                 ),
               ],
             ),
-            Spacer(),
+            const Spacer(),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               spacing: 5,
@@ -164,7 +164,7 @@ class _RegistrationScreenState extends State<RegistrationScreen> {
         );
 
         return Scaffold(
-          appBar: CustomAppBar(text: ''),
+          appBar: const CustomAppBar(text: ''),
           backgroundColor: AppColors.haiti,
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),

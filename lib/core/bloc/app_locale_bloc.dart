@@ -23,13 +23,15 @@ class AppLocaleBloc
 
   final LanguageRepositoryI _languageRepository;
   late final StreamSubscription<Language> _languageSubscription;
-  init(){
+
+  void init() {
     _languageSubscription = _languageRepository.languageStream.listen((
-        language,
-        ) {
+      language,
+    ) {
       add(LanguageChangedEvent(language));
     });
   }
+
   @override
   Future<void> close() {
     _languageSubscription.cancel();

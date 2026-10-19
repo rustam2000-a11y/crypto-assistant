@@ -1,8 +1,7 @@
-import 'package:crypto_assistant/presentation/app_colors.dart';
-import 'package:crypto_assistant/widget/custom_text.dart';
 import 'package:flutter/material.dart';
-
 import '../generated/l10n.dart';
+import '../presentation/app_colors.dart';
+import 'custom_text.dart';
 
 class CustomTextField extends StatelessWidget {
   const CustomTextField({
@@ -63,7 +62,7 @@ class CustomTextField extends StatelessWidget {
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(borderRadius),
-              borderSide: const BorderSide(color: AppColors.jacarta, width: 1),
+              borderSide: const BorderSide(color: AppColors.jacarta),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(borderRadius),
@@ -153,11 +152,11 @@ class _CustomPasswordTextFieldState extends State<CustomPasswordTextField> {
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(widget.borderRadius),
-              borderSide: BorderSide(color: AppColors.jacarta, width: 1),
+              borderSide: const BorderSide(color: AppColors.jacarta),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(widget.borderRadius),
-              borderSide: BorderSide(color: AppColors.activeBorder, width: 1),
+              borderSide: const BorderSide(color: AppColors.activeBorder),
             ),
             errorText: widget.error
                 ? S.of(context).thePasswordMustBeAtLeast6CharactersLong
@@ -165,14 +164,12 @@ class _CustomPasswordTextFieldState extends State<CustomPasswordTextField> {
             errorBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: widget.error ? AppColors.borderRed : AppColors.jacarta,
-                width: 1,
               ),
               borderRadius: BorderRadius.circular(widget.borderRadius),
             ),
             focusedErrorBorder: OutlineInputBorder(
               borderSide: BorderSide(
                 color: widget.error ? AppColors.borderRed : AppColors.jacarta,
-                width: 1,
               ),
               borderRadius: BorderRadius.circular(widget.borderRadius),
             ),

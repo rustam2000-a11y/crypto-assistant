@@ -1,10 +1,9 @@
-import 'package:crypto_assistant/core/ui/device_layout.dart';
-import 'package:crypto_assistant/presentation/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-
+import '../../core/ui/device_layout.dart';
 import '../../core/ui/ui_provider.dart';
 import '../../generated/l10n.dart';
+import '../../presentation/app_colors.dart';
 
 class CoinSearchField extends StatelessWidget {
   const CoinSearchField({super.key, required this.onChanged});

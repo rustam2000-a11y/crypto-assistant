@@ -1,17 +1,10 @@
-import 'package:crypto_assistant/presentation/app_colors.dart';
-import 'package:crypto_assistant/widget/custom_text.dart';
 import 'package:flutter/material.dart';
-
 import '../../generated/l10n.dart';
-
-
+import '../../presentation/app_colors.dart';
+import '../../widget/custom_text.dart';
 
 class BottomSheetWrapper extends StatelessWidget {
-  const BottomSheetWrapper({
-    super.key,
-    required this.body,
-     this.bottomWidget,
-  });
+  const BottomSheetWrapper({super.key, required this.body, this.bottomWidget});
 
   final Widget body;
   final Widget? bottomWidget;
@@ -19,16 +12,14 @@ class BottomSheetWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      constraints: const BoxConstraints(
-        maxHeight: 400,
-      ),
-      padding: const EdgeInsets.symmetric(
-        horizontal: 12,
-        vertical: 6,
-      ),
-      decoration: BoxDecoration(
+      constraints: const BoxConstraints(maxHeight: 400),
+      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+      decoration: const BoxDecoration(
         color: AppColors.sheetBackground,
-        borderRadius: BorderRadius.only(topRight: Radius.circular(20),topLeft: Radius.circular(20)),
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(20),
+          topLeft: Radius.circular(20),
+        ),
       ),
       child: Column(
         children: [
@@ -47,22 +38,16 @@ class BottomSheetWrapper extends StatelessWidget {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    CustomNewText(
-                      text: S.of(context).language,
-                      fontSize: 20,
-                    ),
+                    CustomNewText(text: S.of(context).language, fontSize: 20),
                     Material(
                       shape: const CircleBorder(),
                       color: AppColors.closeButtonBackground,
                       child: InkWell(
-                        onTap: ()=> Navigator.pop(context),
+                        onTap: () => Navigator.pop(context),
                         customBorder: const CircleBorder(),
-                        child: Padding(
-                          padding: const EdgeInsets.all(8),
-                          child: Icon(
-                            Icons.close,
-                            color: AppColors.closeIcon,
-                          ),
+                        child: const Padding(
+                          padding: EdgeInsets.all(8),
+                          child: Icon(Icons.close, color: AppColors.closeIcon),
                         ),
                       ),
                     ),
@@ -73,9 +58,7 @@ class BottomSheetWrapper extends StatelessWidget {
               ],
             ),
           ),
-          SafeArea(
-            child: bottomWidget??SizedBox(),
-          ),
+          SafeArea(child: bottomWidget ?? const SizedBox()),
         ],
       ),
     );

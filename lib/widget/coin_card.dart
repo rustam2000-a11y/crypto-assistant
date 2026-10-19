@@ -1,12 +1,11 @@
-import 'package:crypto_assistant/presentation/app_colors.dart';
-import 'package:crypto_assistant/widget/coin_avatar.dart';
-import 'package:crypto_assistant/widget/coin_price_change.dart';
-import 'package:crypto_assistant/widget/coin_stat_column.dart';
-import 'package:crypto_assistant/widget/format_utils.dart';
-import 'package:crypto_assistant/widget/title_text_column.dart';
 import 'package:flutter/material.dart';
-
 import '../generated/l10n.dart';
+import '../presentation/app_colors.dart';
+import 'coin_avatar.dart';
+import 'coin_price_change.dart';
+import 'coin_stat_column.dart';
+import 'format_utils.dart';
+import 'title_text_column.dart';
 
 class CoinCard extends StatelessWidget {
   const CoinCard({
