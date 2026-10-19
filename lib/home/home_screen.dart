@@ -15,6 +15,7 @@ import '../generated/l10n.dart';
 import '../injection.dart';
 import '../widget/coin_card.dart';
 import 'home_widget/coin_search_field.dart';
+import 'home_widget/confirmation_dialog.dart';
 import 'home_widget/custom_app_bar.dart';
 import 'language/language_bottom_sheet.dart';
 
@@ -51,6 +52,8 @@ class _HomeScreenState extends State<HomeScreen> {
             ScaffoldMessenger.of(
               context,
             ).showSnackBar(SnackBar(content: Text(message)));
+          case Ext():
+            Navigator.pop(context);
         }
       },
       builder: (context, state) {
@@ -81,7 +84,12 @@ class _HomeScreenState extends State<HomeScreen> {
               if (state.isLoggedIn)
                 InkWell(
                   borderRadius: BorderRadius.circular(20),
-                  onTap: () => _bloc.add(LogOutEvent()),
+                  onTap: ()  {
+                    showDialog<bool>(
+                      context: context,
+                      builder: (_) => ConfirmationDialog(onTap: () { _bloc.add(const LogOutEvent());},),
+                    );
+                  },
                   child: Image.asset(
                     AppImages.exit,
                     width: 19,

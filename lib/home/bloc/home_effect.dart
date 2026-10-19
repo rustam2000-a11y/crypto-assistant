@@ -15,3 +15,6 @@ class HomeShowError extends HomeEffect {
   @override
   List<Object?> get props => [message];
 }
+class Ext extends HomeEffect {
+  const Ext();
+}

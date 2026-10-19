@@ -52,5 +52,8 @@
   "emailAlreadyInUse": "Этот email уже используется",
   "failedToSignUp": "Не удалось зарегистрироваться, попробуйте позже",
   "signUpToAddCoinsToYourBriefcaseAndSave": "Зарегистрируйтесь, чтобы добавлять монеты в портфель и сохранять их",
-  "theCoinIsAtItsDailyHighOrLow": "Монета на дневном максимуме или минимуме"
+  "theCoinIsAtItsDailyHighOrLow": "Монета на дневном максимуме или минимуме",
+  "areYouSureYouWantToLogOutOfYour": "Вы уверены что хотите выйти из своего аккаунта?",
+  "cancel": "Cancel",
+  "exit": "Exit"
 }

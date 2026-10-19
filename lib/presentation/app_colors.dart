@@ -35,6 +35,6 @@ class AppColors {
   static const closeIcon = Color(0xFF9295B8);
   static const deepIndigo = Color(0xFF17143B);
   static const indigo = Color(0xFF34306E);
-
+  static const bunting = Color(0xFF1A1648);
 
 }

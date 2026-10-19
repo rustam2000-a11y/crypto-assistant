@@ -1,6 +1,5 @@
 class AppImages {
   const AppImages();
-
   static const barChart = 'assets/images/bar_chart.png';
   static const dataAnalytics = 'assets/images/data_report.png';
   static const home = 'assets/images/home.png';

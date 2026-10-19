@@ -41,6 +41,10 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Approaching its historical maximum/minimum",
         ),
+    "areYouSureYouWantToLogOutOfYour": MessageLookupByLibrary.simpleMessage(
+      "Are you sure you want to log out of your account?",
+    ),
+    "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
     "capitalInflow": MessageLookupByLibrary.simpleMessage("Capital inflow"),
     "capitalization": MessageLookupByLibrary.simpleMessage("Capitalization"),
     "confirmedAnomaly": MessageLookupByLibrary.simpleMessage(
@@ -60,6 +64,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "emailAlreadyInUse": MessageLookupByLibrary.simpleMessage(
       "This email is already in use",
     ),
+    "exit": MessageLookupByLibrary.simpleMessage("Exit"),
     "failedToLogIn": MessageLookupByLibrary.simpleMessage(
       "Failed to log in, please try again later",
     ),

@@ -82,6 +82,7 @@ class HomeBloc extends EffectBloc<HomeEvent, HomeState, HomeEffect> {
   Future<void> _logOut() async {
     try {
       await _authRepository.logout();
+      emitEffect(Ext());
     } on Exception catch (e) {
       emitEffect(HomeShowError(e.toString()));
     }

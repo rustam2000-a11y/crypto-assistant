@@ -3,14 +3,15 @@ import 'package:crypto_assistant/widget/custom_text.dart';
 import 'package:flutter/material.dart';
 
 class CustomButton extends StatelessWidget {
-  const CustomButton({super.key, required this.onTap, required this.name,  this.icon});
+  const CustomButton({super.key, required this.onTap, required this.name,  this.icon, this.color});
   final String name;
+  final Color? color;
   final String? icon;
 final VoidCallback onTap;
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: AppColors.jacarta,
+      color: color ?? AppColors.jacarta,
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
         onTap: onTap,
