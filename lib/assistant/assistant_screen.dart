@@ -27,7 +27,7 @@ class AssistantScreen extends StatelessWidget {
       backgroundColor: AppColors.haiti,
       appBar: CustomAppBar(text: S.of(context).analytics, leadingIcon: false),
       body: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.only(bottom: 20,left: 8,right: 8,top: 8),
         child: SingleChildScrollView(
           child: Column(
             spacing: 13,
