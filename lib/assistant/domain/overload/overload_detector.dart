@@ -2,6 +2,7 @@ import 'dart:math';
 
 import '../../../home/data/models/candle.dart';
 import '../indicators.dart';
+import '../signal_side.dart';
 import 'overload_signal.dart';
 
 /// Индекс перегрузки: сколько из 7 признаков перегрева и плеч горит у
@@ -10,6 +11,11 @@ import 'overload_signal.dart';
 ///
 /// Это состояние монеты, а не прогноз: на истории откат после перегрузки
 /// случался не чаще обычного, а при резком росте плеч рост чаще продолжался.
+///
+/// Зеркально для лонга — перегрузка вниз: монета разогнана под EMA20 и за
+/// 6 часов в минусе, признаки те же с обратным знаком (RSI 1ч <= 28,
+/// RSI 4ч <= 33, фандинг <= −0.02% — переплачивают шорты, лонг/шорт
+/// топ-трейдеров <= 0.5); рост открытого интереса и всплеск объёма — как есть.
 class OverloadDetector {
   const OverloadDetector();
 
@@ -32,13 +38,17 @@ class OverloadDetector {
 
   /// Цена выше EMA20 часового графика, в обычных часовых ходах, если монета
   /// разогнана (иначе null) — только для таких монет нужны данные о плечах.
+  /// Монета, зеркально разогнанная вниз (под EMA20 и за 6 часов в минусе),
+  /// даёт отрицательное значение — это сторона лонга.
   double? stretch(List<Candle> hourly) {
     if (hourly.length < requiredHourly) return null;
     if (dailyVolatility(hourly) < _minDailyVolatility) return null;
     final t = hourly.length - 1;
-    if (hourly[t].close <= hourly[t - 6].close) return null;
+    final change6h = hourly[t].close - hourly[t - 6].close;
     final value = (hourly[t].close - _ema(hourly)) / _atr(hourly);
-    return value >= _minStretch ? value : null;
+    if (change6h > 0 && value >= _minStretch) return value;
+    if (change6h < 0 && value <= -_minStretch) return value;
+    return null;
   }
 
   OverloadSignal? detect({
@@ -48,8 +58,17 @@ class OverloadDetector {
     double? fundingRate,
     double? topTraderRatio,
   }) {
-    final extension = stretch(hourly);
-    if (extension == null || candles4h.length < 15) return null;
+    final stretched = stretch(hourly);
+    if (stretched == null || candles4h.length < 15) return null;
+    final side = stretched < 0 ? SignalSide.long : SignalSide.short;
+    // Для лонга всё зеркально: RSI ↔ 100 − RSI, фандинг ↔ −фандинг,
+    // лонг/шорт топ-трейдеров ↔ шорт/лонг.
+    final sign = side.isLong ? -1.0 : 1.0;
+    double mirrorRsi(double rsi) => side.isLong ? 100 - rsi : rsi;
+    final crowdRatio = side.isLong && topTraderRatio != null
+        ? 1 / topTraderRatio
+        : topTraderRatio;
+    final extension = stretched.abs();
     final rsi1h = wilderRsi(hourly);
     final rsi4h = wilderRsi(candles4h);
     final t = hourly.length - 1;
@@ -65,16 +84,17 @@ class OverloadDetector {
 
     final points = {
       if (extension >= _extensionAtr) OverloadSign.extension,
-      if (rsi1h >= _rsi1h) OverloadSign.rsi1h,
-      if (rsi4h >= _rsi4h) OverloadSign.rsi4h,
+      if (mirrorRsi(rsi1h) >= _rsi1h) OverloadSign.rsi1h,
+      if (mirrorRsi(rsi4h) >= _rsi4h) OverloadSign.rsi4h,
       if ((openInterestChange ?? 0) >= _openInterestGrowth)
         OverloadSign.openInterest,
-      if ((fundingRate ?? 0) >= _funding) OverloadSign.funding,
-      if ((topTraderRatio ?? 0) >= _topTraderRatio) OverloadSign.topTraders,
+      if (sign * (fundingRate ?? 0) >= _funding) OverloadSign.funding,
+      if ((crowdRatio ?? 0) >= _topTraderRatio) OverloadSign.topTraders,
       if (volumeSpike >= _volumeSpike) OverloadSign.volumeSpike,
     };
     if (points.length < minPoints) return null;
     return OverloadSignal(
+      side: side,
       points: points,
       extension: extension,
       rsi1h: rsi1h,

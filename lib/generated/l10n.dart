@@ -790,10 +790,10 @@ class S {
     );
   }
 
-  /// `The coin is strongly overheated: hourly RSI is 80 or higher, the 24h rise is at least 2× its usual daily move and the price is far above its 7-day average. Meanwhile liquidity is leaving: volume over the last 3 hours is 30%+ lower than at the height of the rally, and the share of aggressive buying is falling. This is a state of the coin, not a short signal: historically the price was lower 1–4 hours later in about half of the cases.`
+  /// `The coin is strongly overheated: hourly RSI is 80 or higher, the 24h rise is at least 2× its usual daily move and the price is far above its 7-day average. Meanwhile liquidity is leaving: volume over the last 3 hours is 30%+ lower than at the height of the rally, and the share of aggressive buying is falling. This is a state of the coin, not a short signal: historically the price was lower 1–4 hours later in about half of the cases. Mirrored, it also finds undervalued coins (long): RSI 20 or lower, the 24h drop is at least 2× the usual move, the price is far below its 7-day average, volume over the last 3 hours is 30%+ lower than at the height of the sell-off, and the share of aggressive selling is falling — sellers are running out. The long side has not been checked on history separately.`
   String get overboughtDescription {
     return Intl.message(
-      'The coin is strongly overheated: hourly RSI is 80 or higher, the 24h rise is at least 2× its usual daily move and the price is far above its 7-day average. Meanwhile liquidity is leaving: volume over the last 3 hours is 30%+ lower than at the height of the rally, and the share of aggressive buying is falling. This is a state of the coin, not a short signal: historically the price was lower 1–4 hours later in about half of the cases.',
+      'The coin is strongly overheated: hourly RSI is 80 or higher, the 24h rise is at least 2× its usual daily move and the price is far above its 7-day average. Meanwhile liquidity is leaving: volume over the last 3 hours is 30%+ lower than at the height of the rally, and the share of aggressive buying is falling. This is a state of the coin, not a short signal: historically the price was lower 1–4 hours later in about half of the cases. Mirrored, it also finds undervalued coins (long): RSI 20 or lower, the 24h drop is at least 2× the usual move, the price is far below its 7-day average, volume over the last 3 hours is 30%+ lower than at the height of the sell-off, and the share of aggressive selling is falling — sellers are running out. The long side has not been checked on history separately.',
       name: 'overboughtDescription',
       desc: '',
       args: [],
@@ -830,6 +830,46 @@ class S {
     );
   }
 
+  /// `−{percent}% in 24h (×{times} usual move)`
+  String drop24h(String percent, String times) {
+    return Intl.message(
+      '−$percent% in 24h (×$times usual move)',
+      name: 'drop24h',
+      desc: '',
+      args: [percent, times],
+    );
+  }
+
+  /// `sellers {now}% (was {before}%)`
+  String sellersShare(String now, String before) {
+    return Intl.message(
+      'sellers $now% (was $before%)',
+      name: 'sellersShare',
+      desc: '',
+      args: [now, before],
+    );
+  }
+
+  /// `Short · overvalued`
+  String get sideShort {
+    return Intl.message(
+      'Short · overvalued',
+      name: 'sideShort',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Long · undervalued`
+  String get sideLong {
+    return Intl.message(
+      'Long · undervalued',
+      name: 'sideLong',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Pump starting to fade`
   String get earlyFade {
     return Intl.message(
@@ -850,10 +890,10 @@ class S {
     );
   }
 
-  /// `The coin rose unusually strongly for its volatility: the 24h or 7d rise is at least 2× its usual move and at least 4%. The peak was no more than 3 hours ago, RSI was 80+ within the day and has now dropped by 3–12 points, the price has pulled back 3–20% of the daily range from the high, and the live price is below the last hourly point while still up over 6 hours.`
+  /// `The coin rose unusually strongly for its volatility: the 24h or 7d rise is at least 2× its usual move and at least 4%. The peak was no more than 3 hours ago, RSI was 80+ within the day and has now dropped by 3–12 points, the price has pulled back 3–20% of the daily range from the high, and the live price is below the last hourly point while still up over 6 hours. Mirrored, it also finds undervalued coins (long) — a dump starting to fade: the 24h or 7d drop is at least 2× its usual move and at least 4%, the bottom was no more than 3 hours ago, RSI was 20 or lower within the day and has now risen by 3–12 points, the price has bounced 3–20% of the daily range from the low, and the live price is above the last hourly point while still down over 6 hours.`
   String get earlyFadeDescription {
     return Intl.message(
-      'The coin rose unusually strongly for its volatility: the 24h or 7d rise is at least 2× its usual move and at least 4%. The peak was no more than 3 hours ago, RSI was 80+ within the day and has now dropped by 3–12 points, the price has pulled back 3–20% of the daily range from the high, and the live price is below the last hourly point while still up over 6 hours.',
+      'The coin rose unusually strongly for its volatility: the 24h or 7d rise is at least 2× its usual move and at least 4%. The peak was no more than 3 hours ago, RSI was 80+ within the day and has now dropped by 3–12 points, the price has pulled back 3–20% of the daily range from the high, and the live price is below the last hourly point while still up over 6 hours. Mirrored, it also finds undervalued coins (long) — a dump starting to fade: the 24h or 7d drop is at least 2× its usual move and at least 4%, the bottom was no more than 3 hours ago, RSI was 20 or lower within the day and has now risen by 3–12 points, the price has bounced 3–20% of the daily range from the low, and the live price is above the last hourly point while still down over 6 hours.',
       name: 'earlyFadeDescription',
       desc: '',
       args: [],
@@ -905,10 +945,10 @@ class S {
     );
   }
 
-  /// `The coin has run up hard: the 24h or 7d rise is at least 4% and at least 2× its usual move, and it has not yet dropped more than its usual daily move. At least three of four cooling signs are present: RSI was 85+ within the day and has dropped by 5+ points; the price has pulled back 15–50% of the daily range from the high; the last hour and the last 6 hours are negative; the price is more than 1.5 usual daily moves above its 7-day average.`
+  /// `The coin has run up hard: the 24h or 7d rise is at least 4% and at least 2× its usual move, and it has not yet dropped more than its usual daily move. At least three of four cooling signs are present: RSI was 85+ within the day and has dropped by 5+ points; the price has pulled back 15–50% of the daily range from the high; the last hour and the last 6 hours are negative; the price is more than 1.5 usual daily moves above its 7-day average. Mirrored, it also finds undervalued coins (long): the 24h or 7d drop is at least 4% and at least 2× its usual move, and the coin has not yet bounced more than its usual daily move. At least three of four signs of the fall fading are present: RSI was 15 or lower within the day and has risen by 5+ points; the price has bounced 15–50% of the daily range from the low; the last hour and the last 6 hours are positive; the price is more than 1.5 usual daily moves below its 7-day average.`
   String get overheatedFadingDescription {
     return Intl.message(
-      'The coin has run up hard: the 24h or 7d rise is at least 4% and at least 2× its usual move, and it has not yet dropped more than its usual daily move. At least three of four cooling signs are present: RSI was 85+ within the day and has dropped by 5+ points; the price has pulled back 15–50% of the daily range from the high; the last hour and the last 6 hours are negative; the price is more than 1.5 usual daily moves above its 7-day average.',
+      'The coin has run up hard: the 24h or 7d rise is at least 4% and at least 2× its usual move, and it has not yet dropped more than its usual daily move. At least three of four cooling signs are present: RSI was 85+ within the day and has dropped by 5+ points; the price has pulled back 15–50% of the daily range from the high; the last hour and the last 6 hours are negative; the price is more than 1.5 usual daily moves above its 7-day average. Mirrored, it also finds undervalued coins (long): the 24h or 7d drop is at least 4% and at least 2× its usual move, and the coin has not yet bounced more than its usual daily move. At least three of four signs of the fall fading are present: RSI was 15 or lower within the day and has risen by 5+ points; the price has bounced 15–50% of the daily range from the low; the last hour and the last 6 hours are positive; the price is more than 1.5 usual daily moves below its 7-day average.',
       name: 'overheatedFadingDescription',
       desc: '',
       args: [],
@@ -1045,10 +1085,10 @@ class S {
     );
   }
 
-  /// `A coin that has run above its average (price above the hourly EMA20 and up over 6 hours) with at least 3 of 7 signs of overload: 1) the price is more than 2.5 usual hourly moves above EMA20; 2) hourly RSI 72+; 3) 4-hour RSI 67+; 4) open interest up 15%+ in a day — leverage is being added; 5) funding 0.02%+, twice the standard — longs are overpaying; 6) top traders' long/short position ratio 2+; 7) volume over the last 2 hours is 2× higher than before. The thresholds are the top ~20% of all overextended coins in history, so large caps get in too. This is how overloaded the coin is, not a forecast: historically pullbacks after overload were no more frequent than usual, and when open interest doubled in a day the rise more often continued — that is flagged separately.`
+  /// `A coin that has run above its average (price above the hourly EMA20 and up over 6 hours) with at least 3 of 7 signs of overload: 1) the price is more than 2.5 usual hourly moves above EMA20; 2) hourly RSI 72+; 3) 4-hour RSI 67+; 4) open interest up 15%+ in a day — leverage is being added; 5) funding 0.02%+, twice the standard — longs are overpaying; 6) top traders' long/short position ratio 2+; 7) volume over the last 2 hours is 2× higher than before. The thresholds are the top ~20% of all overextended coins in history, so large caps get in too. This is how overloaded the coin is, not a forecast: historically pullbacks after overload were no more frequent than usual, and when open interest doubled in a day the rise more often continued — that is flagged separately. Mirrored, it also finds undervalued coins (long) — overload to the downside: the price is below EMA20 and down over 6 hours, with the same signs reversed: the price is more than 2.5 usual hourly moves below EMA20; hourly RSI 28 or lower; 4-hour RSI 33 or lower; open interest up 15%+ in a day — shorts are adding leverage; funding −0.02% or lower — shorts are overpaying; top traders' long/short ratio 0.5 or lower; volume over 2 hours 2× higher than before. The long side has not been checked on history separately.`
   String get overloadIndexDescription {
     return Intl.message(
-      'A coin that has run above its average (price above the hourly EMA20 and up over 6 hours) with at least 3 of 7 signs of overload: 1) the price is more than 2.5 usual hourly moves above EMA20; 2) hourly RSI 72+; 3) 4-hour RSI 67+; 4) open interest up 15%+ in a day — leverage is being added; 5) funding 0.02%+, twice the standard — longs are overpaying; 6) top traders\' long/short position ratio 2+; 7) volume over the last 2 hours is 2× higher than before. The thresholds are the top ~20% of all overextended coins in history, so large caps get in too. This is how overloaded the coin is, not a forecast: historically pullbacks after overload were no more frequent than usual, and when open interest doubled in a day the rise more often continued — that is flagged separately.',
+      'A coin that has run above its average (price above the hourly EMA20 and up over 6 hours) with at least 3 of 7 signs of overload: 1) the price is more than 2.5 usual hourly moves above EMA20; 2) hourly RSI 72+; 3) 4-hour RSI 67+; 4) open interest up 15%+ in a day — leverage is being added; 5) funding 0.02%+, twice the standard — longs are overpaying; 6) top traders\' long/short position ratio 2+; 7) volume over the last 2 hours is 2× higher than before. The thresholds are the top ~20% of all overextended coins in history, so large caps get in too. This is how overloaded the coin is, not a forecast: historically pullbacks after overload were no more frequent than usual, and when open interest doubled in a day the rise more often continued — that is flagged separately. Mirrored, it also finds undervalued coins (long) — overload to the downside: the price is below EMA20 and down over 6 hours, with the same signs reversed: the price is more than 2.5 usual hourly moves below EMA20; hourly RSI 28 or lower; 4-hour RSI 33 or lower; open interest up 15%+ in a day — shorts are adding leverage; funding −0.02% or lower — shorts are overpaying; top traders\' long/short ratio 0.5 or lower; volume over 2 hours 2× higher than before. The long side has not been checked on history separately.',
       name: 'overloadIndexDescription',
       desc: '',
       args: [],
@@ -1140,6 +1180,16 @@ class S {
     return Intl.message(
       '⚠ leverage $percent% in a day — historically the rise more often continued',
       name: 'overloadSqueeze',
+      desc: '',
+      args: [percent],
+    );
+  }
+
+  /// `⚠ leverage {percent}% in a day — the fall may continue`
+  String overloadSqueezeLong(String percent) {
+    return Intl.message(
+      '⚠ leverage $percent% in a day — the fall may continue',
+      name: 'overloadSqueezeLong',
       desc: '',
       args: [percent],
     );

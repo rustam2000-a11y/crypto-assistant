@@ -1,8 +1,12 @@
 import 'package:equatable/equatable.dart';
 
-/// Показатели перегретой монеты, у которой уходит ликвидность.
+import '../signal_side.dart';
+
+/// Показатели перегретой (или зеркально перепроданной) монеты, у которой
+/// уходит ликвидность.
 class OverboughtSignal extends Equatable {
   const OverboughtSignal({
+    required this.side,
     required this.rsi,
     required this.rise24hPercent,
     required this.heat,
@@ -11,13 +15,17 @@ class OverboughtSignal extends Equatable {
     required this.previousBuyersSharePercent,
   });
 
+  /// Перегрев (шорт) или перепроданность (лонг).
+  final SignalSide side;
+
   /// RSI(14) по часовым свечам.
   final double rsi;
 
-  /// Рост за 24 часа, %.
+  /// Изменение цены за 24 часа, % (для лонга — отрицательное).
   final double rise24hPercent;
 
-  /// Во сколько раз рост за 24ч больше обычного дневного хода монеты.
+  /// Во сколько раз рост (для лонга — падение) за 24ч больше обычного
+  /// дневного хода монеты.
   final double heat;
 
   /// Средний часовой объём за 3ч против 6ч до них, % (отрицательный — падает).
@@ -29,6 +37,7 @@ class OverboughtSignal extends Equatable {
 
   @override
   List<Object?> get props => [
+    side,
     rsi,
     rise24hPercent,
     heat,

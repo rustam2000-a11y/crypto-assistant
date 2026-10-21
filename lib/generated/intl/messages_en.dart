@@ -24,41 +24,49 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m1(percent) => "${percent}% away";
 
-  static String m2(count) => "${count} h";
+  static String m2(percent, times) =>
+      "−${percent}% in 24h (×${times} usual move)";
 
-  static String m3(value) => "stretch ×${value}";
+  static String m3(count) => "${count} h";
 
-  static String m4(percent) => "funding ${percent}%";
+  static String m4(value) => "stretch ×${value}";
 
-  static String m5(percent) => "OI ${percent}%";
+  static String m5(percent) => "funding ${percent}%";
 
-  static String m6(count) => "Overload ${count}/7";
+  static String m6(percent) => "OI ${percent}%";
 
-  static String m7(value) => "RSI 1h ${value}";
+  static String m7(count) => "Overload ${count}/7";
 
-  static String m8(value) => "RSI 4h ${value}";
+  static String m8(value) => "RSI 1h ${value}";
 
-  static String m9(percent) =>
+  static String m9(value) => "RSI 4h ${value}";
+
+  static String m10(percent) =>
       "⚠ leverage ${percent}% in a day — historically the rise more often continued";
 
-  static String m10(value) => "top traders L/S ${value}";
+  static String m11(percent) =>
+      "⚠ leverage ${percent}% in a day — the fall may continue";
 
-  static String m11(value) => "volume ×${value}";
+  static String m12(value) => "top traders L/S ${value}";
 
-  static String m12(percent) =>
+  static String m13(value) => "volume ×${value}";
+
+  static String m14(percent) =>
       "approaching, ${percent}% to go (reached within 2 h ~75%)";
 
-  static String m13(percent, times) =>
+  static String m15(percent, times) =>
       "+${percent}% in 24h (×${times} usual move)";
 
-  static String m14(count, percent) =>
+  static String m16(now, before) => "sellers ${now}% (was ${before}%)";
+
+  static String m17(count, percent) =>
       "strong bounces: ${count} (avg ${percent}%)";
 
-  static String m15(count) => "Trades: ${count}";
+  static String m18(count) => "Trades: ${count}";
 
-  static String m16(times) => "volume on bounces ×${times}";
+  static String m19(times) => "volume on bounces ×${times}";
 
-  static String m17(percent) => "volume ${percent}%";
+  static String m20(percent) => "volume ${percent}%";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -128,9 +136,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "dontHaveAnAccount": MessageLookupByLibrary.simpleMessage(
       "Don\'t have an account?",
     ),
+    "drop24h": m2,
     "earlyFade": MessageLookupByLibrary.simpleMessage("Pump starting to fade"),
     "earlyFadeDescription": MessageLookupByLibrary.simpleMessage(
-      "The coin rose unusually strongly for its volatility: the 24h or 7d rise is at least 2× its usual move and at least 4%. The peak was no more than 3 hours ago, RSI was 80+ within the day and has now dropped by 3–12 points, the price has pulled back 3–20% of the daily range from the high, and the live price is below the last hourly point while still up over 6 hours.",
+      "The coin rose unusually strongly for its volatility: the 24h or 7d rise is at least 2× its usual move and at least 4%. The peak was no more than 3 hours ago, RSI was 80+ within the day and has now dropped by 3–12 points, the price has pulled back 3–20% of the daily range from the high, and the live price is below the last hourly point while still up over 6 hours. Mirrored, it also finds undervalued coins (long) — a dump starting to fade: the 24h or 7d drop is at least 2× its usual move and at least 4%, the bottom was no more than 3 hours ago, RSI was 20 or lower within the day and has now risen by 3–12 points, the price has bounced 3–20% of the daily range from the low, and the live price is above the last hourly point while still down over 6 hours.",
     ),
     "earlyFadeShort": MessageLookupByLibrary.simpleMessage(
       "Fresh peak, RSI was 80+ and is turning down",
@@ -159,7 +168,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "historicalMinimum": MessageLookupByLibrary.simpleMessage(
       "Historical minimum",
     ),
-    "hoursShort": m2,
+    "hoursShort": m3,
     "invalidEmail": MessageLookupByLibrary.simpleMessage("Invalid email"),
     "itTakesLessThanAMinute": MessageLookupByLibrary.simpleMessage(
       "It takes less than a minute",
@@ -213,7 +222,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Overheated, liquidity leaving",
     ),
     "overboughtDescription": MessageLookupByLibrary.simpleMessage(
-      "The coin is strongly overheated: hourly RSI is 80 or higher, the 24h rise is at least 2× its usual daily move and the price is far above its 7-day average. Meanwhile liquidity is leaving: volume over the last 3 hours is 30%+ lower than at the height of the rally, and the share of aggressive buying is falling. This is a state of the coin, not a short signal: historically the price was lower 1–4 hours later in about half of the cases.",
+      "The coin is strongly overheated: hourly RSI is 80 or higher, the 24h rise is at least 2× its usual daily move and the price is far above its 7-day average. Meanwhile liquidity is leaving: volume over the last 3 hours is 30%+ lower than at the height of the rally, and the share of aggressive buying is falling. This is a state of the coin, not a short signal: historically the price was lower 1–4 hours later in about half of the cases. Mirrored, it also finds undervalued coins (long): RSI 20 or lower, the 24h drop is at least 2× the usual move, the price is far below its 7-day average, volume over the last 3 hours is 30%+ lower than at the height of the sell-off, and the share of aggressive selling is falling — sellers are running out. The long side has not been checked on history separately.",
     ),
     "overboughtShort": MessageLookupByLibrary.simpleMessage(
       "RSI 80+, volume and buyers fading",
@@ -222,27 +231,28 @@ class MessageLookup extends MessageLookupByLibrary {
       "Overheated and fading",
     ),
     "overheatedFadingDescription": MessageLookupByLibrary.simpleMessage(
-      "The coin has run up hard: the 24h or 7d rise is at least 4% and at least 2× its usual move, and it has not yet dropped more than its usual daily move. At least three of four cooling signs are present: RSI was 85+ within the day and has dropped by 5+ points; the price has pulled back 15–50% of the daily range from the high; the last hour and the last 6 hours are negative; the price is more than 1.5 usual daily moves above its 7-day average.",
+      "The coin has run up hard: the 24h or 7d rise is at least 4% and at least 2× its usual move, and it has not yet dropped more than its usual daily move. At least three of four cooling signs are present: RSI was 85+ within the day and has dropped by 5+ points; the price has pulled back 15–50% of the daily range from the high; the last hour and the last 6 hours are negative; the price is more than 1.5 usual daily moves above its 7-day average. Mirrored, it also finds undervalued coins (long): the 24h or 7d drop is at least 4% and at least 2× its usual move, and the coin has not yet bounced more than its usual daily move. At least three of four signs of the fall fading are present: RSI was 15 or lower within the day and has risen by 5+ points; the price has bounced 15–50% of the daily range from the low; the last hour and the last 6 hours are positive; the price is more than 1.5 usual daily moves below its 7-day average.",
     ),
     "overheatedFadingShort": MessageLookupByLibrary.simpleMessage(
       "Overheated + 3 of 4 cooling signs",
     ),
-    "overloadExtension": m3,
-    "overloadFunding": m4,
+    "overloadExtension": m4,
+    "overloadFunding": m5,
     "overloadIndex": MessageLookupByLibrary.simpleMessage("Overload index"),
     "overloadIndexDescription": MessageLookupByLibrary.simpleMessage(
-      "A coin that has run above its average (price above the hourly EMA20 and up over 6 hours) with at least 3 of 7 signs of overload: 1) the price is more than 2.5 usual hourly moves above EMA20; 2) hourly RSI 72+; 3) 4-hour RSI 67+; 4) open interest up 15%+ in a day — leverage is being added; 5) funding 0.02%+, twice the standard — longs are overpaying; 6) top traders\' long/short position ratio 2+; 7) volume over the last 2 hours is 2× higher than before. The thresholds are the top ~20% of all overextended coins in history, so large caps get in too. This is how overloaded the coin is, not a forecast: historically pullbacks after overload were no more frequent than usual, and when open interest doubled in a day the rise more often continued — that is flagged separately.",
+      "A coin that has run above its average (price above the hourly EMA20 and up over 6 hours) with at least 3 of 7 signs of overload: 1) the price is more than 2.5 usual hourly moves above EMA20; 2) hourly RSI 72+; 3) 4-hour RSI 67+; 4) open interest up 15%+ in a day — leverage is being added; 5) funding 0.02%+, twice the standard — longs are overpaying; 6) top traders\' long/short position ratio 2+; 7) volume over the last 2 hours is 2× higher than before. The thresholds are the top ~20% of all overextended coins in history, so large caps get in too. This is how overloaded the coin is, not a forecast: historically pullbacks after overload were no more frequent than usual, and when open interest doubled in a day the rise more often continued — that is flagged separately. Mirrored, it also finds undervalued coins (long) — overload to the downside: the price is below EMA20 and down over 6 hours, with the same signs reversed: the price is more than 2.5 usual hourly moves below EMA20; hourly RSI 28 or lower; 4-hour RSI 33 or lower; open interest up 15%+ in a day — shorts are adding leverage; funding −0.02% or lower — shorts are overpaying; top traders\' long/short ratio 0.5 or lower; volume over 2 hours 2× higher than before. The long side has not been checked on history separately.",
     ),
     "overloadIndexShort": MessageLookupByLibrary.simpleMessage(
       "3+ of 7 signs of overheating and leverage",
     ),
-    "overloadOpenInterest": m5,
-    "overloadPoints": m6,
-    "overloadRsi1h": m7,
-    "overloadRsi4h": m8,
-    "overloadSqueeze": m9,
-    "overloadTopTraders": m10,
-    "overloadVolume": m11,
+    "overloadOpenInterest": m6,
+    "overloadPoints": m7,
+    "overloadRsi1h": m8,
+    "overloadRsi4h": m9,
+    "overloadSqueeze": m10,
+    "overloadSqueezeLong": m11,
+    "overloadTopTraders": m12,
+    "overloadVolume": m13,
     "password": MessageLookupByLibrary.simpleMessage("Password"),
     "patternOnly": MessageLookupByLibrary.simpleMessage(
       "Pattern only, no filters",
@@ -278,29 +288,32 @@ class MessageLookup extends MessageLookupByLibrary {
     "pumpReversalShort": MessageLookupByLibrary.simpleMessage(
       "Short for 3–4 hours after a rejected pump",
     ),
-    "radarApproaching": m12,
+    "radarApproaching": m14,
     "removeFromFavorites": MessageLookupByLibrary.simpleMessage(
       "Remove from favorites",
     ),
     "resistance": MessageLookupByLibrary.simpleMessage("Resistance"),
-    "rise24h": m13,
+    "rise24h": m15,
     "search": MessageLookupByLibrary.simpleMessage("Search"),
+    "sellersShare": m16,
+    "sideLong": MessageLookupByLibrary.simpleMessage("Long · undervalued"),
+    "sideShort": MessageLookupByLibrary.simpleMessage("Short · overvalued"),
     "signUp": MessageLookupByLibrary.simpleMessage("Sign up"),
     "signalJournal": MessageLookupByLibrary.simpleMessage("Signal journal"),
     "signalsActive": MessageLookupByLibrary.simpleMessage("Signals active"),
     "signalsPaused": MessageLookupByLibrary.simpleMessage("Signals paused"),
-    "strongBounces": m14,
+    "strongBounces": m17,
     "structureBreak": MessageLookupByLibrary.simpleMessage("Structure break"),
     "support": MessageLookupByLibrary.simpleMessage("Support"),
     "thePasswordMustBeAtLeast6CharactersLong":
         MessageLookupByLibrary.simpleMessage(
           "The password must be at least 6 characters long.",
         ),
-    "tradesCount": m15,
+    "tradesCount": m18,
     "turnover": MessageLookupByLibrary.simpleMessage("Turnover"),
     "volume24Hours": MessageLookupByLibrary.simpleMessage("Volume 24 hours"),
-    "volumeAtLevel": m16,
-    "volumeChange": m17,
+    "volumeAtLevel": m19,
+    "volumeChange": m20,
     "waitingForResult": MessageLookupByLibrary.simpleMessage(
       "waiting for result",
     ),

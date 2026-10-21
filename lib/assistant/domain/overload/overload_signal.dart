@@ -1,8 +1,11 @@
 import 'package:equatable/equatable.dart';
 
+import '../signal_side.dart';
+
 /// Признаки перегрузки монеты и их значения.
 class OverloadSignal extends Equatable {
   const OverloadSignal({
+    required this.side,
     required this.points,
     required this.extension,
     required this.rsi1h,
@@ -13,10 +16,14 @@ class OverloadSignal extends Equatable {
     this.topTraderRatio,
   });
 
+  /// Перегрузка вверх (шорт) или зеркально вниз (лонг).
+  final SignalSide side;
+
   /// Какие из 7 признаков горят.
   final Set<OverloadSign> points;
 
-  /// Насколько цена выше EMA20 часового графика, в обычных часовых ходах.
+  /// Насколько цена выше EMA20 часового графика (для лонга — ниже),
+  /// в обычных часовых ходах.
   final double extension;
   final double rsi1h;
   final double rsi4h;
@@ -34,11 +41,12 @@ class OverloadSignal extends Equatable {
   final double? topTraderRatio;
 
   /// Плечи растут так резко (OI x2 за сутки), что на истории рост чаще
-  /// продолжался, чем сменялся откатом.
+  /// продолжался, чем сменялся откатом. Для лонга — падение может продолжиться.
   bool get squeezeRisk => (openInterestChange ?? 0) >= 1;
 
   @override
   List<Object?> get props => [
+    side,
     points,
     extension,
     rsi1h,

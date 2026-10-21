@@ -8,7 +8,8 @@ import '../key_levels/key_level_detector.dart';
 import 'overload_detector.dart';
 import 'overload_signal.dart';
 
-/// Монеты с 3+ из 7 признаков перегрузки (перегрев цены и плеч).
+/// Монеты с 3+ из 7 признаков перегрузки (перегрев цены и плеч), и зеркально
+/// — с перегрузкой вниз (перепроданность и плечи в шорт).
 @lazySingleton
 class OverloadFilter implements DetailedCoinFilter {
   OverloadFilter(this._binance, this._candles);

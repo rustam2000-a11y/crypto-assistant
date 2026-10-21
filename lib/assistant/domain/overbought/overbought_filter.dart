@@ -7,7 +7,8 @@ import '../coin_filter.dart';
 import 'overbought_detector.dart';
 import 'overbought_signal.dart';
 
-/// Сильно перегретые монеты (RSI 80+), у которых уходит ликвидность.
+/// Сильно перегретые монеты (RSI 80+), у которых уходит ликвидность, и
+/// зеркально — сильно перепроданные (RSI 20 и ниже), у которых уходят продавцы.
 @lazySingleton
 class OverboughtFilter implements DetailedCoinFilter {
   OverboughtFilter(this._binance, this._candles);
@@ -19,6 +20,7 @@ class OverboughtFilter implements DetailedCoinFilter {
   // Без запроса свечей отсекаем монеты, которые не могли перегреться:
   // рост >= 2 дневных хода при ходе >= 1% — это от 2% за 24ч
   // (берём 1.5% с запасом на разницу CoinGecko и Binance).
+  // Для перепроданности — так же по падению.
   static const double _minChange24hPercent = 1.5;
   // Неделя на волатильность и среднюю + разгон RSI.
   static const int _candlesLimit = 540;
@@ -34,7 +36,7 @@ class OverboughtFilter implements DetailedCoinFilter {
     final symbols = await _binance.perpetualSymbols();
     final contracts = [
       for (final coin in coins)
-        if ((coin.priceChangePercentage24h ?? 0) >= _minChange24hPercent)
+        if ((coin.priceChangePercentage24h ?? 0).abs() >= _minChange24hPercent)
           if (BinanceFuturesClient.contractFor(coin.symbol, symbols)
               case final contract?)
             (coin: coin, symbol: contract.symbol),
@@ -54,7 +56,9 @@ class OverboughtFilter implements DetailedCoinFilter {
       }
     }
     _details = details;
+    // Сначала самые крайние: RSI дальше всего от 50 в любую сторону.
+    double extremeness(CoinModel c) => (details[c.id]!.rsi - 50).abs();
     return coins.where((c) => details.containsKey(c.id)).toList()
-      ..sort((a, b) => details[b.id]!.rsi.compareTo(details[a.id]!.rsi));
+      ..sort((a, b) => extremeness(b).compareTo(extremeness(a)));
   }
 }

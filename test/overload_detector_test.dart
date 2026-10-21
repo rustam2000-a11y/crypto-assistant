@@ -2,24 +2,27 @@ import 'dart:math';
 
 import 'package:crypto_assistant/assistant/domain/overload/overload_detector.dart';
 import 'package:crypto_assistant/assistant/domain/overload/overload_signal.dart';
+import 'package:crypto_assistant/assistant/domain/signal_side.dart';
 import 'package:crypto_assistant/home/data/models/candle.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 const _hour = 60 * 60 * 1000;
 
 /// Часовые свечи: пила ±0.5% у 100, последние [climbHours] часов — рост
-/// на 1% в час; объём последних 2 часов — [lastVolume].
+/// на 1% в час (при [down] — зеркально падение); объём последних 2 часов —
+/// [lastVolume].
 List<Candle> _hourly({
   int climbHours = 30,
   double lastVolume = 3000,
   bool fallLast6h = false,
+  bool down = false,
 }) {
   const bars = 540;
   double close(int k) {
     final noise = 1 + 0.005 * (k.isEven ? 1 : -1);
     var grown = max(0, k - (bars - climbHours)).toDouble();
     if (fallLast6h && k > bars - 7) grown -= (k - (bars - 7)) * 2;
-    return 100 * noise * exp(0.01 * grown);
+    return 100 * noise * exp((down ? -0.01 : 0.01) * grown);
   }
 
   return [
@@ -41,13 +44,14 @@ List<Candle> _hourly({
   ];
 }
 
-/// 4ч свечи: ровно, затем [risingBars] свечей роста по 2%.
-List<Candle> _fourHour({int risingBars = 8}) {
+/// 4ч свечи: ровно, затем [risingBars] свечей роста по 2% (при [down] —
+/// падения).
+List<Candle> _fourHour({int risingBars = 8, bool down = false}) {
   const bars = 100;
   double close(int k) =>
       100 *
       (1 + 0.005 * (k.isEven ? 1 : -1)) *
-      exp(0.02 * max(0, k - (bars - risingBars)));
+      exp((down ? -0.02 : 0.02) * max(0, k - (bars - risingBars)));
   return [
     for (var k = 0; k < bars; k++)
       Candle(
@@ -74,10 +78,40 @@ void main() {
       fundingRate: 0.0003,
       topTraderRatio: 2.5,
     )!;
+    expect(signal.side, SignalSide.short);
     expect(signal.points, OverloadSign.values.toSet());
     expect(signal.rsi1h, greaterThanOrEqualTo(72));
     expect(signal.volumeSpike, closeTo(3, 0.01));
     expect(signal.squeezeRisk, isFalse);
+  });
+
+  test('зеркально: все 7 признаков перегрузки вниз — лонг', () {
+    final signal = detector.detect(
+      hourly: _hourly(down: true),
+      candles4h: _fourHour(down: true),
+      openInterestChange: 0.2,
+      fundingRate: -0.0003,
+      topTraderRatio: 0.4,
+    )!;
+    expect(signal.side, SignalSide.long);
+    expect(signal.points, OverloadSign.values.toSet());
+    expect(signal.rsi1h, lessThanOrEqualTo(28));
+    expect(signal.extension, greaterThanOrEqualTo(2.5));
+  });
+
+  test('зеркально: плечи и фандинг в сторону лонгов при падении не в счёт', () {
+    final signal = detector.detect(
+      hourly: _hourly(down: true),
+      candles4h: _fourHour(down: true),
+      fundingRate: 0.0003,
+      topTraderRatio: 2.5,
+    )!;
+    expect(signal.points, {
+      OverloadSign.extension,
+      OverloadSign.rsi1h,
+      OverloadSign.rsi4h,
+      OverloadSign.volumeSpike,
+    });
   });
 
   test('без данных о плечах считаются только признаки цены и объёма', () {

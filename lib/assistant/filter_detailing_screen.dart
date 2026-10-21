@@ -20,6 +20,7 @@ import 'domain/level_radar/level_approach.dart';
 import 'domain/overbought/overbought_signal.dart';
 import 'domain/overload/overload_signal.dart';
 import 'domain/pump_reversal/pump_reversal_status.dart';
+import 'domain/signal_side.dart';
 import 'signal_journal_screen.dart';
 
 class FilterDetailingScreen extends StatefulWidget {
@@ -154,6 +155,7 @@ class _FilterDetailingScreenState extends State<FilterDetailingScreen> {
                               final OverloadSignal signal => _OverloadLine(
                                 signal: signal,
                               ),
+                              final SignalSide side => _SideLine(side: side),
                               _ => const SizedBox.shrink(),
                             },
                           ],
@@ -242,6 +244,33 @@ class _KeyLevelLine extends StatelessWidget {
   }
 }
 
+// Перегрев (шорт) — жёлтым, зеркальная перепроданность (лонг) — зелёным.
+Color _sideColor(SignalSide side) =>
+    side.isLong ? AppColors.positive : AppColors.amber;
+
+String _sideText(BuildContext context, SignalSide side) =>
+    side.isLong ? S.of(context).sideLong : S.of(context).sideShort;
+
+/// Сторона монеты для фильтров без других показателей.
+class _SideLine extends StatelessWidget {
+  const _SideLine({required this.side});
+
+  final SignalSide side;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(top: 6, left: 4, right: 4),
+      child: CustomNewText(
+        text: _sideText(context, side),
+        fontSize: 13,
+        color: _sideColor(side),
+        textAlign: TextAlign.start,
+      ),
+    );
+  }
+}
+
 class _OverboughtLine extends StatelessWidget {
   const _OverboughtLine({required this.signal});
 
@@ -249,17 +278,33 @@ class _OverboughtLine extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final s = S.of(context);
     String fixed(double value) => value.toStringAsFixed(0);
+    final heat = signal.heat.toStringAsFixed(1);
+    // Для лонга — падение и доля продаж (100% минус доля покупок).
+    final move = signal.side.isLong
+        ? s.drop24h(fixed(-signal.rise24hPercent), heat)
+        : s.rise24h(fixed(signal.rise24hPercent), heat);
+    final flow = signal.side.isLong
+        ? s.sellersShare(
+            fixed(100 - signal.buyersSharePercent),
+            fixed(100 - signal.previousBuyersSharePercent),
+          )
+        : s.buyersShare(
+            fixed(signal.buyersSharePercent),
+            fixed(signal.previousBuyersSharePercent),
+          );
     return Padding(
       padding: const EdgeInsets.only(top: 6, left: 4, right: 4),
       child: CustomNewText(
         text:
+            '${_sideText(context, signal.side)}  ·  '
             'RSI ${fixed(signal.rsi)}  ·  '
-            '${S.of(context).rise24h(fixed(signal.rise24hPercent), signal.heat.toStringAsFixed(1))}  ·  '
-            '${S.of(context).volumeChange(fixed(signal.volumeChangePercent))}  ·  '
-            '${S.of(context).buyersShare(fixed(signal.buyersSharePercent), fixed(signal.previousBuyersSharePercent))}',
+            '$move  ·  '
+            '${s.volumeChange(fixed(signal.volumeChangePercent))}  ·  '
+            '$flow',
         fontSize: 13,
-        color: AppColors.amber,
+        color: _sideColor(signal.side),
         textAlign: TextAlign.start,
       ),
     );
@@ -330,17 +375,20 @@ class _OverloadLine extends StatelessWidget {
             ),
           },
     ];
-    final squeeze = signal.squeezeRisk
-        ? '\n${s.overloadSqueeze(percent(signal.openInterestChange!))}'
-        : '';
+    final openInterest = percent(signal.openInterestChange ?? 0);
+    final squeezeText = signal.side.isLong
+        ? s.overloadSqueezeLong(openInterest)
+        : s.overloadSqueeze(openInterest);
+    final squeeze = signal.squeezeRisk ? '\n$squeezeText' : '';
     return Padding(
       padding: const EdgeInsets.only(top: 6, left: 4, right: 4),
       child: CustomNewText(
         text:
+            '${_sideText(context, signal.side)}  ·  '
             '${s.overloadPoints(signal.points.length)}: ${items.join(' · ')}'
             '$squeeze',
         fontSize: 13,
-        color: AppColors.amber,
+        color: _sideColor(signal.side),
         textAlign: TextAlign.start,
       ),
     );

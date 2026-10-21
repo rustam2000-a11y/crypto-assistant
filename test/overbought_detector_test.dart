@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:crypto_assistant/assistant/domain/overbought/overbought_detector.dart';
+import 'package:crypto_assistant/assistant/domain/signal_side.dart';
 import 'package:crypto_assistant/home/data/models/candle.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -9,19 +10,21 @@ const _hourMs = 60 * 60 * 1000;
 const _pumpBars = 30;
 
 /// Неделями цена ходит пилой ±0.3% у 100, последние 30 часов растёт на 1%
-/// в час. Объём и доля покупок: [pumpVolume]/[pumpBuys] в разгар роста
-/// (часы -9..-4), [lastVolume]/[lastBuys] — последние 3 часа.
+/// в час (при [falling] — падает). Объём и доля покупок:
+/// [pumpVolume]/[pumpBuys] в разгар движения (часы -9..-4),
+/// [lastVolume]/[lastBuys] — последние 3 часа.
 List<Candle> _pump({
   double pumpVolume = 3000,
   double pumpBuys = 0.7,
   double lastVolume = 1000,
   double lastBuys = 0.45,
   bool rising = true,
+  bool falling = false,
 }) {
   double close(int k) {
     final noise = 1 + 0.003 * (k.isEven ? 1 : -1);
     final grown = rising ? max(0, k - (_bars - _pumpBars)) : 0;
-    return 100 * noise * exp(0.01 * grown);
+    return 100 * noise * exp((falling ? -0.01 : 0.01) * grown);
   }
 
   return [
@@ -53,6 +56,7 @@ void main() {
 
   test('перегрев с уходящими объёмом и покупателями — сигнал', () {
     final signal = detector.detect(_pump())!;
+    expect(signal.side, SignalSide.short);
     expect(signal.rsi, greaterThanOrEqualTo(80));
     expect(signal.heat, greaterThanOrEqualTo(2));
     expect(signal.volumeChangePercent, closeTo(-66.7, 0.1));
@@ -70,6 +74,26 @@ void main() {
 
   test('доля покупок растёт — покупатели не выдохлись', () {
     expect(detector.detect(_pump(lastBuys: 0.8)), isNull);
+  });
+
+  test('зеркально: перепроданность с уходящими продавцами — лонг', () {
+    final signal = detector.detect(
+      _pump(falling: true, pumpBuys: 0.3, lastBuys: 0.55),
+    )!;
+    expect(signal.side, SignalSide.long);
+    expect(signal.rsi, lessThanOrEqualTo(20));
+    expect(signal.heat, greaterThanOrEqualTo(2));
+    expect(signal.rise24hPercent, lessThan(0));
+    expect(signal.volumeChangePercent, closeTo(-66.7, 0.1));
+    expect(signal.buyersSharePercent, closeTo(55, 0.01));
+    expect(signal.previousBuyersSharePercent, closeTo(30, 0.01));
+  });
+
+  test('зеркально: доля продаж растёт — продавцы не выдохлись', () {
+    expect(
+      detector.detect(_pump(falling: true, pumpBuys: 0.3, lastBuys: 0.2)),
+      isNull,
+    );
   });
 
   test('мало свечей — нет результата', () {

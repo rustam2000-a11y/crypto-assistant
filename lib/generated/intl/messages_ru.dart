@@ -24,41 +24,49 @@ class MessageLookup extends MessageLookupByLibrary {
 
   static String m1(percent) => "${percent}% до уровня";
 
-  static String m2(count) => "${count} ч";
+  static String m2(percent, times) =>
+      "−${percent}% за 24 ч (×${times} обычного хода)";
 
-  static String m3(value) => "растяжение ×${value}";
+  static String m3(count) => "${count} ч";
 
-  static String m4(percent) => "фандинг ${percent}%";
+  static String m4(value) => "растяжение ×${value}";
 
-  static String m5(percent) => "OI ${percent}%";
+  static String m5(percent) => "фандинг ${percent}%";
 
-  static String m6(count) => "Перегрузка ${count}/7";
+  static String m6(percent) => "OI ${percent}%";
 
-  static String m7(value) => "RSI 1ч ${value}";
+  static String m7(count) => "Перегрузка ${count}/7";
 
-  static String m8(value) => "RSI 4ч ${value}";
+  static String m8(value) => "RSI 1ч ${value}";
 
-  static String m9(percent) =>
+  static String m9(value) => "RSI 4ч ${value}";
+
+  static String m10(percent) =>
       "⚠ плечи ${percent}% за сутки — на истории рост чаще продолжался";
 
-  static String m10(value) => "топ-трейдеры L/S ${value}";
+  static String m11(percent) =>
+      "⚠ плечи ${percent}% за сутки — падение может продолжиться";
 
-  static String m11(value) => "объём ×${value}";
+  static String m12(value) => "топ-трейдеры L/S ${value}";
 
-  static String m12(percent) =>
+  static String m13(value) => "объём ×${value}";
+
+  static String m14(percent) =>
       "подходит, осталось ${percent}% (доходила за 2 ч ~75%)";
 
-  static String m13(percent, times) =>
+  static String m15(percent, times) =>
       "+${percent}% за 24 ч (×${times} обычного хода)";
 
-  static String m14(count, percent) =>
+  static String m16(now, before) => "продажи ${now}% (было ${before}%)";
+
+  static String m17(count, percent) =>
       "сильных отскоков: ${count} (в ср. ${percent}%)";
 
-  static String m15(count) => "Сделок: ${count}";
+  static String m18(count) => "Сделок: ${count}";
 
-  static String m16(times) => "объём на отскоках ×${times}";
+  static String m19(times) => "объём на отскоках ×${times}";
 
-  static String m17(percent) => "объём ${percent}%";
+  static String m20(percent) => "объём ${percent}%";
 
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
@@ -124,11 +132,12 @@ class MessageLookup extends MessageLookupByLibrary {
     "detailing": MessageLookupByLibrary.simpleMessage("Детализация"),
     "distanceToLevel": m1,
     "dontHaveAnAccount": MessageLookupByLibrary.simpleMessage("Нет аккаунта?"),
+    "drop24h": m2,
     "earlyFade": MessageLookupByLibrary.simpleMessage(
       "Памп начинает выдыхаться",
     ),
     "earlyFadeDescription": MessageLookupByLibrary.simpleMessage(
-      "Монета выросла необычно сильно для своей волатильности: рост за 24 ч или 7 дн. минимум в 2 раза больше её обычного хода и не меньше 4%. Пик был не больше 3 часов назад, RSI за сутки был 80+ и сейчас опустился на 3–12 пунктов, цена отошла от дневного максимума на 3–20% дневного диапазона, а живая цена ниже последней часовой точки, но за 6 часов ещё в плюсе.",
+      "Монета выросла необычно сильно для своей волатильности: рост за 24 ч или 7 дн. минимум в 2 раза больше её обычного хода и не меньше 4%. Пик был не больше 3 часов назад, RSI за сутки был 80+ и сейчас опустился на 3–12 пунктов, цена отошла от дневного максимума на 3–20% дневного диапазона, а живая цена ниже последней часовой точки, но за 6 часов ещё в плюсе. Зеркально ищутся и недооценённые монеты (лонг) — дамп начинает выдыхаться: падение за 24 ч или 7 дн. минимум в 2 раза больше обычного хода и не меньше 4%, дно было не больше 3 часов назад, RSI за сутки был 20 и ниже и сейчас поднялся на 3–12 пунктов, цена отскочила от дневного минимума на 3–20% дневного диапазона, а живая цена выше последней часовой точки, но за 6 часов ещё в минусе.",
     ),
     "earlyFadeShort": MessageLookupByLibrary.simpleMessage(
       "Свежий пик, RSI был 80+ и пошёл вниз",
@@ -161,7 +170,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "historicalMinimum": MessageLookupByLibrary.simpleMessage(
       "Исторический минимум",
     ),
-    "hoursShort": m2,
+    "hoursShort": m3,
     "invalidEmail": MessageLookupByLibrary.simpleMessage("Некорректный email"),
     "itTakesLessThanAMinute": MessageLookupByLibrary.simpleMessage(
       "Это займёт меньше минуты",
@@ -215,7 +224,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Перегрев, ликвидность уходит",
     ),
     "overboughtDescription": MessageLookupByLibrary.simpleMessage(
-      "Монета сильно перегрета: RSI на часовом графике 80 или выше, рост за 24 часа минимум в 2 раза больше её обычного дневного хода, цена далеко над средней за 7 дней. При этом ликвидность уходит: объём за последние 3 часа на 30%+ ниже, чем в разгар роста, а доля агрессивных покупок падает. Это состояние монеты, а не сигнал на шорт: на истории через 1–4 часа цена была ниже примерно в половине случаев.",
+      "Монета сильно перегрета: RSI на часовом графике 80 или выше, рост за 24 часа минимум в 2 раза больше её обычного дневного хода, цена далеко над средней за 7 дней. При этом ликвидность уходит: объём за последние 3 часа на 30%+ ниже, чем в разгар роста, а доля агрессивных покупок падает. Это состояние монеты, а не сигнал на шорт: на истории через 1–4 часа цена была ниже примерно в половине случаев. Зеркально ищутся и недооценённые монеты (лонг): RSI 20 и ниже, падение за 24 часа минимум в 2 раза больше обычного хода, цена далеко под средней за 7 дней, объём за последние 3 часа на 30%+ ниже, чем в разгар падения, а доля агрессивных продаж снижается — продавцы выдыхаются. Лонговую сторону на истории отдельно не проверяли.",
     ),
     "overboughtShort": MessageLookupByLibrary.simpleMessage(
       "RSI 80+, объём и покупатели выдыхаются",
@@ -224,27 +233,28 @@ class MessageLookup extends MessageLookupByLibrary {
       "Перегрев и затухание",
     ),
     "overheatedFadingDescription": MessageLookupByLibrary.simpleMessage(
-      "Монета сильно разогналась: рост за 24 ч или 7 дн. не меньше 4% и минимум в 2 раза больше её обычного хода, при этом она ещё не упала сильнее обычного дневного хода. Из четырёх признаков остывания сработали минимум три: RSI за сутки был 85+ и опустился на 5+ пунктов; цена отошла от дневного максимума на 15–50% дневного диапазона; последний час и последние 6 часов в минусе; цена выше средней за 7 дней больше чем на 1,5 обычных дневных хода.",
+      "Монета сильно разогналась: рост за 24 ч или 7 дн. не меньше 4% и минимум в 2 раза больше её обычного хода, при этом она ещё не упала сильнее обычного дневного хода. Из четырёх признаков остывания сработали минимум три: RSI за сутки был 85+ и опустился на 5+ пунктов; цена отошла от дневного максимума на 15–50% дневного диапазона; последний час и последние 6 часов в минусе; цена выше средней за 7 дней больше чем на 1,5 обычных дневных хода. Зеркально ищутся и недооценённые монеты (лонг): падение за 24 ч или 7 дн. не меньше 4% и минимум в 2 раза больше обычного хода, при этом монета ещё не отскочила сильнее обычного дневного хода. Из четырёх признаков затухания падения сработали минимум три: RSI за сутки был 15 и ниже и поднялся на 5+ пунктов; цена отскочила от дневного минимума на 15–50% дневного диапазона; последний час и последние 6 часов в плюсе; цена ниже средней за 7 дней больше чем на 1,5 обычных дневных хода.",
     ),
     "overheatedFadingShort": MessageLookupByLibrary.simpleMessage(
       "Перегрев + 3 из 4 признаков остывания",
     ),
-    "overloadExtension": m3,
-    "overloadFunding": m4,
+    "overloadExtension": m4,
+    "overloadFunding": m5,
     "overloadIndex": MessageLookupByLibrary.simpleMessage("Индекс перегрузки"),
     "overloadIndexDescription": MessageLookupByLibrary.simpleMessage(
-      "Монета разогнана выше своей средней (цена выше EMA20 часового графика и за 6 часов в плюсе), и у неё горят минимум 3 из 7 признаков перегрузки: 1) цена выше EMA20 больше чем на 2,5 обычных часовых хода; 2) RSI 1ч 72+; 3) RSI 4ч 67+; 4) открытый интерес за сутки вырос на 15%+ — набирают плечи; 5) фандинг 0,02%+, вдвое выше стандартного — лонги переплачивают; 6) у топ-трейдеров лонг/шорт по позициям 2+; 7) объём за последние 2 часа в 2+ раза выше, чем до этого. Пороги — верхние ~20% среди всех разогнанных монет на истории, поэтому попадают и крупные монеты. Это степень перегрузки, а не прогноз: на истории откат после перегрузки случался не чаще обычного, а когда открытый интерес за сутки удваивался, рост чаще продолжался — об этом есть отдельное предупреждение.",
+      "Монета разогнана выше своей средней (цена выше EMA20 часового графика и за 6 часов в плюсе), и у неё горят минимум 3 из 7 признаков перегрузки: 1) цена выше EMA20 больше чем на 2,5 обычных часовых хода; 2) RSI 1ч 72+; 3) RSI 4ч 67+; 4) открытый интерес за сутки вырос на 15%+ — набирают плечи; 5) фандинг 0,02%+, вдвое выше стандартного — лонги переплачивают; 6) у топ-трейдеров лонг/шорт по позициям 2+; 7) объём за последние 2 часа в 2+ раза выше, чем до этого. Пороги — верхние ~20% среди всех разогнанных монет на истории, поэтому попадают и крупные монеты. Это степень перегрузки, а не прогноз: на истории откат после перегрузки случался не чаще обычного, а когда открытый интерес за сутки удваивался, рост чаще продолжался — об этом есть отдельное предупреждение. Зеркально ищутся и недооценённые монеты (лонг) — перегрузка вниз: цена ниже EMA20 и за 6 часов в минусе, а признаки те же с обратным знаком: цена ниже EMA20 больше чем на 2,5 обычных часовых хода; RSI 1ч 28 и ниже; RSI 4ч 33 и ниже; открытый интерес за сутки вырос на 15%+ — плечи набирают шорты; фандинг −0,02% и ниже — шорты переплачивают; у топ-трейдеров лонг/шорт 0,5 и ниже; объём за 2 часа в 2+ раза выше. Лонговую сторону на истории отдельно не проверяли.",
     ),
     "overloadIndexShort": MessageLookupByLibrary.simpleMessage(
       "3+ из 7 признаков перегрева и плеч",
     ),
-    "overloadOpenInterest": m5,
-    "overloadPoints": m6,
-    "overloadRsi1h": m7,
-    "overloadRsi4h": m8,
-    "overloadSqueeze": m9,
-    "overloadTopTraders": m10,
-    "overloadVolume": m11,
+    "overloadOpenInterest": m6,
+    "overloadPoints": m7,
+    "overloadRsi1h": m8,
+    "overloadRsi4h": m9,
+    "overloadSqueeze": m10,
+    "overloadSqueezeLong": m11,
+    "overloadTopTraders": m12,
+    "overloadVolume": m13,
     "password": MessageLookupByLibrary.simpleMessage("Пароль"),
     "patternOnly": MessageLookupByLibrary.simpleMessage(
       "Только паттерн, без фильтров",
@@ -282,29 +292,32 @@ class MessageLookup extends MessageLookupByLibrary {
     "pumpReversalShort": MessageLookupByLibrary.simpleMessage(
       "Шорт на 3–4 часа после отбоя пампа",
     ),
-    "radarApproaching": m12,
+    "radarApproaching": m14,
     "removeFromFavorites": MessageLookupByLibrary.simpleMessage(
       "Удалить из избранного",
     ),
     "resistance": MessageLookupByLibrary.simpleMessage("Сопротивление"),
-    "rise24h": m13,
+    "rise24h": m15,
     "search": MessageLookupByLibrary.simpleMessage("Поиск"),
+    "sellersShare": m16,
+    "sideLong": MessageLookupByLibrary.simpleMessage("Лонг · недооценена"),
+    "sideShort": MessageLookupByLibrary.simpleMessage("Шорт · переоценена"),
     "signUp": MessageLookupByLibrary.simpleMessage("Зарегистрироваться"),
     "signalJournal": MessageLookupByLibrary.simpleMessage("Журнал сигналов"),
     "signalsActive": MessageLookupByLibrary.simpleMessage("Сигналы активны"),
     "signalsPaused": MessageLookupByLibrary.simpleMessage("Сигналы на паузе"),
-    "strongBounces": m14,
+    "strongBounces": m17,
     "structureBreak": MessageLookupByLibrary.simpleMessage("Слом структуры"),
     "support": MessageLookupByLibrary.simpleMessage("Поддержка"),
     "thePasswordMustBeAtLeast6CharactersLong":
         MessageLookupByLibrary.simpleMessage(
           "Пароль должен содержать не менее 6 символов",
         ),
-    "tradesCount": m15,
+    "tradesCount": m18,
     "turnover": MessageLookupByLibrary.simpleMessage("Оборачиваемость"),
     "volume24Hours": MessageLookupByLibrary.simpleMessage("Объём за 24 часа"),
-    "volumeAtLevel": m16,
-    "volumeChange": m17,
+    "volumeAtLevel": m19,
+    "volumeChange": m20,
     "waitingForResult": MessageLookupByLibrary.simpleMessage("ждём результат"),
     "weakPassword": MessageLookupByLibrary.simpleMessage(
       "Пароль слишком простой",

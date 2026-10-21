@@ -2,6 +2,7 @@ import 'dart:math';
 
 import '../../../home/data/models/candle.dart';
 import '../indicators.dart';
+import '../signal_side.dart';
 import 'overbought_signal.dart';
 
 /// Перегрев, при котором уходит ликвидность, по закрытым часовым свечам.
@@ -15,6 +16,10 @@ import 'overbought_signal.dart';
 /// На истории Binance (150 ликвидных монет, окт 2025 — сен 2026) — около
 /// двух монет в день; через 1–4 часа цена была ниже примерно в половине
 /// случаев, то есть это состояние монеты, а не прогноз падения.
+///
+/// Зеркально для лонга — перепроданность, при которой уходят продавцы:
+/// RSI <= 20, падение за 24ч >= 2 хода, цена >= 1.5 хода под средней,
+/// объём так же падает, а доля агрессивных продаж снижается.
 class OverboughtDetector {
   const OverboughtDetector();
 
@@ -37,19 +42,24 @@ class OverboughtDetector {
     final t = candles.length - 1;
     final close = candles[t].close;
 
-    final rsi = wilderRsi(candles, period: _rsiPeriod);
+    final rawRsi = wilderRsi(candles, period: _rsiPeriod);
+    // RSI 20 и ниже — зеркальная перепроданность, сторона лонга.
+    final side = rawRsi <= 100 - _minRsi ? SignalSide.long : SignalSide.short;
+    // Для лонга всё зеркально: RSI ↔ 100 − RSI, рост ↔ падение.
+    final sign = side.isLong ? -1.0 : 1.0;
+    final rsi = side.isLong ? 100 - rawRsi : rawRsi;
     if (rsi < _minRsi) return null;
 
     final volatility = dailyVolatility(candles, bars: _weekBars);
     if (volatility < _minDailyVolatility) return null;
     final rise = log(close / candles[t - 24].close);
-    final heat = rise / volatility;
+    final heat = sign * rise / volatility;
     if (heat < _minHeat) return null;
     var weekSum = 0.0;
     for (var k = t - _weekBars + 1; k <= t; k++) {
       weekSum += candles[k].close;
     }
-    final stretch = (close / (weekSum / _weekBars) - 1) / volatility;
+    final stretch = sign * (close / (weekSum / _weekBars) - 1) / volatility;
     if (stretch < _minStretch) return null;
 
     final recent = _flow(candles, t - _recentBars + 1, t);
@@ -64,10 +74,12 @@ class OverboughtDetector {
     if (volumeRatio > _maxVolumeRatio) return null;
     final buyers = recent.buys / recent.volume;
     final previousBuyers = previous.buys / previous.volume;
-    if (buyers >= previousBuyers) return null;
+    // Покупатели выдыхаются; для лонга — продавцы (доля покупок растёт).
+    if (sign * buyers >= sign * previousBuyers) return null;
 
     return OverboughtSignal(
-      rsi: rsi,
+      side: side,
+      rsi: rawRsi,
       rise24hPercent: (exp(rise) - 1) * 100,
       heat: heat,
       volumeChangePercent: (volumeRatio - 1) * 100,

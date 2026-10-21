@@ -79,8 +79,11 @@ class FilterDetailingBloc
       overload: _overload,
     );
     final isReversal = identical(filter, _pumpReversal);
+    // Эти фильтры считают по sparkline без запросов к Binance.
+    final isLocal =
+        filter is OverheatedFadingFilter || filter is PriceMovementFilter;
     var coins = _repository.watchCoins();
-    if (isReversal || filter is DetailedCoinFilter) {
+    if (isReversal || (filter is DetailedCoinFilter && !isLocal)) {
       coins = coins.throttleTime(_binanceThrottle, trailing: true);
     }
     _coinsSubscription?.cancel();
