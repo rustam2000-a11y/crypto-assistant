@@ -9,16 +9,16 @@ class CoinModel extends Equatable {
     required this.currentPrice,
     required this.marketCap,
     required this.marketCapRank,
-    required this.totalVolume, //Объём торгов за 24 часа
+    required this.totalVolume,
     required this.high24h,
     required this.low24h,
     required this.priceChange24h,
-    required this.priceChangePercentage24h, //Рост/падение в %
+    required this.priceChangePercentage24h,
     required this.marketCapChangePercentage24h,
-    required this.ath, //самая высокая цена за всю историю монеты
+    required this.ath,
     required this.athChangePercentage,
     required this.athDate,
-    required this.atl, //на сколько сейчас цена ниже ATH
+    required this.atl,
     required this.atlChangePercentage,
     required this.atlDate,
     required this.lastUpdated,

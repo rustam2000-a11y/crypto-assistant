@@ -123,6 +123,5 @@ flutter_launcher_icons:
   image_path: "assets/images/main_icon.png"
   android: true
   ios: true
-  # Цвет края картинки, чтобы на Android фон адаптивной иконки не был заметен.
   adaptive_icon_background: "#010110"
   adaptive_icon_foreground: "assets/images/main_icon.png"

@@ -86,7 +86,7 @@ class _HomeScreenState extends State<HomeScreen> {
                   onTap: () {
                     showDialog<bool>(
                       context: context,
-                      builder: (_) => ConfirmationDialog(
+                      builder: (context) => ConfirmationDialog(
                         onTap: () {
                           _bloc.add(const LogOutEvent());
                         },

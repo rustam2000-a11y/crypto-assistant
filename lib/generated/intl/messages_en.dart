@@ -41,9 +41,6 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Approaching its historical maximum/minimum",
         ),
-    "areYouSureYouWantToLogOutOfYour": MessageLookupByLibrary.simpleMessage(
-      "Are you sure you want to log out of your account?",
-    ),
     "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
     "capitalInflow": MessageLookupByLibrary.simpleMessage("Capital inflow"),
     "capitalization": MessageLookupByLibrary.simpleMessage("Capitalization"),
@@ -64,7 +61,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "emailAlreadyInUse": MessageLookupByLibrary.simpleMessage(
       "This email is already in use",
     ),
-    "exit": MessageLookupByLibrary.simpleMessage("Exit"),
+    "exit": MessageLookupByLibrary.simpleMessage("Log out"),
     "failedToLogIn": MessageLookupByLibrary.simpleMessage(
       "Failed to log in, please try again later",
     ),
@@ -90,6 +87,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "logInToKeepFollowingTheMarket": MessageLookupByLibrary.simpleMessage(
       "Log in to keep following the market",
     ),
+    "logOutDescription": MessageLookupByLibrary.simpleMessage(
+      "You can sign back in at any time.",
+    ),
+    "logOutTitle": MessageLookupByLibrary.simpleMessage("Log out?"),
     "marketCapIncreaseoutflowOfMoreThan5Over24Hours":
         MessageLookupByLibrary.simpleMessage(
           "Market cap increase/outflow of more than 5% over 24 hours",

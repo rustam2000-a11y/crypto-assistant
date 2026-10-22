@@ -510,11 +510,16 @@ class S {
     );
   }
 
-  /// `Are you sure you want to log out of your account?`
-  String get areYouSureYouWantToLogOutOfYour {
+  /// `Log out?`
+  String get logOutTitle {
+    return Intl.message('Log out?', name: 'logOutTitle', desc: '', args: []);
+  }
+
+  /// `You can sign back in at any time.`
+  String get logOutDescription {
     return Intl.message(
-      'Are you sure you want to log out of your account?',
-      name: 'areYouSureYouWantToLogOutOfYour',
+      'You can sign back in at any time.',
+      name: 'logOutDescription',
       desc: '',
       args: [],
     );
@@ -525,9 +530,9 @@ class S {
     return Intl.message('Cancel', name: 'cancel', desc: '', args: []);
   }
 
-  /// `Exit`
+  /// `Log out`
   String get exit {
-    return Intl.message('Exit', name: 'exit', desc: '', args: []);
+    return Intl.message('Log out', name: 'exit', desc: '', args: []);
   }
 
   /// `or`

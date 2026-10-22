@@ -53,8 +53,9 @@
   "failedToSignUp": "Не удалось зарегистрироваться, попробуйте позже",
   "signUpToAddCoinsToYourBriefcaseAndSave": "Зарегистрируйтесь, чтобы добавлять монеты в портфель и сохранять их",
   "theCoinIsAtItsDailyHighOrLow": "Монета на дневном максимуме или минимуме",
-  "areYouSureYouWantToLogOutOfYour": "Вы уверены что хотите выйти из своего аккаунта?",
-  "cancel": "Cancel",
-  "exit": "Exit",
+  "logOutTitle": "Выйти из аккаунта?",
+  "logOutDescription": "Вы сможете снова войти в любой момент.",
+  "cancel": "Отмена",
+  "exit": "Выйти",
   "or": "или"
 }

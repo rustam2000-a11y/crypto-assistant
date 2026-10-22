@@ -26,7 +26,6 @@ abstract class CoinFilter {
   List<CoinModel> filter(List<CoinModel> coins);
 }
 
-// Аномальное движение цены за последние 24 часа: рост/падение выше чем на 10%.
 class AbnormalMovementFilter implements CoinFilter {
   static const double _thresholdPercent = 10;
 
@@ -41,7 +40,6 @@ class AbnormalMovementFilter implements CoinFilter {
   }
 }
 
-// Движение цены за последние 24 часа: рост/падение выше чем на 5%.
 class PriceMovementFilter implements CoinFilter {
   static const double _thresholdPercent = 5;
 
@@ -56,7 +54,6 @@ class PriceMovementFilter implements CoinFilter {
   }
 }
 
-// Большая волатильность: размах между high24h и low24h относительно текущей цены.
 class HighVolatilityFilter implements CoinFilter {
   static const double _thresholdPercent = 10;
 
@@ -72,7 +69,6 @@ class HighVolatilityFilter implements CoinFilter {
   }
 }
 
-// Исторический максимум/минимум: цена приблизилась к ATH или ATL.
 class HistoricalExtremumFilter implements CoinFilter {
   static const double _thresholdPercent = 5;
 
@@ -88,7 +84,6 @@ class HistoricalExtremumFilter implements CoinFilter {
   }
 }
 
-// Оборачиваемость: аномально высокий объём торгов относительно капитализации.
 class TurnoverFilter implements CoinFilter {
   static const double _thresholdRatio = 0.5;
 
@@ -102,7 +97,6 @@ class TurnoverFilter implements CoinFilter {
   }
 }
 
-// Приток капитала: рост/отток капитализации выше 5% за 24 часа.
 class CapitalInflowFilter implements CoinFilter {
   static const double _thresholdPercent = 5;
 
@@ -118,7 +112,6 @@ class CapitalInflowFilter implements CoinFilter {
   }
 }
 
-// У дневного пика/дна: текущая цена у верхней или нижней границы диапазона high24h/low24h.
 class DailyExtremumFilter implements CoinFilter {
   static const double _thresholdPercent = 5;
 
@@ -135,7 +128,6 @@ class DailyExtremumFilter implements CoinFilter {
   }
 }
 
-// Подтверждённая аномалия: аномальное движение цены, подтверждённое высоким объёмом торгов.
 class ConfirmedAnomalyFilter implements CoinFilter {
   static const double _priceThresholdPercent = 10;
   static const double _turnoverThresholdRatio = 0.5;

@@ -43,10 +43,7 @@ class MessageLookup extends MessageLookupByLibrary {
         MessageLookupByLibrary.simpleMessage(
           "Приближается к своему историческому максимуму/минимуму",
         ),
-    "areYouSureYouWantToLogOutOfYour": MessageLookupByLibrary.simpleMessage(
-      "Вы уверены что хотите выйти из своего аккаунта?",
-    ),
-    "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
+    "cancel": MessageLookupByLibrary.simpleMessage("Отмена"),
     "capitalInflow": MessageLookupByLibrary.simpleMessage("Приток капитала"),
     "capitalization": MessageLookupByLibrary.simpleMessage("Капитализация"),
     "confirmedAnomaly": MessageLookupByLibrary.simpleMessage(
@@ -62,7 +59,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "emailAlreadyInUse": MessageLookupByLibrary.simpleMessage(
       "Этот email уже используется",
     ),
-    "exit": MessageLookupByLibrary.simpleMessage("Exit"),
+    "exit": MessageLookupByLibrary.simpleMessage("Выйти"),
     "failedToLogIn": MessageLookupByLibrary.simpleMessage(
       "Не удалось войти, попробуйте позже",
     ),
@@ -90,6 +87,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "logInToKeepFollowingTheMarket": MessageLookupByLibrary.simpleMessage(
       "Войдите, чтобы продолжить следить за рынком",
     ),
+    "logOutDescription": MessageLookupByLibrary.simpleMessage(
+      "Вы сможете снова войти в любой момент.",
+    ),
+    "logOutTitle": MessageLookupByLibrary.simpleMessage("Выйти из аккаунта?"),
     "marketCapIncreaseoutflowOfMoreThan5Over24Hours":
         MessageLookupByLibrary.simpleMessage(
           "Рост/отток капитализации более чем на 5% за 24 часа",

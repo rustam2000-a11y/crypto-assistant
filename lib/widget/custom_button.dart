@@ -22,6 +22,7 @@ class CustomButton extends StatelessWidget {
       color: color ?? AppColors.jacarta,
       borderRadius: BorderRadius.circular(12),
       child: InkWell(
+       borderRadius: BorderRadius.circular(12),
         onTap: onTap,
         child: Container(
           constraints: const BoxConstraints(maxWidth: 400),

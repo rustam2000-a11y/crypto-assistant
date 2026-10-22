@@ -15,53 +15,68 @@ class ConfirmationDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     return Dialog(
       backgroundColor: AppColors.bunting,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
-      child: Padding(
-        padding: const EdgeInsets.all(22),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          spacing: 12,
-          children: [
-            Container(
-              padding: const EdgeInsets.all(14),
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: AppColors.borderRed.withValues(alpha: 0.4),
-                border: Border.all(color: AppColors.borderRed),
-              ),
-              child: Center(
-                child: Image.asset(
-                  AppImages.exit,
-                  width: 20,
-                  height: 20,
-                  color: AppColors.whiteColor,
+      insetPadding: const EdgeInsets.symmetric(horizontal: 32),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(24),
+        side: const BorderSide(color: AppColors.jacarta),
+      ),
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 360),
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 28, 24, 24),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 56,
+                height: 56,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: AppColors.borderRed.withValues(alpha: 0.15),
                 ),
-              ),
-            ),
-            CustomNewText(
-              text: S.of(context).areYouSureYouWantToLogOutOfYour,
-              fontSize: 18,
-            ),
-            Row(
-              spacing: 12,
-              children: [
-                Flexible(
-                  child: CustomButton(
-                    onTap: () => Navigator.pop(context),
-                    name: S.of(context).cancel,
-                    color: AppColors.sheetHandle,
-                  ),
-                ),
-                Flexible(
-                  child: CustomButton(
-                    onTap: onTap,
-                    name: S.of(context).exit,
+                child: Center(
+                  child: Image.asset(
+                    AppImages.exit,
+                    width: 24,
+                    height: 24,
                     color: AppColors.borderRed,
                   ),
                 ),
-              ],
-            ),
-          ],
+              ),
+              const SizedBox(height: 20),
+              CustomNewText(
+                text: S.of(context).logOutTitle,
+                fontSize: 20,
+                fontWeight: FontWeight.w600,
+              ),
+              const SizedBox(height: 8),
+              CustomNewText(
+                text: S.of(context).logOutDescription,
+                color: AppColors.textSecondary,
+                height: 1.4,
+              ),
+              const SizedBox(height: 24),
+              Row(
+                spacing: 12,
+                children: [
+                  Expanded(
+                    child: CustomButton(
+                      onTap: () => Navigator.pop(context),
+                      name: S.of(context).cancel,
+                      color: AppColors.jacarta,
+                    ),
+                  ),
+                  Expanded(
+                    child: CustomButton(
+                      onTap: onTap,
+                      name: S.of(context).exit,
+                      color: AppColors.borderRed,
+                    ),
+                  ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );
